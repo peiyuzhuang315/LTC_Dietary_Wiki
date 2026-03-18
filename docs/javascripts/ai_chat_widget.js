@@ -3,7 +3,7 @@
  * 功能：固定位置浮窗 + Gemini AI 問答 + 詞條推薦 + Google 搜尋連結
  */
 (function () {
-  const GEMINI_API_KEY = "REPLACE_WITH_YOUR_NEW_API_KEY";
+  const GEMINI_API_KEY = "AIzaSyCdktJ-9x9mvYXLVs2-Ahy_7LhAoHioc0s";
   const WIKI_BASE = "https://peiyuzhuang315.github.io/LTC_Dietary_Wiki";
 
   const WIKI_TERMS = [
