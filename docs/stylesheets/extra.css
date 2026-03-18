@@ -1,0 +1,186 @@
+/*
+ * LTC Dietary Wiki - 自訂樣式
+ * Phase 3 網站架構優化
+ */
+
+/* ========== Hero Section ========== */
+.hero-section {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  background: linear-gradient(135deg, #00695c10, #00897b08);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border: 1px solid #00897b20;
+}
+
+.hero-subtitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--md-primary-fg-color);
+  margin-bottom: 0.75rem;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--md-default-fg-color--light);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* ========== 統計數字 ========== */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--md-primary-fg-color);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+  font-weight: 500;
+}
+
+/* ========== 分類卡片 Grid ========== */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.category-card {
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 10px;
+  padding: 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border-color: var(--md-primary-fg-color);
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--md-typeset-color);
+  margin-bottom: 0.4rem;
+}
+
+.card-desc {
+  font-size: 0.85rem;
+  color: var(--md-default-fg-color--light);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  min-height: 2.5em;
+}
+
+.card-links {
+  font-size: 0.82rem;
+  line-height: 1.8;
+}
+
+.card-links a {
+  color: var(--md-primary-fg-color);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--md-primary-fg-color);
+}
+
+.card-links a:hover {
+  border-bottom-style: solid;
+}
+
+/* ========== 應用文章列表 ========== */
+.article-list {
+  margin: 1rem 0;
+}
+
+.article-item {
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.4rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  border-left: 3px solid transparent;
+  transition: background-color 0.15s ease;
+}
+
+.article-item:hover {
+  background: var(--md-code-bg-color);
+}
+
+.article-item a {
+  color: var(--md-typeset-color);
+  text-decoration: none;
+}
+
+.article-item a:hover {
+  color: var(--md-primary-fg-color);
+}
+
+.article-family {
+  border-left-color: #e91e63;
+}
+
+.article-pro {
+  border-left-color: #1565c0;
+}
+
+.article-clinical {
+  border-left-color: #2e7d32;
+}
+
+.article-market {
+  border-left-color: #e65100;
+}
+
+/* ========== 頁尾備註 ========== */
+.footer-note {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.85rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* ========== RWD 響應式 ========== */
+@media (max-width: 600px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-stats {
+    gap: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.6rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.3rem;
+  }
+}

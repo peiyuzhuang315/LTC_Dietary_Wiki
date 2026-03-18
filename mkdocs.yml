@@ -63,8 +63,11 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/solid/book
-      link: https://github.com
+      link: https://github.com/peiyuzhuang315/LTC_Dietary_Wiki
       name: Mandala知識庫
+
+extra_css:
+  - stylesheets/extra.css
 
 nav:
   - 🏠 知識庫首頁: index.md
