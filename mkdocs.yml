@@ -1,0 +1,170 @@
+site_name: 長照膳食實戰百科：從營運到臨床的全維度指南
+site_description: 台灣長照膳食產業本地端知識庫，涵蓋經營、臨床、認證、政策、業者 80+ 詞條
+site_author: Mandala知識庫
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: zh-TW
+  palette:
+    - scheme: default
+      primary: teal
+      accent: orange
+      toggle:
+        icon: material/brightness-7
+        name: 切換為深色模式
+    - scheme: slate
+      primary: teal
+      accent: orange
+      toggle:
+        icon: material/brightness-4
+        name: 切換為亮色模式
+  font:
+    text: Noto Sans TC
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - search.share
+    - content.tooltips
+    - toc.integrate
+
+plugins:
+  - search:
+      lang: zh
+  - tags
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - toc:
+      permalink: true
+  - def_list
+  - attr_list
+  - md_in_html
+
+extra:
+  social:
+    - icon: fontawesome/solid/book
+      link: https://github.com
+      name: Mandala知識庫
+
+nav:
+  - 🏠 知識庫首頁: index.md
+  - 📋 業者90天啟動手冊: 操作手冊_新業者90天啟動清單.md
+
+  - 📊 1｜經營與營運面向:
+    - 長照: 長照.md
+    - 銀髮膳食開發: 銀髮膳食開發.md
+    - 中央廚房: 中央廚房.md
+    - 膳食外包: 膳食外包.md
+    - 團膳公司: 團膳公司.md
+    - 新商模: 新商模.md
+    - 通路布局: 通路布局.md
+    - 市場規模: 市場規模.md
+    - 機構評價: 機構評價.md
+    - 成本控制: 成本控制.md
+    - 供應鏈管理: 供應鏈管理.md
+    - 物流宅配: 物流宅配.md
+    - 多職種協力: 多職種協力.md
+    - 安心樂食: 安心樂食.md
+    - 機構自有廚房: 機構自有廚房.md
+    - B2B 團膳市場: B2B團膳市場.md
+
+  - 🧑‍⚕️ 2｜使用者與照護需求:
+    - 銀髮膳食: 銀髮膳食.md
+    - 介護食: 介護食.md
+    - 高齡照護食品: 高齡照護食品.md
+    - 銀髮友善食品: 銀髮友善食品.md
+    - 吞嚥障礙: 吞嚥障礙.md
+    - 咀嚼困難: 咀嚼困難.md
+    - 口腔衰弱: 口腔衰弱.md
+    - 肌少症: 肌少症.md
+    - 吸入性肺炎: 吸入性肺炎.md
+    - 質地調整飲食: 質地調整飲食.md
+    - 衰弱階段: 衰弱階段.md
+    - 尊嚴進食: 尊嚴進食.md
+    - 進食安全: 進食安全.md
+    - 增稠劑: 增稠劑.md
+    - 糊狀餐: 糊狀餐.md
+    - 精準營養: 精準營養.md
+    - 個人化客製: 個人化客製.md
+    - 口腔健康: 口腔健康.md
+    - 口腔運動: 口腔運動.md
+    - 共餐: 共餐.md
+    - 送餐: 送餐.md
+    - 口感及味道: 口感及味道.md
+
+  - 🔬 3｜產品研發技術護城河:
+    - IDDSI 國際吞嚥標準: IDDSI.md
+    - 質地分級: 質地分級.md
+    - 蛋白質補充: 蛋白質補充.md
+    - 骨骼保健: 骨骼保健.md
+    - 腸道調理: 腸道調理.md
+    - 冷鏈技術: 冷鏈技術.md
+    - 永續包裝: 永續包裝.md
+    - 標籤規範: 標籤規範.md
+    - 營養密度設計: 營養密度設計.md
+    - 格林全食物 TFL: 格林全食物.md
+
+  - 📜 4｜政策、補助與法規:
+    - 長照2.0: 長照2.0.md
+    - 留存檢體: 留存檢體.md
+    - 食品安全衛生管理法: 食品安全衛生管理法.md
+    - ESG 永續策略: ESG永續策略.md
+    - 出口策略 (日本/ASEAN): 出口策略.md
+
+  - 🏅 5｜認證與標章:
+    - Eatender 銀髮友善食品標章: Eatender銀髮友善食品標章.md
+    - HACCP 認證: HACCP認證.md
+    - GHP 食品良好衛生規範: GHP食品良好衛生規範.md
+    - ISO 22000 認證: ISO22000認證.md
+    - CAS 台灣優良農產品: CAS標章.md
+    - 健康食品認證: 健康食品認證.md
+
+  - 👥 6｜專業人員:
+    - 營養師: 營養師.md
+    - 言語治療師 (SLP): 言語治療師.md
+    - 職能治療師 (OT): 職能治療師.md
+
+  - 📈 7｜市場分析:
+    - 消費者分群: 消費者分群.md
+    - 超高齡社會: 超高齡社會.md
+    - 銀髮經濟: 銀髮經濟.md
+    - 社區整合照顧: 社區整合照顧.md
+    - 跨域整合: 跨域整合.md
+    - MNA 篩檢工具: MNA篩檢工具.md
+    - 機構 KPI: 機構KPI.md
+    - ROI 分析: ROI分析.md
+    - AnkeCare 創新照顧: AnkeCare創新照顧.md
+    - 台北國際照顧博覽會: 台北國際照顧博覽會.md
+    - 銀髮膳食趨勢論壇: 銀髮膳食産業發展趨勢論壇.md
+
+  - 💡 8｜數位轉型與創新:
+    - 3D 列印食物: 3D列印食物.md
+
+  - 🏢 9｜業者詞條:
+    - 漢典食品: 漢典食品.md
+    - 護力養 Basicare: 護力養Basicare.md
+    - 銀色大門: 銀色大門.md
+    - 格林全食物: 格林全食物.md
+    - 聯夏食品: 聯夏食品.md
+    - 奇美食品: 奇美食品.md
+    - 佳樂美: 佳樂美.md
