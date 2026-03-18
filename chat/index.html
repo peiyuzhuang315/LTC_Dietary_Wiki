@@ -5951,9 +5951,9 @@ const SYSTEM_PROMPT = `你是「長照膳食百科 AI」，專屬於「長照膳
    （詞條從知識庫選 2-4 個最相關的；文章關鍵字從下列選 0-2 個最相關的：家屬、IDDSI、SLP、市場、外包、失智症、廚師、成本、日本、AI）`;
 
 function extractSection(text, marker) {
-  const re = new RegExp(marker + "[：:]\\s*([^\\n]+)");
+  const re = new RegExp("(?:" + marker + ")[：:]\\s*([^\\n]+)");
   const m = text.match(re);
-  return m ? m[1].split(/[、,，]/).map(t => t.replace(/[\*🔗📖📝]+/g, "").trim()).filter(Boolean) : [];
+  return (m && m[1]) ? m[1].split(/[、,，]/).map(t => t.replace(/[\*🔗📖📝]+/g, "").trim()).filter(Boolean) : [];
 }
 
 function matchArticles(keywords) {
