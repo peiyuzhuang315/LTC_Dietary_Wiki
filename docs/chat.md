@@ -131,7 +131,7 @@
 // ⚙️ 在下方填入您的 Gemini API Key
 // 取得方式：https://aistudio.google.com/app/apikey
 // ====================================================
-const GEMINI_API_KEY = "AIzaSyAH_L28zQAW2txNfW_eE8J4wXv49lUx3HA";
+const GEMINI_API_KEY = "REPLACE_WITH_YOUR_NEW_API_KEY";
 
 const WIKI_BASE = "https://peiyuzhuang315.github.io/LTC_Dietary_Wiki";
 
@@ -228,8 +228,10 @@ async function submitQuestion() {
         body: JSON.stringify({
           system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
           contents: [{ role: "user", parts: [{ text: question }] }],
-          generationConfig: { temperature: 0.5 },
-          thinkingConfig: { thinkingBudget: 0 }
+          generationConfig: {
+            temperature: 0.5,
+            thinkingConfig: { thinkingBudget: 0 }
+          }
         })
       }
     );
