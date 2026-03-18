@@ -1,93 +1,66 @@
 # 長照膳食實戰百科
 
-<div class="hero-section" markdown="block">
-  <h2 class="hero-subtitle">台灣最完整的長照膳食知識庫</h2>
-  <p class="hero-desc">整合臨床照護、業者經營、政策法規、食品科技的跨域知識平台<br>服務對象：家屬、照服員、營養師、長照業者、產業研究者</p>
-  <div class="hero-stats">
-    <div class="stat-item"><span class="stat-number">130+</span><span class="stat-label">詞條</span></div>
-    <div class="stat-item"><span class="stat-number">10</span><span class="stat-label">深度應用文章</span></div>
-    <div class="stat-item"><span class="stat-number">10</span><span class="stat-label">知識大分類</span></div>
-    <div class="stat-item"><span class="stat-number">免費</span><span class="stat-label">公開知識</span></div>
-  </div>
-</div>
+**台灣最完整的長照膳食知識庫**｜130+ 詞條 · 10 篇深度應用文章 · 8 大分類指南
+
+整合臨床照護、業者經營、政策法規、食品科技的跨域知識平台，服務對象：家屬、照服員、營養師、長照業者、產業研究者。
 
 ---
 
-## 🔍 我想查…
+## 🔍 分類指南
 
-<div class="category-grid" markdown="block">
+點擊分類標題查看完整詞條列表：
 
-<div class="category-card" markdown="block">
-<div class="card-icon">🏡</div>
-<div class="card-title">家屬照護指南</div>
-<div class="card-desc">長輩出院後怎麼辦？認識吞嚥障礙、申請長照補助</div>
+### [🏡 家屬照護指南](guides/家屬照護指南.md)
 
-[出院後一個月計畫](articles/A01_家屬指南_出院後一個月飲食計畫.md) · [選擇照護機構](機構選擇指南.md) · [申請補助](居家補助申請.md)
-</div>
+長輩出院後怎麼辦？認識吞嚥障礙、申請長照補助。
 
-<div class="category-card" markdown="block">
-<div class="card-icon">🍱</div>
-<div class="card-title">吞嚥與質地照護</div>
-<div class="card-desc">IDDSI 七等級、增稠劑使用、泥狀餐製備</div>
+[出院後一個月計畫](articles/A01_家屬指南_出院後一個月飲食計畫.md) · [失智症照護一天](articles/A06_失智症長者一天飲食指南.md) · [居家補助申請](居家補助申請.md) · [機構選擇指南](機構選擇指南.md)
 
-[IDDSI 標準](IDDSI.md) · [吞嚥障礙](吞嚥障礙.md) · [增稠劑](增稠劑.md) · [廚師實戰指南](articles/A07_廚師實戰_IDDSI製備指南.md)
-</div>
+### [🍱 吞嚥與質地照護](guides/吞嚥與質地照護.md)
 
-<div class="category-card" markdown="block">
-<div class="card-icon">🏢</div>
-<div class="card-title">業者工具箱</div>
-<div class="card-desc">機構採購、合規認證、財務模型、出口策略</div>
+IDDSI 七等級、增稠劑使用、泥狀餐製備，確保安全進食。
+
+[IDDSI](IDDSI.md) · [吞嚥障礙](吞嚥障礙.md) · [增稠劑](增稠劑.md) · [糊狀餐](糊狀餐.md) · [廚師實戰指南](articles/A07_廚師實戰_IDDSI製備指南.md)
+
+### [🏢 業者工具箱](guides/業者工具箱.md)
+
+機構採購攻略、GHP/HACCP 合規路徑、財務模型、出口策略。
 
 [IDDSI 採購攻略](articles/A02_業者攻略_IDDSI贏得機構採購.md) · [合規指南](articles/A05_政策深解_2024外包新規.md) · [財務模型](articles/A08_長照廚房財務模型.md)
-</div>
 
-<div class="category-card" markdown="block">
-<div class="card-icon">🧠</div>
-<div class="card-title">失智症照護</div>
-<div class="card-desc">失智症的飲食挑戰、進食技巧、日落症候群因應</div>
+### [🧠 失智症照護](guides/失智症照護.md)
 
-[失智症飲食](失智症飲食.md) · [失智症一天照護指南](articles/A06_失智症長者一天飲食指南.md) · [失智預防](失智預防飲食.md)
-</div>
+進食行為改變、日落症候群因應、質地調整策略。
 
-<div class="category-card" markdown="block">
-<div class="card-icon">⚕️</div>
-<div class="card-title">疾病飲食管理</div>
-<div class="card-desc">腎臟病、糖尿病、心臟病、帕金森氏症等疾病的飲食原則</div>
+[失智症飲食](失智症飲食.md) · [失智預防飲食](失智預防飲食.md) · [失智症照護一天指南](articles/A06_失智症長者一天飲食指南.md)
 
-[腎臟病](腎臟病飲食.md) · [糖尿病](糖尿病飲食.md) · [心臟病](心臟病飲食.md) · [帕金森氏症](帕金森氏症飲食.md)
-</div>
+### [⚕️ 疾病飲食管理](guides/疾病飲食管理.md)
 
-<div class="category-card" markdown="block">
-<div class="card-icon">📋</div>
-<div class="card-title">認證與法規</div>
-<div class="card-desc">GHP、HACCP、Eatender 標章、ISO 22000 完整路徑</div>
+腎臟病、糖尿病、心臟病、帕金森氏症等慢性病飲食原則。
 
-[GHP](GHP食品良好衛生規範.md) · [HACCP](HACCP認證.md) · [Eatender](Eatender銀髮友善食品標章.md) · [合規指南](articles/A05_政策深解_2024外包新規.md)
-</div>
+[腎臟病飲食](腎臟病飲食.md) · [糖尿病飲食](糖尿病飲食.md) · [心臟病飲食](心臟病飲食.md) · [帕金森氏症飲食](帕金森氏症飲食.md)
 
-<div class="category-card" markdown="block">
-<div class="card-icon">👩‍⚕️</div>
-<div class="card-title">專業人員資源</div>
-<div class="card-desc">SLP、RD、OT 的跨域協作模型和臨床工具</div>
+### [📋 認證與法規](guides/認證與法規.md)
 
-[言語治療師](言語治療師.md) · [營養師](營養師.md) · [SLP+RD+OT 協作模型](articles/A03_臨床整合_SLP_RD_OT.md)
-</div>
+GHP、HACCP、Eatender 標章、ISO 22000 完整認證路徑。
 
-<div class="category-card" markdown="block">
-<div class="card-icon">📈</div>
-<div class="card-title">市場與趨勢</div>
-<div class="card-desc">台灣長照膳食市場規模、2025-2030 趨勢、日本出口機會</div>
+[GHP食品良好衛生規範](GHP食品良好衛生規範.md) · [HACCP認證](HACCP認證.md) · [Eatender銀髮友善食品標章](Eatender銀髮友善食品標章.md)
+
+### [👩‍⚕️ 專業人員資源](guides/專業人員資源.md)
+
+SLP、RD、OT 的跨域協作模型和臨床評估工具。
+
+[言語治療師](言語治療師.md) · [營養師](營養師.md) · [職能治療師](職能治療師.md) · [SLP+RD+OT 協作模型](articles/A03_臨床整合_SLP_RD_OT.md)
+
+### [📈 市場與趨勢](guides/市場與趨勢.md)
+
+台灣長照膳食市場規模、2025-2030 趨勢、日本出口機會。
 
 [市場趨勢地圖](articles/A04_台灣長照膳食市場趨勢地圖.md) · [日本市場攻略](articles/A09_台灣長照食品出海日本市場.md) · [AI 趨勢](articles/A10_AI長照膳食趨勢.md)
-</div>
-
-</div>
 
 ---
 
 ## 📝 深度應用文章
-
-> 超越詞條解釋的議題導向文章，連結多個知識面向
 
 | 分類 | 文章 |
 |---|---|
@@ -109,7 +82,7 @@
 <details>
 <summary>▶ 點擊展開，瀏覽全部 130+ 個詞條</summary>
 
-### [📊 經營 / 營運](guides/業者工具箱.md)
+### 📊 [經營 / 營運](guides/業者工具箱.md)
 
 - [長照](長照.md) · [長照2.0](長照2.0.md) · [銀髮膳食開發](銀髮膳食開發.md) · [中央廚房](中央廚房.md)
 - [膳食外包](膳食外包.md) · [機構自有廚房](機構自有廚房.md) · [B2B團膳市場](B2B團膳市場.md) · [團膳公司](團膳公司.md)
@@ -120,9 +93,7 @@
 - [多職種協力](多職種協力.md) · [跨域整合](跨域整合.md) · [照護人員訓練](照護人員訓練.md)
 - [膳費補助](膳費補助.md) · [長照人力與薪資](長照人力與薪資.md) · [長照聯盟](長照聯盟.md) · [安心樂食](安心樂食.md)
 
----
-
-### [🧑‍⚕️ 照護需求 / 疾病飲食](guides/家屬照護指南.md)
+### 🧑‍⚕️ [照護需求 / 疾病飲食](guides/家屬照護指南.md)
 
 - [銀髮膳食](銀髮膳食.md) · [高齡照護食品](高齡照護食品.md) · [銀髮友善食品](銀髮友善食品.md) · [介護食](介護食.md)
 - [吞嚥障礙](吞嚥障礙.md) · [咀嚼困難](咀嚼困難.md) · [口腔衰弱](口腔衰弱.md) · [口腔乾燥症](口腔乾燥症.md)
@@ -135,9 +106,7 @@
 - [水分管理](水分管理.md) · [體重管理](體重管理.md) · [睡眠與飲食](睡眠與飲食.md)
 - [藥物與飲食交互作用](藥物與飲食交互作用.md) · [素食長照](素食長照.md) · [台灣原住民飲食文化](台灣原住民飲食文化.md) · [節慶飲食](節慶飲食.md)
 
----
-
-### [🍲 質地調整 / IDDSI](guides/吞嚥與質地照護.md)
+### 🍲 [質地調整 / IDDSI](guides/吞嚥與質地照護.md)
 
 - [IDDSI](IDDSI.md) · [IDDSI測試方法](IDDSI測試方法.md) · [質地分級](質地分級.md) · [質地調整飲食](質地調整飲食.md)
 - [增稠劑](增稠劑.md) · [糊狀餐](糊狀餐.md) · [尊嚴進食](尊嚴進食.md) · [進食安全](進食安全.md)
@@ -145,9 +114,7 @@
 - [蛋白質補充](蛋白質補充.md) · [熱量補充](熱量補充.md) · [腸道調理](腸道調理.md) · [精準營養](精準營養.md)
 - [骨骼保健](骨骼保健.md) · [運動介入](運動介入.md) · [口腔健康](口腔健康.md) · [口腔衰弱評估](口腔衰弱評估.md) · [口腔運動](口腔運動.md)
 
----
-
-### [📜 法規 / 認證 / 標章](guides/業者工具箱.md)
+### 📜 [法規 / 認證 / 標章](guides/認證與法規.md)
 
 - [食品安全衛生管理法](食品安全衛生管理法.md) · [GHP食品良好衛生規範](GHP食品良好衛生規範.md)
 - [HACCP認證](HACCP認證.md) · [ISO22000認證](ISO22000認證.md) · [TQF](TQF.md) · [CAS標章](CAS標章.md)
@@ -156,19 +123,14 @@
 - [ESG永續策略](ESG永續策略.md) · [永續包裝](永續包裝.md) · [出口策略](出口策略.md)
 - [居家補助申請](居家補助申請.md) · [低收入戶補助](低收入戶補助.md)
 
----
+### 👩‍⚕️ [專業人員 / 技術](guides/專業人員資源.md)
 
-### [👩‍⚕️ 專業人員 / 技術](guides/吞嚥與質地照護.md)
-
-- [營養師](營養師.md) · [言語治療師](言語治療師.md) · [職能治療師](職能治療師.md)
-- [外籍照服員](外籍照服員.md) · [多職種協力](多職種協力.md)
+- [營養師](營養師.md) · [言語治療師](言語治療師.md) · [職能治療師](職能治療師.md) · [外籍照服員](外籍照服員.md)
 - [MNA篩檢工具](MNA篩檢工具.md) · [營養評估工具](營養評估工具.md) · [口腔衰弱評估](口腔衰弱評估.md)
 - [AI智慧營養管理](AI智慧營養管理.md) · [3D列印食物](3D列印食物.md) · [精準營養](精準營養.md)
 - [冷鏈技術](冷鏈技術.md) · [營養密度設計](營養密度設計.md) · [標籤規範](標籤規範.md)
 
----
-
-### [📈 市場 / 業者](guides/業者工具箱.md)
+### 📈 [市場 / 業者](guides/市場與趨勢.md)
 
 - [超高齡社會](超高齡社會.md) · [銀髮經濟](銀髮經濟.md) · [全球發展現況](全球發展現況.md)
 - [社區整合照顧](社區整合照顧.md) · [AnkeCare創新照顧](AnkeCare創新照顧.md) · [台北國際照顧博覽會](台北國際照顧博覽會.md)
@@ -176,16 +138,8 @@
 - [漢典食品](漢典食品.md) · [護力養Basicare](護力養Basicare.md) · [銀色大門](銀色大門.md)
 - [格林全食物](格林全食物.md) · [聯夏食品](聯夏食品.md) · [奇美食品](奇美食品.md) · [佳樂美](佳樂美.md) · [安心樂食新未來](安心樂食新未來.md)
 
-
 </details>
 
 ---
 
-
-<div class="footer-note" markdown="block">
-
-本知識庫持續更新中。所有內容僅供參考，臨床決策請諮詢相關專業人員。
-
-[GitHub Repository](https://github.com/peiyuzhuang315/LTC_Dietary_Wiki)
-
-</div>
+> 本知識庫持續更新中。所有內容僅供參考，臨床決策請諮詢相關專業人員（營養師、語言治療師、醫師）。
