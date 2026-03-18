@@ -116,7 +116,7 @@
 // ⚙️ 在下方填入您的 Gemini API Key
 // 取得方式：https://aistudio.google.com/app/apikey
 // ====================================================
-const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+const GEMINI_API_KEY = "AIzaSyAH_L28zQAW2txNfW_eE8J4wXv49lUx3HA";
 
 const WIKI_BASE = "https://peiyuzhuang315.github.io/LTC_Dietary_Wiki";
 
