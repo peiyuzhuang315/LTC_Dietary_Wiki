@@ -287,13 +287,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
----
-
-!!! info "如何啟用 AI 功能"
-    AI 問答需要填入 **Gemini API Key**（免費）。
-    
-    1. 前往 [Google AI Studio](https://aistudio.google.com/app/apikey) → 點「Create API Key」
-    2. 將 Key 提供給網站管理員，填入頁面程式碼的 `GEMINI_API_KEY` 位置即可啟用
 
 > **注意**：AI 回答僅供參考，臨床決策請諮詢相關專業人員（營養師、語言治療師、醫師）。
 
