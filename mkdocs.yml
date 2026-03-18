@@ -71,6 +71,7 @@ extra_css:
 
 nav:
   - 🏠 知識庫首頁: index.md
+  - 🤖 AI 問答: chat.md
 
   - 📊 1｜經營與營運面向:
     - 長照: 長照.md
