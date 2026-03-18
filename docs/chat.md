@@ -31,6 +31,11 @@
     <div class="related-header">📝 推薦閱讀文章</div>
     <div id="related-articles-links" class="chip-row"></div>
   </div>
+
+  <div id="google-search-area" class="google-search-area" style="display:none">
+    <div class="related-header">🔍 延伸 Google 搜尋</div>
+    <div id="google-search-links"></div>
+  </div>
 </div>
 
 <div id="chat-error" class="chat-error" style="display:none"></div>
@@ -83,7 +88,17 @@
   background: var(--md-code-bg-color); border-radius: 10px; padding: 1.25rem;
   line-height: 1.75; border: 1px solid var(--md-default-fg-color--lightest);
   white-space: pre-wrap; margin-bottom: 1rem;
+  word-break: break-word; overflow-wrap: break-word;
 }
+
+.google-search-area { margin-top: 0.5rem; }
+.google-chip {
+  display: inline-block; background: #f1f3f4; color: #1a73e8 !important;
+  padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.82rem;
+  text-decoration: none !important; margin: 0.25rem 0.25rem 0 0;
+  border: 1px solid #dadce0; transition: background 0.15s;
+}
+.google-chip:hover { background: #e8eaed; }
 
 .related-header { font-weight: 600; margin: 0.75rem 0 0.5rem; color: var(--md-typeset-color); font-size: 0.9rem; }
 
@@ -213,7 +228,8 @@ async function submitQuestion() {
         body: JSON.stringify({
           system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
           contents: [{ role: "user", parts: [{ text: question }] }],
-          generationConfig: { maxOutputTokens: 700, temperature: 0.5 }
+          generationConfig: { temperature: 0.5 },
+          thinkingConfig: { thinkingBudget: 0 }
         })
       }
     );
@@ -260,6 +276,15 @@ async function submitQuestion() {
     } else {
       articlesArea.style.display = "none";
     }
+
+    // 顯示 Google 搜尋連結
+    const googleArea = document.getElementById("google-search-area");
+    const googleLinks = document.getElementById("google-search-links");
+    const searchTerms = termNames.slice(0, 3).concat([question.slice(0, 20)]).filter(Boolean);
+    googleLinks.innerHTML = searchTerms.map(kw =>
+      `<a href="https://www.google.com/search?q=${encodeURIComponent('長照膳食 ' + kw)}" class="google-chip" target="_blank" rel="noopener">🔍 ${kw}</a>`
+    ).join("");
+    googleArea.style.display = "block";
 
   } catch (err) {
     document.getElementById("chat-error").textContent = `⚠️ 無法取得 AI 回答：${err.message}`;

@@ -69,6 +69,10 @@ extra:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/ai_chat_widget.js
+  - javascripts/auto_link_terms.js
+
 nav:
   - 🏠 知識庫首頁: index.md
   - 🤖 AI 問答: chat.md
