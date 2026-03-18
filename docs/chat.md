@@ -251,15 +251,18 @@ async function submitQuestion() {
     document.getElementById("chat-answer-content").textContent = cleanAnswer;
     document.getElementById("chat-answer-area").style.display = "block";
 
-    // 顯示關聯詞條
-    const termNames = extractSection(answer, "📖\\s*關聯詞條|🔗\\s*關聯詞條");
-    const matchedTerms = termNames.filter(t => WIKI_TERMS.includes(t));
+    // 顯示關聯詞條（直接顯示 AI 建議的所有詞條，有 wiki 頁連 wiki）
+    const termNames = extractSection(answer, "📖\\s*關聯詞條");
     const termsArea = document.getElementById("related-terms-area");
     const termsLinks = document.getElementById("related-terms-links");
-    if (matchedTerms.length > 0) {
-      termsLinks.innerHTML = matchedTerms.map(t =>
-        `<a href="${WIKI_BASE}/${encodeURIComponent(t)}/" class="term-chip" target="_blank">${t}</a>`
-      ).join("");
+    if (termNames.length > 0) {
+      termsLinks.innerHTML = termNames.map(t => {
+        const inWiki = WIKI_TERMS.includes(t);
+        const url = inWiki
+          ? `${WIKI_BASE}/${encodeURIComponent(t)}/`
+          : `https://www.google.com/search?q=${encodeURIComponent("長照膳食 " + t)}`;
+        return `<a href="${url}" class="term-chip" target="_blank">${t}</a>`;
+      }).join("");
       termsArea.style.display = "block";
     } else {
       termsArea.style.display = "none";
@@ -284,7 +287,7 @@ async function submitQuestion() {
     const googleLinks = document.getElementById("google-search-links");
     const searchTerms = termNames.slice(0, 3).concat([question.slice(0, 20)]).filter(Boolean);
     googleLinks.innerHTML = searchTerms.map(kw =>
-      `<a href="https://www.google.com/search?q=${encodeURIComponent('長照膳食 ' + kw)}" class="google-chip" target="_blank" rel="noopener">🔍 ${kw}</a>`
+      `<a href="https://www.google.com/search?q=${encodeURIComponent("長照膳食 " + kw)}" class="google-chip" target="_blank" rel="noopener">🔍 ${kw}</a>`
     ).join("");
     googleArea.style.display = "block";
 
