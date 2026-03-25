@@ -2,7 +2,7 @@
  * LTC Wiki – 全站 AI 聊天浮窗（含長照專家角色系統 + Markdown 渲染）
  */
 (function () {
-  const GEMINI_API_KEY = "AIzaSyBOFiq-y9oZft2hqBzFqc7ZvMmy0P0ngxQ";
+  const WORKER_URL = "https://ltc-ai-proxy.peiyuzhuang.workers.dev";
   const WIKI_BASE = "https://peiyuzhuang315.github.io/LTC_Dietary_Wiki";
 
   // ── 長照專家角色 ──────────────────────────────────────────────
@@ -253,7 +253,7 @@
 
     try {
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `${WORKER_URL}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
