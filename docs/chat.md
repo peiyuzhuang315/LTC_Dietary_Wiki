@@ -159,10 +159,13 @@
 .expert-section-role { opacity: .65; font-size: .78rem; }
 .expert-section-bubble {
   border-left: 3px solid; padding: .75rem 1rem;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 12px 12px 0;
   background: var(--md-code-bg-color);
-  line-height: 1.7;
+  line-height: 1.75;
+  margin-bottom: 0.6rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
+.expert-section-bubble:last-child { margin-bottom: 0; }
 .expert-section-bubble p { margin: 0 0 .4em; }
 .expert-section-bubble ul, .expert-section-bubble ol { margin: .3em 0 .3em 1.3em; }
 .expert-section-bubble li { margin: .15em 0; }
