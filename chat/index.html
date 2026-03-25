@@ -470,6 +470,26 @@
   
 
       
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E6%B0%A3%E5%A2%8A%E5%BA%8A%E8%A3%9C%E5%8A%A9/" class="md-tabs__link">
+          
+  
+  
+  🌱 知識飛輪新增
+
+        </a>
+      </li>
+    
+  
+
+      
     </ul>
   </div>
 </nav>
@@ -5750,6 +5770,95 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🌱 知識飛輪新增
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🌱 知識飛輪新增
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%B0%A3%E5%A2%8A%E5%BA%8A%E8%A3%9C%E5%8A%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    氣墊床補助
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -5927,10 +6036,13 @@
 .expert-section-role { opacity: .65; font-size: .78rem; }
 .expert-section-bubble {
   border-left: 3px solid; padding: .75rem 1rem;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 12px 12px 0;
   background: var(--md-code-bg-color);
-  line-height: 1.7;
+  line-height: 1.75;
+  margin-bottom: 0.6rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
+.expert-section-bubble:last-child { margin-bottom: 0; }
 .expert-section-bubble p { margin: 0 0 .4em; }
 .expert-section-bubble ul, .expert-section-bubble ol { margin: .3em 0 .3em 1.3em; }
 .expert-section-bubble li { margin: .15em 0; }
@@ -5967,7 +6079,7 @@
 // 取得方式：https://aistudio.google.com/app/apikey
 // ====================================================
 // API 請求透過 Cloudflare Worker 代理（Key 安全存於 Worker 密鑰，不進入 GitHub）
-const WORKER_URL = "https://ltc-ai-proxy.peiyuzhuang.workers.dev";
+const WORKER_URL = "https://ltc-wiki-worker.peiyuzhuang.workers.dev";
 
 
 const WIKI_BASE = "https://peiyuzhuang315.github.io/LTC_Dietary_Wiki";
@@ -6052,13 +6164,25 @@ function detectExperts(question) {
 
 function buildSystemPrompt(experts) {
   const base = SYSTEM_PROMPT;
-  if (!experts.length) return base;
+  // 若無特定專家，由院長親自代表回應
+  if (!experts.length) {
+    return base + `\n\n【本題啟動代表：長照督導院長】
+【身份要求】：你現在是長照機構的「督導院長」。面對一般性問題或閒聊，請以溫暖、沉穩且具備高度的口吻回話。
+① **自我介紹**：簡述你是院長，致力於整合各界長照專業。
+② **引導專業**：若使用者只是隨機提問，請禮貌地邀請他詢問關於營養、照護、補助或輔具等具體長照問題。
+③ **強烈導讀**：明確說出：「為了讓您更安心，我們已在下方整理了專業詞條與深度文章，強烈建議您點閱深入了解。正確的知識是您照顧路上最強大的後盾。」
+最後輸出關聯詞條。展現院長的高度與溫度。`;
+  }
   if (experts.length === 1) {
     const e = experts[0];
     return base + `\n\n【本題啟動的專家角色】\n${e.persona}\n核心數位技能：${e.skills.join('、')}。\n
 回答內容後，請加上以下段落：
 【長照督導院長】
-（以機構督導的口居，用 2-3 句話綜合以上建議，給出最重要的一個行動方向，並提醒家屬可參考下方相關詞條和搜尋資源。語氣溫婉而簡潔）\n
+【寫作要求】：你是一位充滿智慧與溫度的機構負責人。請實現以下四件事（缺一不可）：
+① **誠摯同理**：用 1-2 句話深刻感謝家屬面對照顧壓力的堅持。要讓對方感到被看見、被理解。
+② **精闢總結**：以院長的高度，整合以上專家的建議，點出一個「現在馬上就能做的」具體行動。
+③ **專業導讀**：明確說出：「為了讓您更安心，我們已在下方整理了與本題相關的**專業詞條與深度文章**，強烈建議您點閱深入了解。照顧路上，正確的知識是您最強大的後盾。」
+④ **建立信賴**：結語語氣要穩定、溫暖，展現知識平台的權威與支持感。\n
 最後輸出關聯詞條。語氣專業直接，展現該角色的專業深度。`;
   }
   // 多角色：要求分段輸出帶協調師結尾
@@ -6066,8 +6190,12 @@ function buildSystemPrompt(experts) {
     experts.map(e => `・${e.digitalTitle}（${e.realRole}）：${e.persona.replace(/你以.+?身份回答，/,'')}`).join('\n') +
     `\n\n【重要格式要求】\n請將回答分成 ${experts.length} 個專家段落，加上 1 個協調師結尾，格式如下：\n` +
     experts.map(e => `【${e.digitalTitle}】\n（此角色的專業建議內容）`).join('\n\n') +
-    `\n\n【長照督導院長】\n（以機構督導的口居，2-3 句話綜合以上專家建議，給出最重要的行動方向，提醒參考下方詞條。語氣溫婉簡潔）\n
-最後輸出關聯詞條。語氣專業直接，每段展現各角色專業深度。`;
+    `\n\n【長照督導院長】\n【寫作要求】：你是一位充滿智慧與溫度的機構負責人。請實現以下四件事（缺一不可）：
+① **誠摯同理**：用 1-2 句話深刻感謝家屬面對照顧壓力的堅持。要讓對方感到被看見、被理解。
+② **精闢總結**：以院長的高度，整合以上專家的建議，點出一個「現在馬上就能做的」具體行動。
+③ **專業導讀**：明確說出：「為了讓您更安心，我們已在下方整理了與本題相關的**專業詞條與深度文章**，強烈建議您點閱深入了解。照顧路上，正確的知識是您最強大的後盾。」
+④ **建立信賴**：結語語氣要穩定、溫暖，展現知識平台的權威與支持感。\n
+最後輸出關聯詞條。每段回答展現各角色專業深度，不僵化套版。`;
 }
 
 // 解析多角色分段回答（含院長特殊段落）
@@ -6075,7 +6203,16 @@ function parseExpertSections(answer, experts) {
   const DEAN_KEY = "長照督導院長";
   const clean = t => t.replace(/📖\s*關聯詞條[：:][^\n]+/g,'').replace(/📝\s*推薦文章[：:][^\n]+/g,'').trim();
 
-  if (experts.length <= 1 && !answer.includes(DEAN_KEY)) {
+  // 若無特定專家（一般性問題），全數交由院長渲染
+  if (experts.length === 0) {
+    let deanText = answer;
+    const deanIdx = answer.indexOf(`【${DEAN_KEY}】`);
+    if (deanIdx !== -1) deanText = answer.slice(deanIdx + `【${DEAN_KEY}】`.length);
+    else if (answer.includes(`【本題啟動代表：長照督導院長】`)) deanText = answer.replace(`【本題啟動代表：長照督導院長】`, '');
+    return { sections: [], principal: clean(deanText) };
+  }
+
+  if (experts.length === 1 && !answer.includes(DEAN_KEY)) {
     return { sections: [{ expert: experts[0], text: clean(answer) }], principal: null };
   }
 
@@ -6097,7 +6234,9 @@ function parseExpertSections(answer, experts) {
   }
 
   if (markers.length === 0) {
-    return { sections: [{ expert: experts[0], text: clean(mainPart) }], principal: deanText };
+    // 若無專家段落但有院長，回傳空專家段落以供渲染（或使用 experts[0] 作為 fallback，若有）
+    const fallbackSection = (mainPart.trim() && experts.length > 0) ? [{ expert: experts[0], text: clean(mainPart) }] : [];
+    return { sections: fallbackSection, principal: deanText };
   }
 
   const sections = [];
@@ -6167,20 +6306,22 @@ const APP_ARTICLES = [
 const SYSTEM_PROMPT = `你是「長照膳食百科 AI」，專屬於「長照膳食實戰百科」網站的智能助理。
 你的知識庫包含 130+ 個長照膳食相關詞條，以及 10 篇深度應用文章。
 
-【溝通原則】
-1. 先識別問題背後的心理狀態：
-   - 若問題含有情緒訊號（如「怎麼辦」「一直這樣」「我很擔心」「不知道該…」「越來越…」「撐不住」「好累」），
-     用 1-2 句話先承認其困境的真實性與辛苦，再切入專業建議
-   - 承認困境要真誠具體（例：「長期照顧家人，這種無力感確實很真實。」）
-     絕對禁止空洞讚美（例：「您問得很好！」「感謝您的提問」「這是個重要的問題」）
-   - 若問題純屬技術諮詢，直接進入重點，不需要情緒鋪墊
-2. 語氣專業直接，不繞彎，不廢話，不說「首先」「一般而言」「當然」等空洞過渡語
-3. 回答長度適中（200-400 字），條列清晰，善用分點
-4. 如果問題超出長照膳食範疇，用一句話說明並引導回相關主題
-5. 回答結尾必須分兩行輸出：
+【陪伴與護照建立原則】
+1. 建立個案人物誌 (Care Profile)：請從過去的對話紀錄中，慢慢拼湊被照顧者（個案）的背景樣貌。
+   - 若對話中缺乏關鍵背景資訊（如：不清楚年齡、性別、牙齒狀況、慢性病史或拒食多久等）。
+   - 請在解答使用者的問題後，以朋友關心的口吻「自然地拋出 1 個好回答的探索性小問題」。
+   - 範例：「不知道爺爺今年幾歲了呢？假牙還戴得住嗎？」
+   - ⚠️ 絕對禁止：一次連環問多個問題、像醫師看診般條列逼問。每次只需要輕柔地問 1 個細節。
+   - 目的：讓家屬覺得被接住，並逐步讓 AI 掌握個案輪廓，提高後續精準度。
+2. 同理心優先：
+   - 若問題含有情緒訊號（如「怎麼辦」「好累」「撐不住」），用 1-2 句話真誠且具體地承認其辛苦，再切入專業。
+   - 禁止空洞的罐頭回覆（如「感謝您的提問」「這是好問題」）。
+3. 語氣專業直接，不需要「首先」「一般而言」等廢話。
+4. 回答長度適中，條列清晰。
+5. 每次回答結尾必須精準包含這兩行（用於推薦）：
    「📖 關聯詞條：詞條A、詞條B、詞條C」
-   「📝 推薦文章：文章關鍵字1、文章關鍵字2」
-   （詞條選 2-4 個最相關的；文章關鍵字從下列選 0-2 個：家屬、IDDSI、SLP、市場、外包、失智症、廚師、成本、日本、AI）`;
+   「📝 推薦文章：關鍵字1、關鍵字2」
+   （詞條選最相關的 2-4 個，關鍵字只能挑 0-2 個：家屬、IDDSI、SLP、市場、外包、失智症、廚師、成本、日本、AI）`;
 
 // ── Markdown 渲染 ──────────────────────────────────────────────
 function renderMd(text) {
@@ -6238,10 +6379,16 @@ function matchArticles(keywords) {
   return results.slice(0, 3);
 }
 
+let chatHistory = JSON.parse(sessionStorage.getItem('ltc_chat_history') || '[]');
+
 async function submitQuestion() {
   const input = document.getElementById("chat-input");
   const question = input.value.trim();
   if (!question) return;
+
+  // 加入歷史紀錄 (保留最後 10 句往返)
+  chatHistory.push({ role: "user", parts: [{ text: question }] });
+  if (chatHistory.length > 20) chatHistory = chatHistory.slice(chatHistory.length - 20);
 
   // 偵測相關專家角色
   const experts = detectExperts(question);
@@ -6261,7 +6408,7 @@ async function submitQuestion() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           system_instruction: { parts: [{ text: buildSystemPrompt(experts) }] },
-          contents: [{ role: "user", parts: [{ text: question }] }],
+          contents: chatHistory,
           generationConfig: {
             temperature: 0.5,
             thinkingConfig: { thinkingBudget: 0 }
@@ -6270,12 +6417,15 @@ async function submitQuestion() {
       }
     );
 
-    if (!res.ok) throw new Error(`API 回應錯誤 ${res.status}`);
     const data = await res.json();
     let answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    if (!answer) throw new Error("AI 未回傳內容");
+    if (!answer) throw new Error("無效的伺服器回傳或受到安全阻擋");
 
-    // 清除標記行，留下主要回答
+    // 保存 AI 回覆至歷史紀錄
+    chatHistory.push({ role: "model", parts: [{ text: answer }] });
+    sessionStorage.setItem('ltc_chat_history', JSON.stringify(chatHistory));
+
+    // 過濾推薦與關聯標籤區塊，僅留下純淨對話主要回答
     const cleanAnswer = answer
       .replace(/📖\s*關聯詞條[：:][^\n]+/g, "")
       .replace(/📝\s*推薦文章[：:][^\n]+/g, "")
@@ -6290,10 +6440,14 @@ async function submitQuestion() {
     const cardsEl = document.getElementById("expert-cards-area");
     cardsEl.style.display = "none";
 
-    if (sections.length > 1 || principal) {
-      // 多角色：每位專家各自名片 + 對話框
+    if (sections.length > 0 || principal) {
+      // 無論角色數量，全面採用動態對話氣泡流 (Conversational Flow)
       let html = sections.map(sec => {
-        const e = sec.expert;
+        const e = sec.expert || {emoji:"🤖", digitalTitle:"AI 助手", realRole:"智能助理", color:"#00897b"};
+        // 依雙換行切分段落，各自包裝為獨立氣泡
+        const blocks = sec.text.split(/(?:\r?\n){2,}/).map(t => t.trim()).filter(Boolean);
+        const bubblesHtml = blocks.map(b => `<div class="expert-section-bubble" style="border-left-color:${e.color}">${renderMd(b)}</div>`).join('');
+
         return `
         <div class="expert-section">
           <div class="expert-section-badge" style="border-color:${e.color}">
@@ -6303,12 +6457,14 @@ async function submitQuestion() {
               <span class="expert-section-role"> · ${e.realRole}</span>
             </div>
           </div>
-          <div class="expert-section-bubble" style="border-left-color:${e.color}">${renderMd(sec.text)}</div>
+          ${bubblesHtml}
         </div>`;
       }).join('');
 
       // 院長壓軸出場
       if (principal) {
+        const blocks = principal.split(/(?:\r?\n){2,}/).map(t => t.trim()).filter(Boolean);
+        const bubblesHtml = blocks.map(b => `<div class="dean-bubble">${renderMd(b)}</div>`).join('');
         html += `
         <div class="dean-section">
           <div class="dean-badge">
@@ -6318,14 +6474,10 @@ async function submitQuestion() {
               <span class="dean-role"> · 跨域照護統籌</span>
             </div>
           </div>
-          <div class="dean-bubble">${renderMd(principal)}</div>
+          ${bubblesHtml}
         </div>`;
       }
       contentEl.innerHTML = html;
-    } else {
-      // 單角色：原有名片 + 回答框
-      renderExpertCards(experts);
-      contentEl.innerHTML = renderMd(sections[0]?.text || '');
     }
 
     document.getElementById("chat-answer-area").style.display = "block";
@@ -6334,9 +6486,14 @@ async function submitQuestion() {
     const termNames = extractSection(answer, "📖\\s*關聯詞條");
     const termsArea = document.getElementById("related-terms-area");
     const termsLinks = document.getElementById("related-terms-links");
+
+    // 收集缺失的詞條 (Phase 5: 知識飛輪種子)
+    const missingTerms = [];
+
     if (termNames.length > 0) {
       termsLinks.innerHTML = termNames.map(t => {
         const inWiki = WIKI_TERMS.includes(t);
+        if (!inWiki) missingTerms.push(t);
         const url = inWiki
           ? `${WIKI_BASE}/${encodeURIComponent(t)}/`
           : `https://www.google.com/search?q=${encodeURIComponent("長照膳食 " + t)}`;
@@ -6345,6 +6502,21 @@ async function submitQuestion() {
       termsArea.style.display = "block";
     } else {
       termsArea.style.display = "none";
+    }
+
+    // 發送缺失詞條至 Cloudflare Notion 記錄站 (Phase 5)
+    if (missingTerms.length > 0) {
+      missingTerms.forEach(term => {
+        fetch(`${WORKER_URL}/log`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            source: "chat.md 主視窗",
+            question: question,
+            term: term
+          })
+        }).catch(err => console.warn("Failed to log missing term", err));
+      });
     }
 
     // 顯示推薦文章
