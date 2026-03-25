@@ -168,6 +168,28 @@
 .expert-section-bubble li { margin: .15em 0; }
 .expert-section-bubble strong { font-weight: 700; }
 
+/* 院長壓軸卡片 */
+.dean-section { margin-top: 1.2rem; margin-bottom: 1rem; }
+.dean-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 7px 14px; border-radius: 10px;
+  background: linear-gradient(135deg, #fff8e1, #fff3cd);
+  border: 2px solid #f9a825; margin-bottom: 8px;
+  font-size: 0.85rem; box-shadow: 0 2px 8px rgba(249,168,37,.2);
+}
+.dean-emoji { font-size: 1.5rem; }
+.dean-title { font-weight: 800; color: #e65100; font-size: .95rem; }
+.dean-role { opacity: .65; font-size: .78rem; color: #5d4037; }
+.dean-bubble {
+  border-left: 4px solid #f9a825; padding: .85rem 1.1rem;
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(135deg, #fffde7, #fff8e1);
+  line-height: 1.75; font-size: .92rem;
+  box-shadow: 0 2px 8px rgba(249,168,37,.1);
+}
+.dean-bubble p { margin: 0 0 .4em; }
+.dean-bubble strong { font-weight: 700; color: #e65100; }
+
 @media (max-width: 600px) { #chat-submit { align-self: stretch; } }
 </style>
 
@@ -250,7 +272,7 @@ function detectExperts(question) {
   });
   const matched = Object.entries(scores)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 2)
+    .slice(0, 5)  // 最多召喚 5 位專家
     .map(([id]) => EXPERTS.find(e => e.id === id));
   // 後備：若未命中任何角色但屬長照議題，預設顯示營養師
   if (matched.length === 0 && LTC_GENERAL_KW.some(kw => question.includes(kw))) {
@@ -280,31 +302,48 @@ function buildSystemPrompt(experts) {
 最後輸出關聯詞條。語氣專業直接，每段展現各角色專業深度。`;
 }
 
-// 解析多角色分段回答
+// 解析多角色分段回答（含院長特殊段落）
 function parseExpertSections(answer, experts) {
-  if (experts.length <= 1) {
-    const clean = answer.replace(/📖\s*關聯詞條[：:][^\n]+/g,'').replace(/📝\s*推薦文章[：:][^\n]+/g,'').trim();
-    return [{ expert: experts[0], text: clean }];
+  const DEAN_KEY = "長照督導院長";
+  const clean = t => t.replace(/📖\s*關聯詞條[：:][^\n]+/g,'').replace(/📝\s*推薦文章[：:][^\n]+/g,'').trim();
+
+  if (experts.length <= 1 && !answer.includes(DEAN_KEY)) {
+    return { sections: [{ expert: experts[0], text: clean(answer) }], principal: null };
   }
-  const sections = [];
+
+  // 先切出院長段落
+  let mainPart = answer, deanText = null;
+  const deanIdx = answer.indexOf(`【${DEAN_KEY}】`);
+  if (deanIdx !== -1) {
+    deanText = clean(answer.slice(deanIdx + `【${DEAN_KEY}】`.length));
+    mainPart = answer.slice(0, deanIdx);
+  }
+
+  // 解析專家段落
   const markerRe = /【([^】]+)】/g;
   const markers = [];
   let m;
-  while ((m = markerRe.exec(answer)) !== null) {
+  while ((m = markerRe.exec(mainPart)) !== null) {
     const expert = experts.find(e => e.digitalTitle.includes(m[1]) || m[1].includes(e.digitalTitle));
     if (expert) markers.push({ expert, index: m.index, markerLen: m[0].length });
   }
+
   if (markers.length === 0) {
-    const clean = answer.replace(/📖\s*關聯詞條[：:][^\n]+/g,'').replace(/📝\s*推薦文章[：:][^\n]+/g,'').trim();
-    return experts.map((e, i) => ({ expert: e, text: i === 0 ? clean : '' })).filter(s => s.text);
+    return { sections: [{ expert: experts[0], text: clean(mainPart) }], principal: deanText };
   }
+
+  const sections = [];
   for (let i = 0; i < markers.length; i++) {
     const start = markers[i].index + markers[i].markerLen;
-    const end = markers[i+1] ? markers[i+1].index : answer.length;
-    const raw = answer.slice(start, end).replace(/📖\s*關聯詞條[：:][^\n]+/g,'').replace(/📝\s*推薦文章[：:][^\n]+/g,'').trim();
+    const end = markers[i+1] ? markers[i+1].index : mainPart.length;
+    const raw = clean(mainPart.slice(start, end));
     if (raw) sections.push({ expert: markers[i].expert, text: raw });
   }
-  return sections.length ? sections : [{ expert: experts[0], text: answer.replace(/📖\s*關聯詞條[：:][^\n]+/g,'').trim() }];
+
+  return {
+    sections: sections.length ? sections : [{ expert: experts[0], text: clean(mainPart) }],
+    principal: deanText
+  };
 }
 
 function renderExpertCards(experts) {
@@ -475,17 +514,17 @@ async function submitQuestion() {
       .replace(/🔗\s*關聯詞條[：:][^\n]+/g, "")
       .trim();
 
-    // 解析多角色分段
-    const sections = parseExpertSections(answer, experts);
+    // 解析多角色分段（含院長）
+    const { sections, principal } = parseExpertSections(answer, experts);
 
-    // 清空並重新渲染（多角色分段對話框）
+    // 清空並渲染
     const contentEl = document.getElementById("chat-answer-content");
     const cardsEl = document.getElementById("expert-cards-area");
     cardsEl.style.display = "none";
 
-    if (sections.length > 1) {
-      // 多角色：每個角色各自的名片 + 對話框
-      contentEl.innerHTML = sections.map(sec => {
+    if (sections.length > 1 || principal) {
+      // 多角色：每位專家各自名片 + 對話框
+      let html = sections.map(sec => {
         const e = sec.expert;
         return `
         <div class="expert-section">
@@ -499,6 +538,22 @@ async function submitQuestion() {
           <div class="expert-section-bubble" style="border-left-color:${e.color}">${renderMd(sec.text)}</div>
         </div>`;
       }).join('');
+
+      // 院長壓軸出場
+      if (principal) {
+        html += `
+        <div class="dean-section">
+          <div class="dean-badge">
+            <span class="dean-emoji">🏅</span>
+            <div>
+              <span class="dean-title">長照督導院長</span>
+              <span class="dean-role"> · 跨域照護統籌</span>
+            </div>
+          </div>
+          <div class="dean-bubble">${renderMd(principal)}</div>
+        </div>`;
+      }
+      contentEl.innerHTML = html;
     } else {
       // 單角色：原有名片 + 回答框
       renderExpertCards(experts);
@@ -506,7 +561,6 @@ async function submitQuestion() {
     }
 
     document.getElementById("chat-answer-area").style.display = "block";
-
 
     // 顯示關聯詞條（直接顯示 AI 建議的所有詞條，有 wiki 頁連 wiki）
     const termNames = extractSection(answer, "📖\\s*關聯詞條");
