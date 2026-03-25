@@ -76,6 +76,7 @@ extra_javascript:
 nav:
   - 🏠 知識庫首頁: index.md
   - 🤖 AI 問答: chat.md
+  - ⚙️ 管理後台: admin.md
 
   - 📖 分類指南:
     - 🏡 家屬照護指南: guides/家屬照護指南.md
