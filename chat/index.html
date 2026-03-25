@@ -5788,6 +5788,7 @@
     <span class="answer-badge">🤖 AI 回答</span>
     <button class="clear-btn" onclick="clearAnswer()">清除</button>
   </div>
+  <div id="expert-cards-area" style="display:none; margin-bottom:1rem;"></div>
   <div id="chat-answer-content" class="answer-content"></div>
 
   <div id="related-terms-area" style="display:none">
@@ -5855,9 +5856,15 @@
 .answer-content {
   background: var(--md-code-bg-color); border-radius: 10px; padding: 1.25rem;
   line-height: 1.75; border: 1px solid var(--md-default-fg-color--lightest);
-  white-space: pre-wrap; margin-bottom: 1rem;
-  word-break: break-word; overflow-wrap: break-word;
+  margin-bottom: 1rem; word-break: break-word; overflow-wrap: break-word;
 }
+.answer-content p { margin: 0 0 .5em; }
+.answer-content ul, .answer-content ol { margin: .3em 0 .5em 1.4em; padding: 0; }
+.answer-content li { margin: .2em 0; }
+.answer-content h4 { margin: .6em 0 .2em; font-size: 1rem; font-weight: 700; }
+.answer-content h5 { margin: .4em 0 .15em; font-size: .9rem; font-weight: 600; }
+.answer-content strong { font-weight: 700; }
+.answer-content code { background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; font-size: .88rem; }
 
 .google-search-area { margin-top: 0.5rem; }
 .google-chip {
@@ -5891,6 +5898,22 @@
   padding: 0.85rem 1rem; margin-top: 0.75rem; font-size: 0.9rem;
 }
 
+.expert-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 14px; border-radius: 10px;
+  background: var(--md-code-bg-color);
+  border-left: 4px solid; margin-bottom: 8px;
+}
+.expert-card-emoji { font-size: 1.6rem; line-height: 1; margin-top: 2px; }
+.expert-card-info { flex: 1; }
+.expert-digital-title { font-weight: 700; font-size: 0.92rem; }
+.expert-real-role { font-size: 0.78rem; color: var(--md-default-fg-color--light); margin-bottom: 4px; }
+.expert-skill-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.expert-skill-chip {
+  padding: 1px 8px; border-radius: 12px; font-size: 0.72rem;
+  background: rgba(0,0,0,0.07); color: var(--md-typeset-color);
+}
+
 @media (max-width: 600px) { #chat-submit { align-self: stretch; } }
 </style>
 
@@ -5902,6 +5925,102 @@
 const GEMINI_API_KEY = "AIzaSyBOFiq-y9oZft2hqBzFqc7ZvMmy0P0ngxQ";
 
 const WIKI_BASE = "https://peiyuzhuang315.github.io/LTC_Dietary_Wiki";
+
+// ============================================================
+// 🩺 長照專家角色定義
+// ============================================================
+const EXPERTS = [
+  { id:"care_assessor", emoji:"📋", color:"#1565c0",
+    realRole:"照服專員（照專）", digitalTitle:"失能評估引擎",
+    skills:["NLP 語意分析","CMS 評估演算法"],
+    persona:"你以失能評估引擎（照服專員）身份回答，專長分析照護需求、判定失能等級與補助資格。",
+    keywords:["失能","失能評估","CMS","照顧服務","照服員","申請居家","照服"] },
+  { id:"case_manager", emoji:"🗂️", color:"#6a1b9a",
+    realRole:"個案管理員（個管師）", digitalTitle:"照護方案架構師",
+    skills:["排程優化","資源分配邏輯"],
+    persona:"你以照護方案架構師（個案管理員）身份回答，專長生成個人化照護計畫、媒合服務單位與預算管控。",
+    keywords:["照護計畫","個管","服務媒合","方案","排程","個案管理","照護安排"] },
+  { id:"home_nurse", emoji:"🩺", color:"#c62828",
+    realRole:"居家護理師", digitalTitle:"臨床監測守護者",
+    skills:["生理數據分析","遠端傷口辨識"],
+    persona:"你以臨床監測守護者（居家護理師）身份回答，專長監控生命徵象、傷口照護與慢性病管理。",
+    keywords:["血壓","血糖","傷口","護理","生命徵象","體溫","心跳","居家護理","換藥","導尿"] },
+  { id:"therapist", emoji:"🏃", color:"#2e7d32",
+    realRole:"物理/職能治療師", digitalTitle:"復能動態指導員",
+    skills:["電腦視覺","人體骨架偵測"],
+    persona:"你以復能動態指導員（物理/職能治療師）身份回答，專長分析跌倒風險、指導復健動作與日常生活功能訓練。",
+    keywords:["跌倒","復健","走路","行走","平衡","關節","職能治療","物理治療","復能","肌力","ADL"] },
+  { id:"nutritionist", emoji:"🥗", color:"#00897b",
+    realRole:"營養師", digitalTitle:"精準營養規劃師",
+    skills:["膳食圖像辨識","營養成分資料庫"],
+    persona:"你以精準營養規劃師（營養師）身份回答，專長設計個人化膳食計畫、吞嚥質地調整與管灌配方建議。",
+    keywords:["飲食","吞嚥","營養","食物","管灌","膳食","配方","熱量","蛋白質","吃","進食","不吃飯","飲食計畫","限鉀","低鈉"] },
+  { id:"care_worker", emoji:"🙌", color:"#f57c00",
+    realRole:"照顧服務員（照服員）", digitalTitle:"虛擬日常助理",
+    skills:["IoT 裝置連動","SOP 指引系統"],
+    persona:"你以虛擬日常助理（照顧服務員）身份回答，專長日常照護操作、翻身移位技巧與生活起居記錄。",
+    keywords:["翻身","移位","餵藥","日常照顧","排泄","大便","排便","尿","洗澡","清潔","臥床","喂食"] },
+  { id:"social_worker", emoji:"🏛️", color:"#0277bd",
+    realRole:"社會工作師（社工）", digitalTitle:"福利資源導航員",
+    skills:["政策大數據檢索","風險情緒偵測"],
+    persona:"你以福利資源導航員（社工）身份回答，專長媒合最新政府補助資源、解讀長照政策與評估照顧者負荷。",
+    keywords:["補助","申請","政策","長照2.0","福利","補貼","社工","法規","1966","長照服務","失能補助","補助資格"] },
+  { id:"psychologist", emoji:"💙", color:"#7b1fa2",
+    realRole:"心理師", digitalTitle:"情緒共感代理人",
+    skills:["情感運算","CBT 對話引導"],
+    persona:"你以情緒共感代理人（心理師）身份回答，專長傾聽照顧者壓力、提供情緒支持與認知行為療法(CBT)建議。",
+    keywords:["壓力","情緒","失眠","憂鬱","焦慮","心理","崩潰","辛苦","照顧壓力","心情","傷心","撐不住","喘息"] },
+  { id:"pharmacist", emoji:"💊", color:"#d84315",
+    realRole:"藥師", digitalTitle:"智慧用藥安全員",
+    skills:["藥物交互作用比對","雲端藥歷串接"],
+    persona:"你以智慧用藥安全員（藥師）身份回答，專長偵測藥物交互作用、重複用藥風險與正確用藥時間指導。",
+    keywords:["藥物","用藥","藥","副作用","藥單","服藥","藥師","藥物交互","重複用藥","安眠藥","抗生素"] },
+  { id:"assistive_tech", emoji:"🏠", color:"#558b2f",
+    realRole:"輔具評估員", digitalTitle:"空間改造成型師",
+    skills:["AR 擴增實境","3D 建模分析"],
+    persona:"你以空間改造成型師（輔具評估員）身份回答，專長規劃居家無障礙環境、輔具選配與坡道扶手配置。",
+    keywords:["輔具","扶手","坡道","無障礙","居家改造","輪椅","助行器","浴室安全","防跌","住宅修繕"] }
+];
+
+function detectExperts(question) {
+  const scores = {};
+  EXPERTS.forEach(e => {
+    let s = 0;
+    e.keywords.forEach(kw => { if (question.includes(kw)) s++; });
+    if (s > 0) scores[e.id] = s;
+  });
+  return Object.entries(scores)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2)
+    .map(([id]) => EXPERTS.find(e => e.id === id));
+}
+
+function buildSystemPrompt(experts) {
+  const base = SYSTEM_PROMPT;
+  if (!experts.length) return base;
+  const primary = experts[0];
+  const secondary = experts[1];
+  let inject = `\n\n【本題啟動的專家角色】\n${primary.persona}\n核心數位技能：${primary.skills.join('、')}。`;
+  if (secondary) inject += `\n\n同時融入「${secondary.digitalTitle}」（${secondary.realRole}）的協作觀點，技能：${secondary.skills.join('、')}。`;
+  inject += `\n回答時，語氣專業直接，展現該角色的專業深度。`;
+  return base + inject;
+}
+
+function renderExpertCards(experts) {
+  const area = document.getElementById("expert-cards-area");
+  if (!experts.length) { area.style.display = "none"; return; }
+  area.innerHTML = experts.map((e, i) => `
+    <div class="expert-card" style="border-color:${e.color}">
+      <div class="expert-card-emoji">${e.emoji}</div>
+      <div class="expert-card-info">
+        <div class="expert-digital-title" style="color:${e.color}">${e.digitalTitle}${i===1?' <span style="font-weight:400;font-size:.78rem;color:#888">（協作）</span>':''}</div>
+        <div class="expert-real-role">${e.realRole}</div>
+        <div class="expert-skill-chips">${e.skills.map(s=>`<span class="expert-skill-chip">${s}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+  area.style.display = "block";
+}
 
 // Wiki 詞條清單（用於關聯詞條匹配）
 const WIKI_TERMS = [
@@ -5951,6 +6070,43 @@ const SYSTEM_PROMPT = `你是「長照膳食百科 AI」，專屬於「長照膳
    「📝 推薦文章：文章關鍵字1、文章關鍵字2」
    （詞條選 2-4 個最相關的；文章關鍵字從下列選 0-2 個：家屬、IDDSI、SLP、市場、外包、失智症、廚師、成本、日本、AI）`;
 
+// ── Markdown 渲染 ──────────────────────────────────────────────
+function renderMd(text) {
+  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const fmt = s => esc(s)
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g,"<em>$1</em>")
+    .replace(/`(.+?)`/g,"<code>$1</code>");
+  const lines = text.split("\n");
+  let html = "", inUl = false, inOl = false;
+  for (const line of lines) {
+    if (/^#{1,3}\s/.test(line)) {
+      if (inUl) { html += "</ul>"; inUl=false; }
+      if (inOl) { html += "</ol>"; inOl=false; }
+      const tag = line.startsWith("# ") ? "h4" : "h5";
+      html += `<${tag}>${fmt(line.replace(/^#+\s/,""))}</${tag}>`; continue;
+    }
+    const olM = line.match(/^\d+\.\s+(.*)/);
+    if (olM) {
+      if (inUl) { html += "</ul>"; inUl=false; }
+      if (!inOl) { html += "<ol>"; inOl=true; }
+      html += `<li>${fmt(olM[1])}</li>`; continue;
+    }
+    const ulM = line.match(/^[\*\-]\s+(.*)/);
+    if (ulM) {
+      if (inOl) { html += "</ol>"; inOl=false; }
+      if (!inUl) { html += "<ul>"; inUl=true; }
+      html += `<li>${fmt(ulM[1])}</li>`; continue;
+    }
+    if (inUl) { html += "</ul>"; inUl=false; }
+    if (inOl) { html += "</ol>"; inOl=false; }
+    html += line.trim() === "" ? "<br>" : `<p>${fmt(line)}</p>`;
+  }
+  if (inUl) html += "</ul>";
+  if (inOl) html += "</ol>";
+  return html;
+}
+
 function extractSection(text, marker) {
   const re = new RegExp("(?:" + marker + ")[：:]\\s*([^\\n]+)");
   const m = text.match(re);
@@ -5975,11 +6131,8 @@ async function submitQuestion() {
   const question = input.value.trim();
   if (!question) return;
 
-  if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
-    document.getElementById("chat-error").textContent = "⚠️ 請先在頁面程式碼中填入您的 Gemini API Key（參考頁面底部說明）";
-    document.getElementById("chat-error").style.display = "block";
-    return;
-  }
+  // 偵測相關專家角色
+  const experts = detectExperts(question);
 
   const btn = document.getElementById("chat-submit");
   btn.disabled = true;
@@ -5995,7 +6148,7 @@ async function submitQuestion() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          system_instruction: { parts: [{ text: buildSystemPrompt(experts) }] },
           contents: [{ role: "user", parts: [{ text: question }] }],
           generationConfig: {
             temperature: 0.5,
@@ -6017,7 +6170,8 @@ async function submitQuestion() {
       .replace(/🔗\s*關聯詞條[：:][^\n]+/g, "")
       .trim();
 
-    document.getElementById("chat-answer-content").textContent = cleanAnswer;
+    document.getElementById("chat-answer-content").innerHTML = renderMd(cleanAnswer);
+    renderExpertCards(experts);
     document.getElementById("chat-answer-area").style.display = "block";
 
     // 顯示關聯詞條（直接顯示 AI 建議的所有詞條，有 wiki 頁連 wiki）
