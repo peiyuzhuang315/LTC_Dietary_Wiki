@@ -6402,7 +6402,7 @@ async function submitQuestion() {
 
   try {
     const res = await fetch(
-      WORKER_URL,
+      `${WORKER_URL}/ask`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

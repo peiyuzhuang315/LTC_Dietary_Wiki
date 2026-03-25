@@ -263,7 +263,7 @@
     msgBox.scrollTop = msgBox.scrollHeight;
 
     try {
-      const res = await fetch(WORKER_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ system_instruction:{parts:[{text:buildPrompt(experts)}]}, contents:widgetHistory, generationConfig:{temperature:0.5} }) });
+      const res = await fetch(`${WORKER_URL}/ask`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ system_instruction:{parts:[{text:buildPrompt(experts)}]}, contents:widgetHistory, generationConfig:{temperature:0.5} }) });
       ld.remove(); if (!res.ok) throw new Error("API 錯誤");
       const d = await res.json(), ans = d.candidates?.[0]?.content?.parts?.[0]?.text || "";
       if (!ans) throw new Error("無效的回傳");
