@@ -27,7 +27,7 @@ jobs:
           python-version: '3.11'
 
       - name: 安裝 MkDocs 套件
-        run: pip install -r requirements.txt
+      - run: pip install mkdocs-material pymdown-extensions
 
       - name: 部署 MkDocs 到 gh-pages
         run: mkdocs gh-deploy --force --clean
