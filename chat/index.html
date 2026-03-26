@@ -6235,29 +6235,22 @@
 </div>
 
 <style>
-/* ─── ChatGPT 風格對話容器 ─── */
+/* ─── 對話容器 ─── */
 #ltc-chat-container {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 148px);
-  min-height: 420px;
   max-width: 820px;
   margin: 0;
   font-family: inherit;
-  position: relative;
 }
 
-/* ── 對話區（可捲動） ── */
+/* ── 對話區 ── */
 #conversation-thread {
-  flex: 1;
-  overflow-y: auto;
   padding: 16px 14px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   background: #ecead7;
   border-radius: 16px 16px 0 0;
-  scroll-behavior: smooth;
+  min-height: 120px;
 }
 #conversation-thread::-webkit-scrollbar { width: 4px; }
 #conversation-thread::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
@@ -6438,173 +6431,6 @@
 }
 </style>
 
-<p>.chat-input-area { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }</p>
-<h1 id="chat-input">chat-input {<a class="headerlink" href="#chat-input" title="Permanent link">&para;</a></h1>
-<p>width: 100%; padding: 0.85rem 1rem; font-size: 0.95rem; font-family: inherit;
-  border: 2px solid var(--md-default-fg-color--lightest); border-radius: 10px;
-  background: var(--md-default-bg-color); color: var(--md-typeset-color);
-  resize: vertical; transition: border-color 0.2s; box-sizing: border-box;
-}</p>
-<h1 border-color:="border-color:" id="chat-inputfocus" none_="none;" outline:="outline:" var_--md-primary-fg-color_="var(--md-primary-fg-color);">chat-input:focus<a class="headerlink" href="#chat-inputfocus" title="Permanent link">&para;</a></h1>
-<h1 id="chat-submit">chat-submit {<a class="headerlink" href="#chat-submit" title="Permanent link">&para;</a></h1>
-<p>align-self: flex-end; padding: 0.7rem 2rem;
-  background: var(--md-primary-fg-color); color: white; border: none;
-  border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s; font-family: inherit;
-}</p>
-<h1 0.88_="0.88;" id="chat-submithover" opacity:="opacity:" transform:="transform:" translateY_-1px_="translateY(-1px);">chat-submit:hover<a class="headerlink" href="#chat-submithover" title="Permanent link">&para;</a></h1>
-<h1 0.5_="0.5;" cursor:="cursor:" id="chat-submitdisabled" none_="none;" not-allowed_="not-allowed;" opacity:="opacity:" transform:="transform:">chat-submit:disabled<a class="headerlink" href="#chat-submitdisabled" title="Permanent link">&para;</a></h1>
-<p>/<em> ── 對話線程容器 ── </em>/</p>
-<h1 id="conversation-thread">conversation-thread {<a class="headerlink" href="#conversation-thread" title="Permanent link">&para;</a></h1>
-<p>background: #e9ece7;
-  border-radius: 16px;
-  padding: 16px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-height: 80px;
-  margin-bottom: 1rem;
-  border: 1px solid rgba(0,0,0,.07);
-}</p>
-<p>/<em> ── 問答組（可多輪對話）── </em>/
-.chat-exchange { display:contents; }</p>
-<p>/<em> ── 訊息列（頭像+氣泡一行）── </em>/
-.msg-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  max-width: 88%;
-  animation: msgPop .18s ease;
-}
-@keyframes msgPop { from{transform:scale(.94) translateY(4px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
-.msg-row-user { align-self: flex-end; flex-direction: row-reverse; }
-.msg-row-ai   { align-self: flex-start; flex-direction: row; }</p>
-<p>/<em> ── 頭像 ── </em>/
-.msg-avatar {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; box-shadow: 0 2px 6px rgba(0,0,0,.18);
-}
-.msg-avatar-ai   { background: linear-gradient(135deg,#00897b,#00acc1); }
-.msg-avatar-dean { background: linear-gradient(135deg,#f9a825,#fb8c00); }</p>
-<p>/<em> ── 氣泡 ── </em>/
-.msg-bubble {
-  padding: 10px 14px;
-  border-radius: 20px;
-  line-height: 1.72;
-  box-shadow: 0 1px 4px rgba(0,0,0,.13);
-  position: relative;
-  max-width: 460px;
-  word-break: break-word;
-}
-.msg-bubble p { margin: 0 0 .38em; }
-.msg-bubble p:last-child { margin: 0; }
-.msg-bubble ul,.msg-bubble ol { margin: .25em 0 .38em 1.3em; }
-.msg-bubble li { margin: .12em 0; }
-.msg-bubble strong { font-weight: 700; }
-.msg-bubble h4 { margin:.5em 0 .15em; font-size:.95rem; font-weight:700; }
-.msg-bubble code { background:rgba(0,0,0,.07); padding:1px 5px; border-radius:3px; font-size:.86rem; }</p>
-<p>/<em> 使用者──右側，綠色，右下角尾巴 </em>/
-.msg-bubble-user {
-  background: #d9fdd3;
-  color: #111;
-  border-radius: 20px 20px 5px 20px;
-  font-size: .93rem;
-}
-.msg-bubble-user::after {
-  content: ''; position: absolute; bottom: 0; right: -8px;
-  border: 8px solid transparent;
-  border-left-color: #d9fdd3; border-bottom: 0;
-}</p>
-<p>/<em> AI──左側，白色，左下角尾巴 </em>/
-.msg-bubble-ai {
-  background: #fff;
-  color: #111;
-  border-radius: 20px 20px 20px 5px;
-  font-size: .9rem;
-}
-.msg-bubble-ai::after {
-  content: ''; position: absolute; bottom: 0; left: -8px;
-  border: 8px solid transparent;
-  border-right-color: #fff; border-bottom: 0;
-}</p>
-<p>/<em> 院長──左側，金色 </em>/
-.msg-bubble-dean {
-  background: linear-gradient(135deg,#fffde7,#fff8e1);
-  border: 1px solid #fbc02d;
-  color: #3e2200;
-  border-radius: 20px 20px 20px 5px;
-  font-size: .9rem;
-}
-.msg-bubble-dean::after {
-  content: ''; position: absolute; bottom: 0; left: -8px;
-  border: 8px solid transparent;
-  border-right-color: #fbc02d; border-bottom: 0;
-}
-.msg-bubble-dean strong { color: #e65100; }</p>
-<p>/<em> 名牌列（頭像+名稱，無氣泡） </em>/
-.msg-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: .76rem;
-  font-weight: 700;
-  color: rgba(0,0,0,.5);
-  padding-left: 44px;
-  margin-bottom: 1px;
-}</p>
-<p>/<em> 時間戳記 </em>/
-.msg-time {
-  font-size: .66rem;
-  color: rgba(0,0,0,.38);
-  padding: 0 4px;
-  white-space: nowrap;
-  align-self: flex-end;
-}
-.msg-row-user + .msg-time { align-self:flex-end; text-align:right; padding-right:4px; }</p>
-<p>/<em> 打字等待氣泡 </em>/
-.msg-typing {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 13px 16px;
-}
-.msg-typing span {
-  width: 7px; height: 7px;
-  background: #aab;
-  border-radius: 50%;
-  animation: typeBounce .9s infinite;
-}
-.msg-typing span:nth-child(2){animation-delay:.15s}
-.msg-typing span:nth-child(3){animation-delay:.3s}
-@keyframes typeBounce{0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)}}</p>
-<p>/<em> 相關詞條區 </em>/
-.related-header { font-weight:600; margin:.75rem 0 .5rem; font-size:.9rem; }
-.chip-row { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:.75rem; }
-.term-chip {
-  background: var(--md-primary-fg-color); color:white !important;
-  padding:.3rem .85rem; border-radius:20px; font-size:.84rem;
-  text-decoration:none !important; font-weight:500; transition:opacity .15s;
-}
-.term-chip:hover{opacity:.8}
-.article-chip {
-  background:#e65100; color:white !important;
-  padding:.3rem .85rem; border-radius:20px; font-size:.84rem;
-  text-decoration:none !important; font-weight:500; transition:opacity .15s;
-}
-.article-chip:hover{opacity:.8}
-.google-chip {
-  display:inline-block; background:#f1f3f4; color:#1a73e8 !important;
-  padding:.3rem .85rem; border-radius:20px; font-size:.82rem;
-  text-decoration:none !important; border:1px solid #dadce0; transition:background .15s;
-}
-.google-chip:hover{background:#e8eaed}
-.chat-error{
-  background:#fce4ec; color:#c62828; border-radius:10px;
-  padding:.85rem 1rem; margin-top:.75rem; font-size:.9rem;
-}
-@media (max-width:600px) { #chat-submit{align-self:stretch} .msg-bubble{max-width:85vw} }
-</style></p>
 <script>
 // ====================================================
 // ⚙️ 在下方填入您的 Gemini API Key
@@ -6828,187 +6654,25 @@ const APP_ARTICLES = [
   { key: "SLP|RD|OT|臨床|跨域|言語治療|職能|營養師", title: "臨床整合：SLP+RD+OT 跨域照護模型", url: WIKI_BASE + "/articles/A03_%E8%87%A8%E5%BA%8A%E6%95%B4%E5%90%88_SLP_RD_OT/" },
   { key: "市場|趨勢|商機|銀髮", title: "市場全景：台灣長照膳食 2025-2030 趨勢", url: WIKI_BASE + "/articles/A04_%E5%8F%B0%E7%81%A3%E9%95%B7%E7%85%A7%E8%86%B3%E9%A3%9F%E5%B8%82%E5%A0%B4%E8%B6%A8%E5%8B%A2%E5%9C%B0%E5%9C%96/" },
   { key: "外包|合規|GHP|HACCP|法規", title: "政策深解：長照膳食外包合規指南", url: WIKI_BASE + "/articles/A05_%E6%94%BF%E7%AD%96%E6%B7%B1%E8%A7%A3_2024%E5%A4%96%E5%8C%85%E6%96%B0%E8%A6%8F/" },
-  { key: "失智症|失智|認知", title: "失智症長者的一天：完整飲食照護指南", url: WIKI_BASE + "/articles/A06_%E5%A4%B1%E6%99%BA%E7%97%87%E9%95%B7%E8%80%85%E4%B8%80%E5%A4%A9%E9%A3%AE%E9%A3%9F%E6%8C%87%E5%8D%97/" },
-  { key: "廚師|烹調|備餐|IDDSI測試|質地", title: "廚師實戰：IDDSI Level 判斷與製備指南", url: WIKI_BASE + "/articles/A07_%E5%BB%9A%E5%B8%AB%E5%AF%A6%E6%88%B0_IDDSI%E8%A3%BD%E5%82%99%E6%8C%87%E5%8D%97/" },
-  { key: "成本|財務|毛利|利潤|廚房", title: "長照廚房財務模型：從食材成本到毛利設計", url: WIKI_BASE + "/articles/A08_%E9%95%B7%E7%85%A7%E5%BB%9A%E6%88%BF%E8%B2%A1%E5%8B%99%E6%A8%A1%E5%9E%8B/" },
-  { key: "日本|出口|出海|介護食", title: "台灣長照食品出海：日本市場攻略", url: WIKI_BASE + "/articles/A09_%E5%8F%B0%E7%81%A3%E9%95%B7%E7%85%A7%E9%A3%9F%E5%93%81%E5%87%BA%E6%B5%B7%E6%97%A5%E6%9C%AC%E5%B8%82%E5%A0%B4/" },
-  { key: "AI|人工智慧|科技|3D列印", title: "AI × 長照膳食：現在能做什麼、5 年後趨勢", url: WIKI_BASE + "/articles/A10_AI%E9%95%B7%E7%85%A7%E8%86%B3%E9%A3%9F%E8%B6%A8%E5%8B%A2/" }
-];
-
-const SYSTEM_PROMPT = `你是「長照膳食百科 AI」，專屬於「長照膳食實戰百科」網站的智能助理。
-你的知識庫包含 130+ 個長照膳食相關詞條，以及 10 篇深度應用文章。
-
-【陪伴與護照建立原則】
-1. 建立個案人物誌 (Care Profile)：請從過去的對話紀錄中，慢慢拼湊被照顧者（個案）的背景樣貌。
-   - 若對話中缺乏關鍵背景資訊（如：不清楚年齡、性別、牙齒狀況、慢性病史或拒食多久等）。
-   - 請在解答使用者的問題後，以朋友關心的口吻「自然地拋出 1 個好回答的探索性小問題」。
-   - 範例：「不知道爺爺今年幾歲了呢？假牙還戴得住嗎？」
-   - ⚠️ 絕對禁止：一次連環問多個問題、像醫師看診般條列逼問。每次只需要輕柔地問 1 個細節。
-   - 目的：讓家屬覺得被接住，並逐步讓 AI 掌握個案輪廓，提高後續精準度。
-2. 同理心優先：
-   - 若問題含有情緒訊號（如「怎麼辦」「好累」「撐不住」），用 1-2 句話真誠且具體地承認其辛苦，再切入專業。
-   - 禁止空洞的罐頭回覆（如「感謝您的提問」「這是好問題」）。
-3. 語氣專業直接，不需要「首先」「一般而言」等廢話。
-4. 回答長度適中，條列清晰。
-5. 每次回答結尾必須精準包含這兩行（用於推薦）：
-   「📖 關聯詞條：詞條A、詞條B、詞條C」
-   「📝 推薦文章：關鍵字1、關鍵字2」
-   （詞條選最相關的 2-4 個，關鍵字只能挑 0-2 個：家屬、IDDSI、SLP、市場、外包、失智症、廚師、成本、日本、AI）`;
-
-// ── Markdown 渲染 ──────────────────────────────────────────────
-function renderMd(text) {
-  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-  const fmt = s => esc(s)
-    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g,"<em>$1</em>")
-    .replace(/`(.+?)`/g,"<code>$1</code>");
-  const lines = text.split("\n");
-  let html = "", inUl = false, inOl = false;
-  for (const line of lines) {
-    if (/^#{1,3}\s/.test(line)) {
-      if (inUl) { html += "</ul>"; inUl=false; }
-      if (inOl) { html += "</ol>"; inOl=false; }
-      const tag = line.startsWith("# ") ? "h4" : "h5";
-      html += `<${tag}>${fmt(line.replace(/^#+\s/,""))}</${tag}>`; continue;
-    }
-    const olM = line.match(/^\d+\.\s+(.*)/);
-    if (olM) {
-      if (inUl) { html += "</ul>"; inUl=false; }
-      if (!inOl) { html += "<ol>"; inOl=true; }
-      html += `<li>${fmt(olM[1])}</li>`; continue;
-    }
-    const ulM = line.match(/^[\*\-]\s+(.*)/);
-    if (ulM) {
-      if (inOl) { html += "</ol>"; inOl=false; }
-      if (!inUl) { html += "<ul>"; inUl=true; }
-      html += `<li>${fmt(ulM[1])}</li>`; continue;
-    }
-    if (inUl) { html += "</ul>"; inUl=false; }
-    if (inOl) { html += "</ol>"; inOl=false; }
-    html += line.trim() === "" ? "<br>" : `<p>${fmt(line)}</p>`;
-  }
-  if (inUl) html += "</ul>";
-  if (inOl) html += "</ol>";
-  return html;
-}
-
-function extractSection(text, marker) {
-  const re = new RegExp("(?:" + marker + ")[：:]\\s*([^\\n]+)");
-  const m = text.match(re);
-  return (m && m[1]) ? m[1].split(/[、,，]/).map(t => t.replace(/[\*🔗📖📝]+/g, "").trim()).filter(Boolean) : [];
-}
-
-function matchArticles(keywords) {
-  const results = [];
-  keywords.forEach(kw => {
-    APP_ARTICLES.forEach(a => {
-      const patterns = a.key.split("|");
-      if (patterns.some(p => kw.includes(p) || p.includes(kw))) {
-        if (!results.find(r => r.url === a.url)) results.push(a);
-      }
-    });
-  });
-  return results.slice(0, 3);
-}
-
-let chatHistory = JSON.parse(sessionStorage.getItem('ltc_chat_history') || '[]');
-
-function now() {
-  return new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit', hour12:false });
-}
-
-async function submitQuestion() {
-  const input = document.getElementById("chat-input");
-  const question = input.value.trim();
-  if (!question) return;
-
-  // 加入歷史紀錄 (保留最後 10 句往返)
-  chatHistory.push({ role: "user", parts: [{ text: question }] });
-  if (chatHistory.length > 20) chatHistory = chatHistory.slice(chatHistory.length - 20);
-
-  // 偵測相關專家角色
-  const experts = detectExperts(question);
-
-  const btn = document.getElementById("chat-submit");
-  btn.disabled = true;
-  document.getElementById("btn-text").style.display = "none";
-  document.getElementById("btn-loading").style.display = "inline";
-  const thread = document.getElementById('conversation-thread');
-  thread.style.display = 'flex';
-
-  // ─ 立即顯示使用者問題氣泡 (右側) ─
-  const t0 = now();
-  const uRow = document.createElement('div'); uRow.className='msg-row msg-row-user';
-  const uBub = document.createElement('div'); uBub.className='msg-bubble msg-bubble-user'; uBub.textContent=question;
-  uRow.appendChild(uBub); thread.appendChild(uRow);
-  const uTime = document.createElement('div'); uTime.className='msg-time'; uTime.style.cssText='align-self:flex-end;padding-right:2px'; uTime.textContent=t0;
-  thread.appendChild(uTime);
-
-  // ─ 打字等待氣泡 ─
-  const ldRow = document.createElement('div'); ldRow.className='msg-row msg-row-ai';
-  const ldAv = document.createElement('div'); ldAv.className='msg-avatar msg-avatar-ai'; ldAv.textContent='🤖';
-  const ldBub = document.createElement('div'); ldBub.className='msg-bubble msg-bubble-ai msg-typing';
-  ldBub.innerHTML='<span></span><span></span><span></span>';
-  ldRow.appendChild(ldAv); ldRow.appendChild(ldBub); thread.appendChild(ldRow);
-  thread.scrollIntoView({behavior:'smooth',block:'end'});
-
-  try {
-    const res = await fetch(
-      `${WORKER_URL}/ask`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: buildSystemPrompt(experts) }] },
-          contents: chatHistory,
-          generationConfig: {
-            temperature: 0.5,
-            thinkingConfig: { thinkingBudget: 0 }
-          }
-        })
-      }
-    );
-
-    const data = await res.json();
-    let answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    if (!answer) throw new Error("無效的伺服器回傳或受到安全阻擋");
-
-    // 保存 AI 回覆至歷史紀錄
-    chatHistory.push({ role: "model", parts: [{ text: answer }] });
-    sessionStorage.setItem('ltc_chat_history', JSON.stringify(chatHistory));
-
-    // 過濾推薦與關聯標籤區塊，僅留下純淨對話主要回答
-    const cleanAnswer = answer
-      .replace(/📖\s*關聯詞條[：:][^\n]+/g, "")
-      .replace(/📝\s*推薦文章[：:][^\n]+/g, "")
-      .replace(/🔗\s*關聯詞條[：:][^\n]+/g, "")
-      .trim();
-
-    // ─ 移除打字等待氣泡 ─
-    ldRow.remove();
-
-    // ─ 解析分段 ─
+  { key: "失�    // ─ 語法分段 ─
     const { sections, principal } = parseExpertSections(answer, experts);
 
     function typewriteBubble(bub, plainText, fullHtml, onDone) {
-      const chars = [...plainText]; // handle multibyte
+      const chars = [...plainText];
       const typed = document.createElement('span');
-      const cursor = document.createElement('span');
-      cursor.className = 'type-cursor';
-      bub.innerHTML = '';
-      bub.appendChild(typed);
-      bub.appendChild(cursor);
+      const cursor = document.createElement('span'); cursor.className='type-cursor';
+      bub.innerHTML = ''; bub.appendChild(typed); bub.appendChild(cursor);
       let i = 0;
       function next() {
         if (i >= chars.length) {
           cursor.remove();
-          bub.innerHTML = fullHtml; // swap to fully-rendered HTML
+          bub.innerHTML = fullHtml;
           if (onDone) onDone();
           return;
         }
         const ch = chars[i++];
         typed.textContent += ch;
-        thread.scrollTop = thread.scrollHeight;
+        thread.scrollIntoView({block:'end'});
         let delay = 14;
         if ('。！？'.includes(ch)) delay = 160;
         else if ('，、；：'.includes(ch)) delay = 70;
@@ -7018,128 +6682,107 @@ async function submitQuestion() {
       requestAnimationFrame(next);
     }
 
-    let typeQueue = Promise.resolve(); // 串行氣泡
-    function addBubbles(blocks, avatarEmoji, bubbleClass, avatarClass) {
-      blocks.forEach((b, bi) => {
-        const row = document.createElement('div'); row.className='msg-row msg-row-ai';
-        const av = document.createElement('div'); av.className=`msg-avatar ${avatarClass}`; av.textContent=bi===0?avatarEmoji:'';
-        av.style.visibility = bi===0?'visible':'hidden';
-        const bub = document.createElement('div'); bub.className=`msg-bubble ${bubbleClass}`;
-        bub.innerHTML = '<span class="msg-typing"><span></span><span></span><span></span></span>';
-        row.appendChild(av); row.appendChild(bub); thread.appendChild(row);
-        thread.scrollTop = thread.scrollHeight;
+    let typeQueue = Promise.resolve();
 
+    function addBubbles(blocks, labelText, labelColor, avatarEmoji, bubbleClass, avatarClass) {
+      // 名牌安排到第一個氣泡前出現
+      typeQueue = typeQueue.then(() => {
+        const lbl = document.createElement('div'); lbl.className='msg-label';
+        lbl.textContent = labelText; lbl.style.color = labelColor;
+        thread.appendChild(lbl);
+        return Promise.resolve();
+      });
+
+      blocks.forEach((b, bi) => {
         const fullHtml = renderMd(b);
-        const plainText = (function(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent;})(fullHtml);
+        const plainText = (function(h){ const d=document.createElement('div'); d.innerHTML=h; return d.textContent; })(fullHtml);
 
         typeQueue = typeQueue.then(() => new Promise(resolve => {
-          // 短暫顯示氣泡後始打字
-          setTimeout(() => { typewriteBubble(bub, plainText, fullHtml, resolve); }, bi===0?0:120);
+          // 在從列排到時才建立 DOM——不預先占位
+          const row = document.createElement('div'); row.className='msg-row msg-row-ai';
+          const av = document.createElement('div'); av.className=`msg-avatar ${avatarClass}`;
+          av.textContent = bi===0 ? avatarEmoji : '';
+          av.style.visibility = bi===0 ? 'visible' : 'hidden';
+          const bub = document.createElement('div'); bub.className=`msg-bubble ${bubbleClass}`;
+          row.appendChild(av); row.appendChild(bub); thread.appendChild(row);
+          thread.scrollIntoView({block:'end'});
+          setTimeout(() => typewriteBubble(bub, plainText, fullHtml, resolve), bi===0 ? 0 : 100);
         }));
       });
+
       typeQueue = typeQueue.then(() => {
-        const ts = document.createElement('div'); ts.className='msg-time'; ts.style.cssText='padding-left:42px'; ts.textContent=now();
+        const ts = document.createElement('div'); ts.className='msg-time';
+        ts.style.cssText='padding-left:42px'; ts.textContent=now();
         thread.appendChild(ts);
         return Promise.resolve();
       });
     }
 
     sections.forEach(sec => {
-      const e = sec.expert || {emoji:'🤖', color:'#00897b'};
-      // 名牌列
-      const label = document.createElement('div'); label.className='msg-label';
-      label.textContent=`${e.emoji} ${e.digitalTitle || 'AI 助手'}`; label.style.color=e.color||'#00897b';
-      thread.appendChild(label);
+      const e = sec.expert || {emoji:'🤖', digitalTitle:'AI 助手', color:'#00897b'};
       const blocks = sec.text.split(/(?:\r?\n){2,}/).map(t=>t.trim()).filter(Boolean);
-      addBubbles(blocks, e.emoji, 'msg-bubble-ai', 'msg-avatar-ai');
+      addBubbles(blocks, `${e.emoji} ${e.digitalTitle||'AI 助手'}`, e.color||'#00897b', e.emoji, 'msg-bubble-ai', 'msg-avatar-ai');
     });
 
     if (principal) {
-      const dLabel = document.createElement('div'); dLabel.className='msg-label';
-      dLabel.style.color='#e65100'; dLabel.textContent='🏅 長照督導院長';
-      thread.appendChild(dLabel);
       const blocks = principal.split(/(?:\r?\n){2,}/).map(t=>t.trim()).filter(Boolean);
-      addBubbles(blocks, '🏅', 'msg-bubble-dean', 'msg-avatar-dean');
+      addBubbles(blocks, '🏅 長照督導院長', '#e65100', '🏅', 'msg-bubble-dean', 'msg-avatar-dean');
     }
 
-    thread.scrollIntoView({behavior:'smooth',block:'end'});
-
-    document.getElementById('related-section').style.display='block';
-
-    // 顯示關聯詞條（直接顯示 AI 建議的所有詞條，有 wiki 頁連 wiki）
-    const termNames = extractSection(answer, "📖\\s*關聯詞條");
-    const termsArea = document.getElementById("related-terms-area");
-    const termsLinks = document.getElementById("related-terms-links");
-
-    // 收集缺失的詞條 (Phase 5: 知識飛輪種子)
+    // ─ 所有氣泡打字完後，才顯示相關詞條 / 推薦文章 / Google 搜尋 ─
+    const termNames = extractSection(answer, '📖\\s*關聯詞條');
+    const articleKeys = extractSection(answer, '📝\\s*推薦文章');
+    const matchedArticles = matchArticles(articleKeys.concat([question]));
     const missingTerms = [];
 
-    if (termNames.length > 0) {
-      termsLinks.innerHTML = termNames.map(t => {
-        const inWiki = WIKI_TERMS.includes(t);
-        if (!inWiki) missingTerms.push(t);
-        const url = inWiki
-          ? `${WIKI_BASE}/${encodeURIComponent(t)}/`
-          : `https://www.google.com/search?q=${encodeURIComponent("長照膳食 " + t)}`;
-        return `<a href="${url}" class="term-chip" target="_blank">${t}</a>`;
-      }).join("");
-      termsArea.style.display = "block";
-    } else {
-      termsArea.style.display = "none";
-    }
-
-    // 發送缺失詞條至 Cloudflare Notion 記錄站 (Phase 5)
+    // 尀就發送小设 Notion (Phase 5)
+    termNames.forEach(t => { if (!WIKI_TERMS.includes(t)) missingTerms.push(t); });
     if (missingTerms.length > 0) {
       missingTerms.forEach(term => {
         fetch(`${WORKER_URL}/log`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            source: "chat.md 主視窗",
-            question: question,
-            term: term
-          })
-        }).catch(err => console.warn("Failed to log missing term", err));
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ source:'chat.md 主視窗', question, term })
+        }).catch(err => console.warn('log fail', err));
       });
     }
 
-    // 顯示推薦文章
-    const articleKeys = extractSection(answer, "📝\\s*推薦文章");
-    const matchedArticles = matchArticles(articleKeys.concat([question]));
-    const articlesArea = document.getElementById("related-articles-area");
-    const articlesLinks = document.getElementById("related-articles-links");
-    if (matchedArticles.length > 0) {
-      articlesLinks.innerHTML = matchedArticles.map(a =>
-        `<a href="${a.url}" class="article-chip" target="_blank">📝 ${a.title}</a>`
-      ).join("");
-      articlesArea.style.display = "block";
-    } else {
-      articlesArea.style.display = "none";
-    }
+    typeQueue.then(() => {
+      // 全部氣泡完裝後，才顯示相關區塊
+      const relEl = document.getElementById('related-section');
+      const termsLinks = document.getElementById('related-terms-links');
+      const termsArea  = document.getElementById('related-terms-area');
+      const articlesLinks = document.getElementById('related-articles-links');
+      const articlesArea  = document.getElementById('related-articles-area');
+      const googleLinks = document.getElementById('google-search-links');
+      const googleArea  = document.getElementById('google-search-area');
 
-    // 顯示 Google 搜尋連結
-    const googleArea = document.getElementById("google-search-area");
-    const googleLinks = document.getElementById("google-search-links");
-    const searchTerms = termNames.slice(0, 3).concat([question.slice(0, 20)]).filter(Boolean);
-    googleLinks.innerHTML = searchTerms.map(kw =>
-      `<a href="https://www.google.com/search?q=${encodeURIComponent("長照膳食 " + kw)}" class="google-chip" target="_blank" rel="noopener">🔍 ${kw}</a>`
-    ).join("");
-    googleArea.style.display = "block";
+      if (termNames.length > 0) {
+        termsLinks.innerHTML = termNames.map(t => {
+          const inWiki = WIKI_TERMS.includes(t);
+          const url = inWiki
+            ? `${WIKI_BASE}/${encodeURIComponent(t)}/`
+            : `https://www.google.com/search?q=${encodeURIComponent('長照膨食 ' + t)}`;
+          return `<a href="${url}" class="term-chip" target="_blank">${t}</a>`;
+        }).join('');
+        termsArea.style.display = 'block';
+      } else { termsArea.style.display = 'none'; }
 
-  } catch (err) {
-    ldRow.remove();
-    const errRow = document.createElement('div'); errRow.className='msg-row msg-row-ai';
-    const errAv = document.createElement('div'); errAv.className='msg-avatar msg-avatar-ai'; errAv.textContent='🤖';
-    const errBub = document.createElement('div'); errBub.className='msg-bubble msg-bubble-ai'; errBub.style.color='#c62828';
-    errBub.textContent=`⚠️ 無法取得 AI 回答：${err.message}`;
-    errRow.appendChild(errAv); errRow.appendChild(errBub); thread.appendChild(errRow);
-  } finally {
-    btn.disabled = false;
-    document.getElementById('btn-text').style.display = 'inline';
-    document.getElementById('btn-loading').style.display = 'none';
-  }
-}
+      if (matchedArticles.length > 0) {
+        articlesLinks.innerHTML = matchedArticles.map(a =>
+          `<a href="${a.url}" class="article-chip" target="_blank">📝 ${a.title}</a>`
+        ).join('');
+        articlesArea.style.display = 'block';
+      } else { articlesArea.style.display = 'none'; }
 
+      const searchTerms = termNames.slice(0,3).concat([question.slice(0,20)]).filter(Boolean);
+      googleLinks.innerHTML = searchTerms.map(kw =>
+        `<a href="https://www.google.com/search?q=${encodeURIComponent('長照膨食 ' + kw)}" class="google-chip" target="_blank" rel="noopener">🔍 ${kw}</a>`
+      ).join('');
+      googleArea.style.display = 'block';
+
+      relEl.style.display = 'block';
+      relEl.scrollIntoView({behavior:'smooth', block:'start'});
+    });
 function quickAsk(btn) {
   const input = document.getElementById('chat-input');
   input.value = btn.textContent;
