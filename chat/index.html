@@ -6191,7 +6191,7 @@
 <div id="conversation-thread">
   <div class="chat-welcome">
     <div class="chat-welcome-icon">🤖</div>
-    <p class="chat-welcome-title">長照膨食 AI 助理</p>
+    <p class="chat-welcome-title">長照線上專家諮詢</p>
     <p class="chat-welcome-sub">根據 130+ 個長照知識詞條為您解答問題，並推薦相關文章。</p>
     <div class="chat-examples-row">
       <button class="quick-q" onclick="quickAsk(this)">小長輩不肯吃飯怎麼辦？</button>
@@ -6654,7 +6654,148 @@ const APP_ARTICLES = [
   { key: "SLP|RD|OT|臨床|跨域|言語治療|職能|營養師", title: "臨床整合：SLP+RD+OT 跨域照護模型", url: WIKI_BASE + "/articles/A03_%E8%87%A8%E5%BA%8A%E6%95%B4%E5%90%88_SLP_RD_OT/" },
   { key: "市場|趨勢|商機|銀髮", title: "市場全景：台灣長照膳食 2025-2030 趨勢", url: WIKI_BASE + "/articles/A04_%E5%8F%B0%E7%81%A3%E9%95%B7%E7%85%A7%E8%86%B3%E9%A3%9F%E5%B8%82%E5%A0%B4%E8%B6%A8%E5%8B%A2%E5%9C%B0%E5%9C%96/" },
   { key: "外包|合規|GHP|HACCP|法規", title: "政策深解：長照膳食外包合規指南", url: WIKI_BASE + "/articles/A05_%E6%94%BF%E7%AD%96%E6%B7%B1%E8%A7%A3_2024%E5%A4%96%E5%8C%85%E6%96%B0%E8%A6%8F/" },
-  { key: "失�    // ─ 語法分段 ─
+  { key: "失智症|失智|認知", title: "失智症長者的一天：完整飲食照護指南", url: WIKI_BASE + "/articles/A06_%E5%A4%B1%E6%99%BA%E7%97%87%E9%95%B7%E8%80%85%E4%B8%80%E5%A4%A9%E9%A3%AE%E9%A3%9F%E6%8C%87%E5%8D%97/" },
+  { key: "廚師|烹調|備餐|IDDSI測試|質地", title: "廚師實戰：IDDSI Level 判斷與製備指南", url: WIKI_BASE + "/articles/A07_%E5%BB%9A%E5%B8%AB%E5%AF%A6%E6%88%B0_IDDSI%E8%A3%BD%E5%82%99%E6%8C%87%E5%8D%97/" },
+  { key: "成本|財務|毛利|利潤|廚房", title: "長照廚房財務模型：從食材成本到毛利設計", url: WIKI_BASE + "/articles/A08_%E9%95%B7%E7%85%A7%E5%BB%9A%E6%88%BF%E8%B2%A1%E5%8B%99%E6%A8%A1%E5%9E%8B/" },
+  { key: "日本|出口|出海|介護食", title: "台灣長照食品出海：日本市場攻略", url: WIKI_BASE + "/articles/A09_%E5%8F%B0%E7%81%A3%E9%95%B7%E7%85%A7%E9%A3%9F%E5%93%81%E5%87%BA%E6%B5%B7%E6%97%A5%E6%9C%AC%E5%B8%82%E5%A0%B4/" },
+  { key: "AI|人工智慧|科技|3D列印", title: "AI × 長照膳食：現在能做什麼、5 年後趨勢", url: WIKI_BASE + "/articles/A10_AI%E9%95%B7%E7%85%A7%E8%86%B3%E9%A3%9F%E8%B6%A8%E5%8B%A2/" }
+];
+
+const SYSTEM_PROMPT = `你是「長照膳食百科 AI」，專屬於「長照線上專家諮詢」網站的智能助理。
+你的知識庫包含 130+ 個長照膳食相關詞條，以及 10 篇深度應用文章。
+
+【陪伴與護照建立原則】
+1. 建立個案人物誌 (Care Profile)：請從過去的對話紀錄中，慢慢拼湊被照顧者（個案）的背景樣貌。
+   - 若對話中缺乏關鍵背景資訊（如：不清楚年齡、性別、牙齒狀況、慢性病史或拒食多久等）。
+   - 請在解答使用者的問題後，以朋友關心的口吻「自然地拋出 1 個好回答的探索性小問題」。
+   - 範例：「不知道爺爺今年幾歲了呢？假牙還戴得住嗎？」
+   - ⚠️ 絕對禁止：一次連環問多個問題、像醫師看診般條列逼問。每次只需要輕柔地問 1 個細節。
+   - 目的：讓家屬覺得被接住，並逐步讓 AI 掌握個案輪廓，提高後續精準度。
+2. 同理心優先：
+   - 若問題含有情緒訊號（如「怎麼辦」「好累」「撐不住」），用 1-2 句話真誠且具體地承認其辛苦，再切入專業。
+   - 禁止空洞的罐頭回覆（如「感謝您的提問」「這是好問題」）。
+3. 語氣專業直接，不需要「首先」「一般而言」等廢話。
+4. 回答長度適中，條列清晰。
+5. 每次回答結尾必須精準包含這兩行（用於推薦）：
+   「📖 關聯詞條：詞條A、詞條B、詞條C」
+   「📝 推薦文章：關鍵字1、關鍵字2」
+   （詞條選最相關的 2-4 個，關鍵字只能挑 0-2 個：家屬、IDDSI、SLP、市場、外包、失智症、廚師、成本、日本、AI）`;
+
+function renderMd(text) {
+  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const fmt = s => esc(s)
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g,"<em>$1</em>")
+    .replace(/`(.+?)`/g,"<code>$1</code>");
+  const lines = text.split("\n");
+  let html = "", inUl = false, inOl = false;
+  for (const line of lines) {
+    if (/^#{1,3}\s/.test(line)) {
+      if (inUl) { html += "</ul>"; inUl=false; }
+      if (inOl) { html += "</ol>"; inOl=false; }
+      const tag = line.startsWith("# ") ? "h4" : "h5";
+      html += `<${tag}>${fmt(line.replace(/^#+\s/,""))}</${tag}>`; continue;
+    }
+    const olM = line.match(/^\d+\.\s+(.*)/);
+    if (olM) {
+      if (inUl) { html += "</ul>"; inUl=false; }
+      if (!inOl) { html += "<ol>"; inOl=true; }
+      html += `<li>${fmt(olM[1])}</li>`; continue;
+    }
+    const ulM = line.match(/^[\*\-]\s+(.*)/);
+    if (ulM) {
+      if (inOl) { html += "</ol>"; inOl=false; }
+      if (!inUl) { html += "<ul>"; inUl=true; }
+      html += `<li>${fmt(ulM[1])}</li>`; continue;
+    }
+    if (inUl) { html += "</ul>"; inUl=false; }
+    if (inOl) { html += "</ol>"; inOl=false; }
+    html += line.trim() === "" ? "<br>" : `<p>${fmt(line)}</p>`;
+  }
+  if (inUl) html += "</ul>";
+  if (inOl) html += "</ol>";
+  return html;
+}
+
+function extractSection(text, marker) {
+  const re = new RegExp("(?:" + marker + ")[：:]\\s*([^\\n]+)");
+  const m = text.match(re);
+  return (m && m[1]) ? m[1].split(/[、,，]/).map(t => t.replace(/[\*🔗📖📝]+/g, "").trim()).filter(Boolean) : [];
+}
+
+function matchArticles(keywords) {
+  const results = [];
+  keywords.forEach(kw => {
+    APP_ARTICLES.forEach(a => {
+      const patterns = a.key.split("|");
+      if (patterns.some(p => kw.includes(p) || p.includes(kw))) {
+        if (!results.find(r => r.url === a.url)) results.push(a);
+      }
+    });
+  });
+  return results.slice(0, 3);
+}
+
+let chatHistory = JSON.parse(sessionStorage.getItem("ltc_chat_history") || "[]");
+
+function now() {
+  return new Date().toLocaleTimeString("zh-TW", { hour:"2-digit", minute:"2-digit", hour12:false });
+}
+
+async function submitQuestion() {
+  const input = document.getElementById("chat-input");
+  const question = input.value.trim();
+  if (!question) return;
+
+  chatHistory.push({ role: "user", parts: [{ text: question }] });
+  if (chatHistory.length > 20) chatHistory = chatHistory.slice(chatHistory.length - 20);
+  const experts = detectExperts(question);
+
+  const btn = document.getElementById("chat-submit");
+  btn.disabled = true;
+  document.getElementById("btn-text").style.display = "none";
+  document.getElementById("btn-loading").style.display = "inline";
+  document.getElementById("chat-error").style.display = "none";
+
+  const thread = document.getElementById("conversation-thread");
+  const welcome = thread.querySelector(".chat-welcome");
+  if (welcome) welcome.remove();
+
+  input.value = "";
+  const t0 = now();
+  const uRow = document.createElement("div"); uRow.className="msg-row msg-row-user";
+  const uBub = document.createElement("div"); uBub.className="msg-bubble msg-bubble-user"; uBub.textContent=question;
+  uRow.appendChild(uBub); thread.appendChild(uRow);
+  const uTime = document.createElement("div"); uTime.className="msg-time"; uTime.style.cssText="align-self:flex-end;padding-right:2px"; uTime.textContent=t0;
+  thread.appendChild(uTime);
+
+  const ldRow = document.createElement("div"); ldRow.className="msg-row msg-row-ai";
+  const ldAv = document.createElement("div"); ldAv.className="msg-avatar msg-avatar-ai"; ldAv.textContent="🤖";
+  const ldBub = document.createElement("div"); ldBub.className="msg-bubble msg-bubble-ai msg-typing";
+  ldBub.innerHTML="<span></span><span></span><span></span>";
+  ldRow.appendChild(ldAv); ldRow.appendChild(ldBub); thread.appendChild(ldRow);
+  thread.scrollIntoView({behavior:"smooth", block:"end"});
+
+  try {
+    const res = await fetch(`${WORKER_URL}/ask`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: buildSystemPrompt(experts) }] },
+        contents: chatHistory,
+        generationConfig: { temperature: 0.5, thinkingConfig: { thinkingBudget: 0 } }
+      })
+    });
+
+    const data = await res.json();
+    let answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    if (!answer) throw new Error("無效的伺服器回傳或受到安全阻擋");
+
+    chatHistory.push({ role: "model", parts: [{ text: answer }] });
+    sessionStorage.setItem("ltc_chat_history", JSON.stringify(chatHistory));
+    ldRow.remove();
+
+    // ─ 語法分段 ─
     const { sections, principal } = parseExpertSections(answer, experts);
 
     function typewriteBubble(bub, plainText, fullHtml, onDone) {
@@ -6761,7 +6902,7 @@ const APP_ARTICLES = [
           const inWiki = WIKI_TERMS.includes(t);
           const url = inWiki
             ? `${WIKI_BASE}/${encodeURIComponent(t)}/`
-            : `https://www.google.com/search?q=${encodeURIComponent('長照膨食 ' + t)}`;
+            : `https://www.google.com/search?q=${encodeURIComponent('長照膳食 ' + t)}`;
           return `<a href="${url}" class="term-chip" target="_blank">${t}</a>`;
         }).join('');
         termsArea.style.display = 'block';
@@ -6776,7 +6917,7 @@ const APP_ARTICLES = [
 
       const searchTerms = termNames.slice(0,3).concat([question.slice(0,20)]).filter(Boolean);
       googleLinks.innerHTML = searchTerms.map(kw =>
-        `<a href="https://www.google.com/search?q=${encodeURIComponent('長照膨食 ' + kw)}" class="google-chip" target="_blank" rel="noopener">🔍 ${kw}</a>`
+        `<a href="https://www.google.com/search?q=${encodeURIComponent('長照膳食 ' + kw)}" class="google-chip" target="_blank" rel="noopener">🔍 ${kw}</a>`
       ).join('');
       googleArea.style.display = 'block';
 
