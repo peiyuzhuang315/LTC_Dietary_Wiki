@@ -3,213 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌱 知識飛輪管理後台 — 長照膳食實戰百科</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>知識飛輪管理後台 — 長照膳食實戰百科</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0d1117; --card: #161b22; --border: #30363d;
-  --text: #e6edf3; --muted: #7d8590; --accent: #238636;
-  --accent-hover: #2ea043; --teal: #00897b; --teal-dark: #00695c;
-  --blue: #388bfd; --orange: #e3b341;
+  --bg: #0d1117; --card: #161b22; --card2: #1c2128; --border: #30363d;
+  --text: #e6edf3; --muted: #7d8590; --accent: #238636; --accent-h: #2ea043;
+  --teal: #00897b; --teal-d: #00695c; --blue: #2f81f7; --orange: #d29922;
 }
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg); color: var(--text);
-  min-height: 100vh; line-height: 1.6;
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* TOPBAR */
+.topbar { background: linear-gradient(90deg,#00695c,#00838f); padding: .9rem 2rem;
+  display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 16px rgba(0,0,0,.5);
+  position: sticky; top:0; z-index:200; }
+.topbar h1 { font-size: 1.1rem; font-weight:800; color:#fff; }
+.topbar small { font-size:.75rem; opacity:.7; color:#fff; }
+.topbar a { margin-left:auto; color:rgba(255,255,255,.8); text-decoration:none; font-size:.8rem; }
+.topbar a:hover { color:#fff; }
+
+/* TABS */
+.tabs { display:flex; background:var(--card); border-bottom:1px solid var(--border); padding: 0 2rem; }
+.tab { padding:.85rem 1.4rem; background:none; border:none; border-bottom:2px solid transparent;
+  color:var(--muted); font-size:.85rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s; }
+.tab:hover { color:var(--text); }
+.tab.active { color:var(--teal); border-bottom-color:var(--teal); }
+
+/* BODY */
+.body { padding: 1.4rem 2rem; max-width:1100px; margin:0 auto; }
+
+/* STATS */
+.stats { display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
+.stat { background:var(--card); border:1px solid var(--border); border-radius:10px;
+  padding:.85rem 1.2rem; flex:1; min-width:120px; }
+.stat-v { font-size:1.8rem; font-weight:800; line-height:1; }
+.stat-l { font-size:.72rem; color:var(--muted); margin-top:.3rem; }
+
+/* SECTION HEADER */
+.sh { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+.sh h2 { font-size:.9rem; font-weight:700; }
+
+/* GAP ROW */
+.gap-row { display:flex; align-items:center; gap:1rem;
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:.8rem 1.1rem; margin-bottom:.5rem; transition:border-color .2s; }
+.gap-row:hover { border-color:var(--teal); }
+.gap-num { width:36px; height:36px; border-radius:50%; background:var(--teal); color:#fff;
+  font-weight:800; font-size:.9rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.gap-term { font-weight:700; font-size:.88rem; flex:1; }
+.gap-q { font-size:.75rem; color:var(--muted); flex:2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ARCHIVE */
+.archive-toggle { background:none; border:none; color:var(--muted); font-size:.8rem; cursor:pointer; padding:.4rem 0; font-family:inherit; }
+.archive-toggle:hover { color:var(--text); }
+#archive-section { display:none; margin-top:.8rem; border-top:1px solid var(--border); padding-top:.8rem; }
+.gap-row.archived { opacity:.55; }
+.gap-row.archived:hover { opacity:.8; border-color:var(--border); }
+
+/* DRAFT CARD */
+.dc { background:var(--card); border:1px solid var(--border); border-radius:10px;
+  margin-bottom:.9rem; overflow:hidden; transition:border-color .2s; }
+.dc:hover { border-color:#2f81f744; }
+.dc-head { display:flex; align-items:flex-start; justify-content:space-between;
+  gap:1rem; padding: 1rem 1.2rem; flex-wrap:wrap; }
+.dc-term { font-weight:700; font-size:.92rem; }
+.dc-meta { font-size:.73rem; color:var(--muted); margin-top:.25rem; }
+.dc-actions { display:flex; gap:.5rem; flex-shrink:0; flex-wrap:wrap; align-items:center; }
+
+/* CONTENT EDITOR */
+.dc-editor { display:none; border-top:1px solid var(--border); }
+.dc-textarea {
+  width:100%; min-height:260px; background:#0d1117; border:none; outline:none;
+  color:#94a3b8; font-size:.78rem; line-height:1.8; padding:1rem 1.2rem;
+  font-family:'SFMono-Regular',Consolas,monospace; resize:vertical;
+}
+.dc-toolbar {
+  display:flex; gap:.5rem; padding:.7rem 1.2rem; border-top:1px solid var(--border);
+  background:var(--card2); flex-wrap:wrap;
 }
 
-/* ── TOP BAR ── */
-.topbar {
-  background: linear-gradient(90deg, var(--teal), #0097a7);
-  padding: 1rem 2rem; display: flex; align-items: center;
-  gap: 1rem; box-shadow: 0 2px 16px rgba(0,0,0,.5);
-  position: sticky; top: 0; z-index: 100;
-}
-.topbar-title { font-size: 1.15rem; font-weight: 800; color: #fff; }
-.topbar-sub { font-size: .78rem; opacity: .75; color: #fff; }
-.topbar-right { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
-.back-link { color: rgba(255,255,255,.8); text-decoration: none; font-size: .82rem; }
-.back-link:hover { color: #fff; }
+/* AI REVISE DIALOG */
+.revise-area { display:none; background:var(--card2); border-top:1px solid var(--border);
+  padding:.8rem 1.2rem; }
+.revise-label { font-size:.75rem; color:var(--muted); margin-bottom:.4rem; }
+.revise-input { width:100%; background:var(--bg); border:1px solid var(--border);
+  border-radius:6px; color:var(--text); font-size:.82rem; padding:.5rem .8rem;
+  font-family:inherit; outline:none; }
+.revise-input:focus { border-color:var(--blue); }
+.revise-actions { display:flex; gap:.5rem; margin-top:.5rem; }
 
-/* ── TABS ── */
-.tabs { display: flex; background: var(--card); border-bottom: 1px solid var(--border); padding: 0 2rem; }
-.tab-btn {
-  padding: .9rem 1.5rem; font-size: .88rem; font-weight: 600;
-  background: none; border: none; color: var(--muted);
-  cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s;
-}
-.tab-btn:hover { color: var(--text); }
-.tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+/* FILTER */
+.filter-select { background:var(--card); border:1px solid var(--border); color:var(--text);
+  padding:.4rem .8rem; border-radius:6px; font-size:.82rem; font-family:inherit; }
 
-/* ── BODY ── */
-.body { padding: 1.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+/* BUTTONS */
+.btn { padding:.38rem .9rem; border-radius:6px; border:1px solid var(--border);
+  cursor:pointer; font-size:.78rem; font-weight:600; font-family:inherit;
+  transition:all .2s; display:inline-flex; align-items:center; gap:.3rem; }
+.btn-teal { background:var(--teal); color:#fff; border-color:var(--teal-d); }
+.btn-teal:hover { background:var(--teal-d); }
+.btn-green { background:var(--accent); color:#fff; border-color:var(--accent-h); }
+.btn-green:hover { background:var(--accent-h); }
+.btn-blue { background:var(--blue); color:#fff; border-color:#1a6ddf; }
+.btn-blue:hover { background:#1a6ddf; }
+.btn-ghost { background:transparent; color:var(--muted); }
+.btn-ghost:hover { background:var(--card); color:var(--text); }
+.btn-orange { background:#4a2900; color:var(--orange); border-color:#6b3a00; }
+.btn-orange:hover { background:#6b3a00; }
+.btn:disabled { opacity:.35; cursor:not-allowed; }
 
-/* ── SECTION HEADER ── */
-.section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1.2rem;
-}
-.section-header h2 { font-size: 1rem; font-weight: 700; }
+/* BADGES */
+.badge { display:inline-block; padding:.12rem .5rem; border-radius:20px; font-size:.7rem; font-weight:700; }
+.bblue { background:#1e3a8a44; color:#93c5fd; border:1px solid #3b82f644; }
+.bgreen { background:#14532d44; color:#4ade80; border:1px solid #22c55e44; }
+.byellow { background:#78350f44; color:#fbbf24; border:1px solid #f59e0b44; }
+.bgray { background:#1e293b; color:#64748b; border:1px solid #334155; }
 
-/* ── BUTTONS ── */
-.btn {
-  padding: .4rem 1rem; border-radius: 6px; border: 1px solid var(--border);
-  cursor: pointer; font-size: .82rem; font-weight: 600;
-  font-family: inherit; transition: all .2s; display: inline-flex; align-items: center; gap: .3rem;
-}
-.btn-green { background: var(--accent); color: #fff; border-color: var(--accent-hover); }
-.btn-green:hover { background: var(--accent-hover); }
-.btn-teal { background: var(--teal); color: #fff; border-color: var(--teal-dark); }
-.btn-teal:hover { background: var(--teal-dark); }
-.btn-ghost { background: transparent; color: var(--muted); }
-.btn-ghost:hover { background: var(--card); color: var(--text); }
-.btn:disabled { opacity: .4; cursor: not-allowed; }
+/* SKELETON / EMPTY */
+.skel { background:linear-gradient(90deg,var(--card) 25%,#1e293b 50%,var(--card) 75%);
+  background-size:200% 100%; animation:shim 1.5s infinite; border-radius:8px; height:56px; margin-bottom:.5rem; }
+@keyframes shim { to { background-position:-200% 0; } }
+.empty { text-align:center; padding:2.5rem; color:var(--muted); font-size:.85rem; }
 
-/* ── GAP ROW ── */
-.gap-row {
-  display: flex; align-items: center; gap: 1rem;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 8px; padding: .85rem 1.2rem; margin-bottom: .6rem;
-  transition: border-color .2s;
-}
-.gap-row:hover { border-color: var(--teal); }
-.gap-count {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: var(--teal); color: #fff; font-weight: 800;
-  font-size: .9rem; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.gap-term { font-weight: 700; font-size: .9rem; flex: 1; }
-.gap-q { font-size: .78rem; color: var(--muted); flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gap-actions { flex-shrink: 0; }
+/* TOAST */
+#toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%);
+  background:var(--card); border:1px solid var(--border); border-radius:50px;
+  padding:.65rem 1.4rem; font-size:.82rem; z-index:9999; display:none;
+  box-shadow:0 8px 32px rgba(0,0,0,.5); max-width:90vw; text-align:center; }
 
-/* ── DRAFT CARD ── */
-.draft-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 10px; margin-bottom: .8rem; overflow: hidden;
-  transition: border-color .2s;
-}
-.draft-card:hover { border-color: #388bfd55; }
-.draft-card-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 1rem; padding: 1rem 1.2rem; flex-wrap: wrap;
-}
-.draft-term { font-weight: 700; font-size: .95rem; }
-.draft-meta { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
-.draft-actions { display: flex; gap: .5rem; flex-shrink: 0; flex-wrap: wrap; }
-.draft-body {
-  padding: 1rem 1.2rem; border-top: 1px solid var(--border);
-  display: none; background: #0d1117;
-}
-.draft-body pre {
-  font-size: .78rem; line-height: 1.8; white-space: pre-wrap;
-  color: #94a3b8; max-height: 280px; overflow-y: auto;
-}
+/* SPINNER */
+.spin { display:inline-block; width:12px; height:12px; border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff; border-radius:50%; animation:sp .6s linear infinite; }
+@keyframes sp { to { transform:rotate(360deg); } }
 
-/* ── BADGES ── */
-.badge {
-  display: inline-block; padding: .15rem .55rem; border-radius: 20px;
-  font-size: .72rem; font-weight: 700;
-}
-.badge-blue { background: #1e3a8a44; color: #93c5fd; border: 1px solid #3b82f644; }
-.badge-green { background: #14532d44; color: #4ade80; border: 1px solid #22c55e44; }
-.badge-yellow { background: #78350f44; color: #fbbf24; border: 1px solid #f59e0b44; }
-.badge-gray { background: #1e293b; color: #64748b; border: 1px solid #334155; }
+.tp { display:none; }
+.tp.active { display:block; }
 
-/* ── FILTER ── */
-.filter-select {
-  background: var(--card); border: 1px solid var(--border); color: var(--text);
-  padding: .4rem .8rem; border-radius: 6px; font-size: .82rem; font-family: inherit;
-}
-
-/* ── EMPTY / LOADING ── */
-.empty { text-align: center; padding: 3rem; color: var(--muted); font-size: .9rem; }
-.skeleton {
-  background: linear-gradient(90deg, var(--card) 25%, #1e293b 50%, var(--card) 75%);
-  background-size: 200% 100%; animation: shimmer 1.5s infinite;
-  border-radius: 8px; height: 60px; margin-bottom: .6rem;
-}
-@keyframes shimmer { to { background-position: -200% 0; } }
-
-/* ── TOAST ── */
-#toast {
-  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-  background: var(--card); border: 1px solid var(--border); border-radius: 50px;
-  padding: .7rem 1.5rem; font-size: .85rem; z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0,0,0,.5); display: none;
-  max-width: 90vw; text-align: center;
-}
-
-/* ── SPINNER ── */
-.spin {
-  display: inline-block; width: 13px; height: 13px;
-  border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
-  border-radius: 50%; animation: spin .6s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-/* ── STAT STRIP ── */
-.stat-strip { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-.stat {
-  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-  padding: .8rem 1.2rem; flex: 1; min-width: 130px;
-}
-.stat-value { font-size: 1.8rem; font-weight: 800; line-height: 1; }
-.stat-label { font-size: .75rem; color: var(--muted); margin-top: .3rem; }
+/* SAVING indicator */
+.saving { color: var(--orange); font-size:.73rem; display:none; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div>
-    <div class="topbar-title">🌱 知識飛輪管理後台</div>
-    <div class="topbar-sub">長照膳食實戰百科 · 全自動內容成長系統</div>
+    <h1>🌱 知識飛輪管理後台</h1>
+    <small>長照膳食實戰百科 · 全自動內容成長系統</small>
   </div>
-  <div class="topbar-right">
-    <a class="back-link" href="/LTC_Dietary_Wiki/">← 返回知識庫</a>
-  </div>
+  <a href="/LTC_Dietary_Wiki/">← 返回知識庫</a>
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('gaps')">📡 知識缺口</button>
-  <button class="tab-btn" onclick="switchTab('drafts')">✍️ 草稿審核</button>
+  <button class="tab active" onclick="switchTab('gaps')">📡 知識缺口 <span id="gap-count-badge"></span></button>
+  <button class="tab" onclick="switchTab('drafts')">✍️ 草稿審核</button>
 </div>
 
 <div class="body">
 
-  <!-- Tab 1: 知識缺口 -->
-  <div id="tab-gaps" class="tab-panel active">
-    <div style="margin-bottom:1.2rem;" id="gap-stats"></div>
-    <div class="section-header">
-      <h2>缺口詞條排行榜</h2>
+  <!-- ── Tab 1: 知識缺口 ─────────────────────────────── -->
+  <div id="tp-gaps" class="tp active">
+    <div id="gap-stats"></div>
+    <div class="sh">
+      <h2>待生成詞條</h2>
       <button class="btn btn-ghost" onclick="loadGaps()">🔄 重整</button>
     </div>
-    <div id="gaps-list">
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    <div id="gaps-pending"></div>
+
+    <button class="archive-toggle" id="archive-toggle-btn" onclick="toggleArchive()">▶ 顯示已封存（已生成草稿）</button>
+    <div id="archive-section">
+      <div class="sh" style="margin-top:.6rem;"><h2 style="color:var(--muted)">已封存詞條（草稿已生成）</h2></div>
+      <div id="gaps-archived"></div>
     </div>
   </div>
 
-  <!-- Tab 2: 草稿審核 -->
-  <div id="tab-drafts" class="tab-panel">
-    <div class="section-header">
+  <!-- ── Tab 2: 草稿審核 ─────────────────────────────── -->
+  <div id="tp-drafts" class="tp">
+    <div class="sh">
       <h2>草稿審核區</h2>
       <div style="display:flex;gap:.5rem;align-items:center;">
         <select class="filter-select" id="draft-filter" onchange="loadDrafts()">
           <option value="🤖 AI草稿">🤖 AI草稿</option>
-          <option value="✅ 核准發布">✅ 核准發布</option>
+          <option value="🔍 審核中">🔍 審核中</option>
           <option value="📦 已發布">📦 已發布</option>
           <option value="all">全部</option>
         </select>
         <button class="btn btn-ghost" onclick="loadDrafts()">🔄 重整</button>
       </div>
     </div>
-    <div id="drafts-list">
-      <div class="skeleton"></div><div class="skeleton"></div>
-    </div>
+    <div id="drafts-list"></div>
   </div>
 
 </div>
@@ -217,175 +199,279 @@ body {
 <div id="toast"></div>
 
 <script>
-const WORKER = "https://ltc-wiki-worker.peiyuzhuang.workers.dev";
+const W = "https://ltc-wiki-worker.peiyuzhuang.workers.dev";
 
-// ── Tab 切換 ──────────────────────────────────────
-function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b, i) => {
-    b.classList.toggle('active', ['gaps','drafts'][i] === tab);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  if (tab === 'gaps') loadGaps();
-  if (tab === 'drafts') loadDrafts();
+// ─── Tab 切換 ─────────────────────────────────────────
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach((b,i) => b.classList.toggle('active', ['gaps','drafts'][i]===t));
+  document.querySelectorAll('.tp').forEach(p => p.classList.remove('active'));
+  document.getElementById('tp-'+t).classList.add('active');
+  if (t==='gaps') loadGaps();
+  if (t==='drafts') loadDrafts();
 }
 
-// ── Toast 提示 ────────────────────────────────────
-let toastTimer;
-function toast(msg, duration = 4000) {
-  const el = document.getElementById('toast');
-  el.innerHTML = msg; el.style.display = 'block';
-  clearTimeout(toastTimer);
-  if (duration > 0) toastTimer = setTimeout(() => el.style.display = 'none', duration);
+// ─── Toast ───────────────────────────────────────────
+let _tt;
+function toast(msg, dur=4000) {
+  const el=document.getElementById('toast');
+  el.innerHTML=msg; el.style.display='block';
+  clearTimeout(_tt); if(dur>0) _tt=setTimeout(()=>el.style.display='none', dur);
 }
 
-// ── 知識缺口 ──────────────────────────────────────
+// ─── 知識缺口 ─────────────────────────────────────────
+let _draftTerms = new Set(); // 已有草稿的詞條集合
+
 async function loadGaps() {
-  const list = document.getElementById('gaps-list');
-  const stats = document.getElementById('gap-stats');
-  list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
-  try {
-    const res = await fetch(`${WORKER}/admin/gaps`);
-    const { gaps } = await res.json();
+  document.getElementById('gaps-pending').innerHTML = skeleton(3);
+  document.getElementById('gaps-archived').innerHTML = skeleton(2);
 
-    // 統計列
-    const total = (gaps || []).reduce((s, g) => s + g.count, 0);
-    stats.innerHTML = `
-      <div class="stat-strip">
-        <div class="stat"><div class="stat-value" style="color:var(--teal)">${(gaps||[]).length}</div><div class="stat-label">缺口詞條數量</div></div>
-        <div class="stat"><div class="stat-value" style="color:var(--blue)">${total}</div><div class="stat-label">累計觸發次數</div></div>
+  try {
+    // 並行載入缺口和現有草稿
+    const [gapRes, draftRes] = await Promise.all([
+      fetch(`${W}/admin/gaps`),
+      fetch(`${W}/admin/drafts?status=all`)
+    ]);
+    const { gaps } = await gapRes.json();
+    const { drafts } = await draftRes.json();
+    _draftTerms = new Set((drafts||[]).map(d => d.term));
+
+    const total = (gaps||[]).reduce((s,g)=>s+g.count,0);
+    document.getElementById('gap-stats').innerHTML = `
+      <div class="stats">
+        <div class="stat"><div class="stat-v" style="color:var(--teal)">${(gaps||[]).length}</div><div class="stat-l">缺口詞條數量</div></div>
+        <div class="stat"><div class="stat-v" style="color:var(--blue)">${total}</div><div class="stat-l">累計觸發次數</div></div>
+        <div class="stat"><div class="stat-v" style="color:var(--orange)">${_draftTerms.size}</div><div class="stat-l">已生成草稿</div></div>
       </div>`;
 
-    if (!gaps || gaps.length === 0) {
-      list.innerHTML = '<div class="empty">🎉 目前沒有知識缺口！</div>';
+    if (!gaps || gaps.length===0) {
+      document.getElementById('gaps-pending').innerHTML = '<div class="empty">🎉 目前沒有知識缺口！</div>';
       return;
     }
-    list.innerHTML = gaps.map(g => `
-      <div class="gap-row" id="gap-${esc(g.term)}">
-        <div class="gap-count">${g.count}</div>
-        <div class="gap-term">${g.term}</div>
-        <div class="gap-q">${g.question || '—'}</div>
-        <div class="gap-actions">
-          <button class="btn btn-teal" id="gbtn-${esc(g.term)}"
-            onclick="generateDraft('${esc(g.term)}','${esc(g.question)}',this)">
-            🤖 生成草稿
-          </button>
-        </div>
-      </div>`).join('');
-  } catch (e) {
-    list.innerHTML = `<div class="empty">❌ 載入失敗：${e.message}</div>`;
+
+    const pending = gaps.filter(g => !_draftTerms.has(g.term));
+    const archived = gaps.filter(g => _draftTerms.has(g.term));
+
+    document.getElementById('gaps-pending').innerHTML =
+      pending.length ? pending.map(gapRow).join('') : '<div class="empty">所有詞條均已生成草稿 🎉</div>';
+    document.getElementById('gaps-archived').innerHTML =
+      archived.length ? archived.map(g => gapRow(g, true)).join('') : '<div class="empty" style="padding:1rem">（無）</div>';
+
+    const btn = document.getElementById('archive-toggle-btn');
+    btn.style.display = archived.length ? 'block' : 'none';
+  } catch(e) {
+    document.getElementById('gaps-pending').innerHTML = `<div class="empty">❌ ${e.message}</div>`;
   }
 }
 
-// ── 生成草稿 ──────────────────────────────────────
-async function generateDraft(term, question, btn) {
-  if (!confirm(`確定要為「${term}」生成 AI 草稿？\n（需要 20-40 秒，生成完成後到「✍️ 草稿審核」Tab 查看）`)) return;
+function gapRow(g, archived=false) {
+  const id = `gr-${btoa(encodeURIComponent(g.term)).replace(/[^a-zA-Z0-9]/g,'_')}`;
+  return `
+    <div class="gap-row${archived?' archived':''}" id="${id}" data-term="${escAttr(g.term)}" data-question="${escAttr(g.question||'')}">
+      <div class="gap-num">${g.count}</div>
+      <div class="gap-term">${g.term}</div>
+      <div class="gap-q">${g.question||'—'}</div>
+      <div style="flex-shrink:0">
+        ${archived
+          ? `<span class="badge byellow">已生成草稿</span>`
+          : `<button class="btn btn-teal" onclick="generateDraft(this)">🤖 生成草稿</button>`}
+      </div>
+    </div>`;
+}
+
+function toggleArchive() {
+  const sec = document.getElementById('archive-section');
+  const btn = document.getElementById('archive-toggle-btn');
+  const open = sec.style.display==='block';
+  sec.style.display = open ? 'none' : 'block';
+  btn.textContent = (open?'▶ 顯示':'▼ 隱藏') + '已封存（已生成草稿）';
+}
+
+// ─── 生成草稿（透過 data attribute 取得 term/question）──
+async function generateDraft(btn) {
+  const row = btn.closest('.gap-row');
+  const term = row.dataset.term;
+  const question = row.dataset.question;
+  if (!confirm(`確定要為「${term}」生成 AI 草稿？\n（約需 20-40 秒）`)) return;
   const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span> AI 撰寫中...';
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> AI 撰寫中...';
   toast('⏳ AI 正在撰寫草稿，請稍候...', 0);
   try {
-    const res = await fetch(`${WORKER}/admin/draft`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ term, question })
+    const res = await fetch(`${W}/admin/draft`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({term, question})
     });
     const data = await res.json();
     if (data.success) {
-      toast(`✅ 草稿完成！共 ${data.chars} 字。切換到「✍️ 草稿審核」查看。`);
-      btn.innerHTML = '✅ 已生成';
-      btn.style.background = '#14532d';
-    } else {
-      throw new Error(data.error || '未知錯誤');
-    }
-  } catch (e) {
+      toast(`✅ 草稿完成！共 ${data.chars} 字。請切換到「✍️ 草稿審核」查看。`);
+      btn.innerHTML='✅ 已生成'; btn.style.background='#14532d';
+      _draftTerms.add(term);
+      // 移至封存區
+      row.classList.add('archived');
+      row.querySelector('.btn-teal').replaceWith(Object.assign(document.createElement('span'),{className:'badge byellow', textContent:'已生成草稿'}));
+      const archived = document.getElementById('gaps-archived');
+      archived.appendChild(row);
+      const pendingEl = document.getElementById('gaps-pending');
+      if (!pendingEl.querySelector('.gap-row:not(.archived)'))
+        pendingEl.innerHTML = '<div class="empty">所有詞條均已生成草稿 🎉</div>';
+      document.getElementById('archive-toggle-btn').style.display='block';
+    } else { throw new Error(data.error||'未知錯誤'); }
+  } catch(e) {
     toast(`❌ 生成失敗：${e.message}`);
-    btn.innerHTML = orig; btn.disabled = false;
+    btn.innerHTML=orig; btn.disabled=false;
   }
 }
 
-// ── 草稿列表 ──────────────────────────────────────
+// ─── 草稿列表 ─────────────────────────────────────────
 async function loadDrafts() {
   const list = document.getElementById('drafts-list');
   const status = document.getElementById('draft-filter').value;
-  list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
+  list.innerHTML = skeleton(2);
   try {
-    const res = await fetch(`${WORKER}/admin/drafts?status=${encodeURIComponent(status)}`);
+    const res = await fetch(`${W}/admin/drafts?status=${encodeURIComponent(status)}`);
     const { drafts } = await res.json();
-    if (!drafts || drafts.length === 0) {
-      list.innerHTML = '<div class="empty">此狀態目前沒有草稿</div>'; return;
-    }
-    list.innerHTML = drafts.map(d => `
-      <div class="draft-card" id="dc-${d.id}">
-        <div class="draft-card-header">
-          <div>
-            <div class="draft-term">📄 ${d.term}</div>
-            <div class="draft-meta">
-              ${new Date(d.createdTime).toLocaleString('zh-TW')} ·
-              ${d.content.length} 字 ·
-              <span class="badge ${badgeClass(d.status)}">${d.status}</span>
-            </div>
-          </div>
-          <div class="draft-actions">
-            <button class="btn btn-ghost" onclick="toggleBody('${d.id}')">👁 展開</button>
-            ${d.status !== '📦 已發布'
-              ? `<button class="btn btn-green" onclick='publishDraft("${d.id}","${esc(d.term)}",${JSON.stringify(d.content)},this)'>🚀 核准並發布</button>`
-              : '<span class="badge badge-green">📦 已上線</span>'}
-          </div>
+    if (!drafts||drafts.length===0) { list.innerHTML='<div class="empty">此狀態目前沒有草稿</div>'; return; }
+    list.innerHTML = drafts.map(draftCard).join('');
+  } catch(e) { list.innerHTML=`<div class="empty">❌ ${e.message}</div>`; }
+}
+
+function draftCard(d) {
+  const published = d.status==='📦 已發布';
+  return `
+  <div class="dc" id="dc-${d.id}">
+    <div class="dc-head">
+      <div>
+        <div class="dc-term">📄 ${d.term}</div>
+        <div class="dc-meta">
+          ${new Date(d.createdTime).toLocaleString('zh-TW')} ·
+          ${d.content.length} 字 ·
+          <span class="badge ${badgeCls(d.status)}">${d.status}</span>
         </div>
-        <div class="draft-body" id="db-${d.id}">
-          <pre>${escHtml(d.content)}</pre>
+      </div>
+      <div class="dc-actions">
+        <button class="btn btn-ghost" onclick="toggleEditor('${d.id}')">✏️ 編輯</button>
+        ${published
+          ? '<span class="badge bgreen">📦 已上線</span>'
+          : `<button class="btn btn-green" data-pid="${d.id}" data-term="${escAttr(d.term)}" onclick="publishDraft(this)">🚀 核准並發布</button>`}
+      </div>
+    </div>
+
+    <!-- 編輯區塊 -->
+    <div class="dc-editor" id="editor-${d.id}">
+      <textarea class="dc-textarea" id="ta-${d.id}">${escHtml(d.content)}</textarea>
+
+      <!-- AI 對話調整列 -->
+      <div class="revise-area" id="ra-${d.id}">
+        <div class="revise-label">📝 輸入修改指令（例如：把第二段改得更口語化、幫我加上關於申請資格的段落）</div>
+        <textarea class="revise-input" id="ri-${d.id}" rows="2" placeholder="請描述你想怎麼調整這篇文章..."></textarea>
+        <div class="revise-actions">
+          <button class="btn btn-blue" data-id="${d.id}" onclick="reviseDraft(this)">🤖 AI 調整</button>
+          <button class="btn btn-ghost" onclick="closeRevise('${d.id}')">取消</button>
         </div>
-      </div>`).join('');
-  } catch (e) {
-    list.innerHTML = `<div class="empty">❌ ${e.message}</div>`;
-  }
+      </div>
+
+      <!-- 操作工具列 -->
+      <div class="dc-toolbar">
+        <button class="btn btn-orange" data-id="${d.id}" onclick="openRevise('${d.id}')">💬 AI 協助修改</button>
+        <button class="btn btn-ghost" data-id="${d.id}" data-pid="${d.id}" onclick="saveDraft(this)">💾 儲存草稿</button>
+        <span class="saving" id="saving-${d.id}">⏳ 儲存中...</span>
+      </div>
+    </div>
+  </div>`;
 }
 
-function toggleBody(id) {
-  const el = document.getElementById('db-' + id);
-  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+function toggleEditor(id) {
+  const el = document.getElementById('editor-'+id);
+  el.style.display = el.style.display==='block' ? 'none' : 'block';
 }
 
-function badgeClass(s) {
-  if (s.includes('草稿') || s.includes('審核')) return 'badge-blue';
-  if (s.includes('已發布')) return 'badge-green';
-  if (s.includes('核准')) return 'badge-yellow';
-  return 'badge-gray';
+function openRevise(id) {
+  document.getElementById('ra-'+id).style.display='block';
+  document.getElementById('ri-'+id).focus();
 }
+function closeRevise(id) { document.getElementById('ra-'+id).style.display='none'; }
 
-// ── 發布 ──────────────────────────────────────────
-async function publishDraft(pageId, term, content, btn) {
-  if (!confirm(`確定要發布「${term}」？\n文章將透過 GitHub API 直接上傳，約 2 分鐘後上線。`)) return;
+// ─── AI 調整草稿 ──────────────────────────────────────
+async function reviseDraft(btn) {
+  const id = btn.dataset.id;
+  const content = document.getElementById('ta-'+id).value;
+  const instruction = document.getElementById('ri-'+id).value.trim();
+  if (!instruction) { toast('⚠️ 請輸入修改指令'); return; }
   const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span> 發布中...';
-  toast('🚀 透過 GitHub API 發布中...', 0);
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> AI 調整中...';
+  toast('⏳ AI 正在修改文章，請稍候（約 20 秒）...', 0);
   try {
-    const res = await fetch(`${WORKER}/admin/publish`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pageId, term, content })
+    const res = await fetch(`${W}/admin/revise`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({content, instruction})
     });
     const data = await res.json();
     if (data.success) {
-      toast(`✅ 發布成功！約 2 分鐘後可在 <a href="${data.url}" target="_blank" style="color:#4ade80">${data.filename}</a> 看到`, 8000);
-      btn.innerHTML = '✅ 已發布'; btn.style.background = '#14532d';
-      document.getElementById('dc-' + pageId)?.querySelector('.draft-term')?.insertAdjacentHTML('afterend',
-        ' <span class="badge badge-green">📦 已上線</span>');
-    } else {
-      throw new Error(data.error || '未知錯誤');
-    }
-  } catch (e) {
+      document.getElementById('ta-'+id).value = data.content;
+      closeRevise(id);
+      document.getElementById('ri-'+id).value='';
+      toast('✅ AI 已完成修改！請確認內容後儲存。');
+    } else { throw new Error(data.error||'未知錯誤'); }
+  } catch(e) { toast(`❌ 調整失敗：${e.message}`); }
+  finally { btn.innerHTML=orig; btn.disabled=false; }
+}
+
+// ─── 儲存草稿 ─────────────────────────────────────────
+async function saveDraft(btn) {
+  const id = btn.dataset.id;
+  const pid = btn.dataset.pid;
+  const content = document.getElementById('ta-'+id).value;
+  const saving = document.getElementById('saving-'+id);
+  saving.style.display='inline'; btn.disabled=true;
+  try {
+    const res = await fetch(`${W}/admin/save`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({pageId: pid, content})
+    });
+    const data = await res.json();
+    if (data.success) toast('✅ 草稿已儲存（狀態改為「審核中」）');
+    else throw new Error(data.error||'未知錯誤');
+  } catch(e) { toast(`❌ 儲存失敗：${e.message}`); }
+  finally { saving.style.display='none'; btn.disabled=false; }
+}
+
+// ─── 發布 ────────────────────────────────────────────
+async function publishDraft(btn) {
+  const pid = btn.dataset.pid;
+  const term = btn.dataset.term;
+  // 嘗試從編輯器取得最新內容
+  const ta = document.getElementById('ta-'+pid);
+  const cardEl = document.getElementById('dc-'+pid);
+  const content = ta ? ta.value : cardEl.querySelector('.dc-textarea')?.value || '';
+  if (!content) { toast('⚠️ 找不到草稿內容，請先展開編輯區'); return; }
+  if (!confirm(`確定要發布「${term}」？\n文章將透過 GitHub API 上傳，約 2 分鐘後上線。`)) return;
+  const orig = btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> 發布中...';
+  toast('🚀 透過 GitHub API 發布中...', 0);
+  try {
+    const res = await fetch(`${W}/admin/publish`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({pageId:pid, term, content})
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast(`✅ 發布成功！約 2 分鐘後可在 <a href="${data.url}" target="_blank" style="color:#4ade80">${data.filename}</a> 查看`, 8000);
+      btn.innerHTML='✅ 已發布'; btn.style.background='#14532d';
+    } else { throw new Error(data.error||'未知錯誤'); }
+  } catch(e) {
     toast(`❌ 發布失敗：${e.message}`);
-    btn.innerHTML = orig; btn.disabled = false;
+    btn.innerHTML=orig; btn.disabled=false;
   }
 }
 
-function esc(s) { return String(s||'').replace(/'/g,"\\'"); }
+function badgeCls(s) {
+  if (s.includes('草稿')||s.includes('審核')) return 'bblue';
+  if (s.includes('已發布')) return 'bgreen';
+  return 'byellow';
+}
+function skeleton(n) { return Array(n).fill('<div class="skel"></div>').join(''); }
+function escAttr(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// 初始化
 loadGaps();
 </script>
 </body>
