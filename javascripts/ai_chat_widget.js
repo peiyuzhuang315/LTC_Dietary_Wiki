@@ -214,19 +214,73 @@
     #ltc-widget.visible { transform:scale(1) translateY(0); opacity:1; pointer-events:auto; }
     #ltc-widget-header { background:#00897b; color:white; padding:12px 16px;
       font-weight:700; font-size:.95rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-    #ltc-messages { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
-    .ltc-msg-user { align-self:flex-end; background:#00897b; color:white;
-      padding:8px 12px; border-radius:14px 14px 2px 14px; font-size:.88rem; max-width:85%; }
-    .ltc-msg-ai { align-self:flex-start; background:#f5f5f5;
-       padding:10px 12px; border-radius:14px 14px 14px 2px; font-size:.85rem; max-width:95%; line-height:1.65; }
-    .ltc-msg-ai p { margin: 0 0 .4em; }
+    /* ── 消息容器 ── */
+    #ltc-messages { flex:1; overflow-y:auto; padding:14px 12px; display:flex; flex-direction:column; gap:4px;
+      background:#e5ddd5; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3C/svg%3E"); }
+
+    /* ── 訊息列（包含頭像+氣泡） ── */
+    .ltc-row { display:flex; align-items:flex-end; gap:6px; max-width:90%; }
+    .ltc-row-user { align-self:flex-end; flex-direction:row-reverse; }
+    .ltc-row-ai   { align-self:flex-start; flex-direction:row; }
+
+    /* ── 頭像 ── */
+    .ltc-avatar { width:32px; height:32px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center; font-size:1rem;
+      box-shadow:0 1px 4px rgba(0,0,0,.2); }
+    .ltc-avatar-ai   { background:linear-gradient(135deg,#00897b,#00acc1); color:#fff; }
+    .ltc-avatar-dean { background:linear-gradient(135deg,#f9a825,#f57f17); color:#fff; }
+
+    /* ── 氣泡本體 ── */
+    .ltc-bubble { padding:9px 13px; border-radius:18px; font-size:.86rem; line-height:1.65;
+      box-shadow:0 1px 3px rgba(0,0,0,.15); animation:ltc-pop .15s ease; position:relative; max-width:320px; }
+    @keyframes ltc-pop { from { transform:scale(.92); opacity:0; } to { transform:scale(1); opacity:1; } }
+
+    /* 使用者氣泡（右側，綠色，帶右下尾巴） */
+    .ltc-bubble-user { background:#dcf8c6; color:#1a1a1a; border-radius:18px 18px 4px 18px; }
+    .ltc-bubble-user::after { content:''; position:absolute; bottom:0; right:-7px;
+      width:0; height:0; border-style:solid; border-width:8px 0 0 8px;
+      border-color:transparent transparent transparent #dcf8c6; }
+
+    /* AI 氣泡（左側，白色，帶左下尾巴） */
+    .ltc-bubble-ai { background:#ffffff; color:#1a1a1a; border-radius:18px 18px 18px 4px; }
+    .ltc-bubble-ai::after { content:''; position:absolute; bottom:0; left:-7px;
+      width:0; height:0; border-style:solid; border-width:8px 8px 0 0;
+      border-color:transparent #ffffff transparent transparent; }
+    .ltc-bubble-ai p { margin:0 0 .35em; }
+    .ltc-bubble-ai p:last-child { margin:0; }
+
+    /* 院長氣泡（黃金色） */
+    .ltc-bubble-dean { background:#fffde7; border:1px solid #fbc02d; color:#4a2b00; border-radius:18px 18px 18px 4px; }
+    .ltc-bubble-dean::after { content:''; position:absolute; bottom:0; left:-7px;
+      width:0; height:0; border-style:solid; border-width:8px 8px 0 0;
+      border-color:transparent #fbc02d transparent transparent; }
+    .ltc-bubble-dean p { margin:0 0 .35em; }
+
+    /* 專家名牌 */
     .ltc-expert-card { align-self:flex-start; display:flex; align-items:center; gap:8px;
-      padding:6px 10px; border-radius:8px; border-left:3px solid; background:#f9f9f9; font-size:.8rem; max-width:95%; }
-    .ltc-dean-card { margin-top:8px; display:inline-flex; align-items:center; gap:6px; background:#fffdf2; border:1.5px solid #f9a825; border-radius:8px; padding:6px 10px; align-self:flex-start; max-width:95%; font-weight:700; color:#e65100; font-size:.8rem; }
-    .ltc-dean-bubble { align-self:flex-start; background:#fffdf2; border:1px solid #fbc02d; padding:10px 12px; border-radius:14px 14px 14px 2px; font-size:.85rem; max-width:95%; line-height:1.65; color:#444; }
-    .ltc-chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:2px; padding-left:4px; }
-    .ltc-term-chip { background:#00897b; color:white !important; padding:2px 8px; border-radius:12px; font-size:.75rem; text-decoration:none !important; }
-    .ltc-google-chip { background:#f1f3f4; color:#1a73e8 !important; padding:2px 8px; border-radius:12px; font-size:.75rem; border:1px solid #dadce0; }
+      padding:4px 10px; border-radius:8px; border-left:3px solid; background:rgba(255,255,255,.75);
+      font-size:.76rem; max-width:90%; box-shadow:0 1px 2px rgba(0,0,0,.1); margin-left:38px; }
+    .ltc-dean-card { margin-top:4px; display:inline-flex; align-items:center; gap:6px;
+      background:#fffde7; border:1.5px solid #f9a825; border-radius:8px;
+      padding:4px 10px; align-self:flex-start; font-weight:700; color:#e65100; font-size:.76rem;
+      margin-left:38px; }
+
+    /* 時間戳記 */
+    .ltc-time { font-size:.67rem; color:rgba(0,0,0,.4); margin-top:2px; padding:0 4px; align-self:flex-end; white-space:nowrap; }
+    .ltc-row-user .ltc-time { padding-right:38px; }
+    .ltc-row-ai  .ltc-time  { padding-left:38px; }
+
+    /* chips */
+    .ltc-chips { display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 0 38px; }
+    .ltc-term-chip { background:#00897b; color:white !important; padding:2px 9px; border-radius:12px; font-size:.72rem; text-decoration:none !important; }
+    .ltc-google-chip { background:#f1f3f4; color:#1a73e8 !important; padding:2px 9px; border-radius:12px; font-size:.72rem; border:1px solid #dadce0; }
+
+    /* 打字等待動畫 */
+    .ltc-typing { display:inline-flex; align-items:center; gap:3px; padding:10px 14px; }
+    .ltc-typing span { width:7px; height:7px; background:#aaa; border-radius:50%; animation:ltc-bounce .9s infinite; }
+    .ltc-typing span:nth-child(2) { animation-delay:.15s; }
+    .ltc-typing span:nth-child(3) { animation-delay:.3s; }
+    @keyframes ltc-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
     #ltc-input-row { display:flex; padding:10px 12px; gap:8px; border-top:1px solid #eee; flex-shrink:0; }
     #ltc-input { flex:1; padding:8px 10px; border-radius:8px; border:1.5px solid #ccc; font-size:.88rem; outline:none; height:38px; resize:none; }
     #ltc-send { background:#00897b; color:white; border:none; border-radius:8px; padding:0 14px; cursor:pointer; font-size:1.2rem; }
@@ -248,6 +302,10 @@
 
   let widgetHistory = JSON.parse(sessionStorage.getItem('ltc_widget_history') || '[]');
 
+  function now() {
+    return new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit', hour12:false });
+  }
+
   async function sendMessage() {
     const input = document.getElementById("ltc-input"), q = input.value.trim(); if (!q) return;
     
@@ -258,8 +316,20 @@
     const experts = detectExperts(q), msgBox = document.getElementById("ltc-messages");
     input.value = ""; document.getElementById("ltc-send").disabled = true;
 
-    const uB = document.createElement("div"); uB.className="ltc-msg-user"; uB.textContent=q; msgBox.appendChild(uB);
-    const ld = document.createElement("div"); ld.className="ltc-msg-loading"; ld.textContent="⏳ AI 思考中…"; msgBox.appendChild(ld);
+    const uRow = document.createElement("div"); uRow.className="ltc-row ltc-row-user";
+    const uBubble = document.createElement("div"); uBubble.className="ltc-bubble ltc-bubble-user"; uBubble.textContent=q;
+    uRow.appendChild(uBubble);
+    msgBox.appendChild(uRow);
+    const uTime = document.createElement("div"); uTime.className="ltc-time ltc-row-user"; uTime.textContent=now(); uTime.style.cssText="align-self:flex-end;padding-right:4px;";
+    msgBox.appendChild(uTime);
+
+    // 打字動畫
+    const ldRow = document.createElement("div"); ldRow.className="ltc-row ltc-row-ai";
+    const ldAvatar = document.createElement("div"); ldAvatar.className="ltc-avatar ltc-avatar-ai"; ldAvatar.textContent="🤖";
+    const ldBubble = document.createElement("div"); ldBubble.className="ltc-bubble ltc-bubble-ai ltc-typing";
+    ldBubble.innerHTML="<span></span><span></span><span></span>";
+    ldRow.appendChild(ldAvatar); ldRow.appendChild(ldBubble);
+    const ld = ldRow;
     msgBox.scrollTop = msgBox.scrollHeight;
 
     try {
@@ -279,11 +349,17 @@
         card.innerHTML = `<span style="font-size:1.1rem">${sec.e.emoji}</span><div><b style="color:${sec.e.color}">${sec.e.digitalTitle}</b> <small style="opacity:.6">· ${sec.e.realRole}</small></div>`;
         msgBox.appendChild(card);
         
-        // 氣泡化：依雙換行將回覆切成獨立對話框
+        // 用氣泡列包裝：一個 AI 訊息列 = 頭像 + 氣泡
         const blocks = sec.text.split(/(?:\r?\n){2,}/).map(t => t.trim()).filter(Boolean);
-        blocks.forEach(b => {
-          const bEl = document.createElement("div"); bEl.className="ltc-msg-ai"; bEl.innerHTML=renderMd(b); msgBox.appendChild(bEl);
+        blocks.forEach((b, bi) => {
+          const row = document.createElement("div"); row.className="ltc-row ltc-row-ai";
+          const av = document.createElement("div"); av.className="ltc-avatar ltc-avatar-ai"; av.textContent = bi===0 ? sec.e.emoji : "";
+          av.style.visibility = bi===0 ? "visible" : "hidden";
+          const bub = document.createElement("div"); bub.className="ltc-bubble ltc-bubble-ai"; bub.innerHTML=renderMd(b);
+          row.appendChild(av); row.appendChild(bub);
+          msgBox.appendChild(row);
         });
+        const t = document.createElement("div"); t.className="ltc-time"; t.style.cssText="padding-left:38px"; t.textContent=now(); msgBox.appendChild(t);
       });
 
       if (dean) {
@@ -291,11 +367,17 @@
         dC.innerHTML = `🏅 長照督導院長 <small style="opacity:.7;font-weight:normal">· 跨域照護統籌</small>`;
         msgBox.appendChild(dC);
         
-        // 氣泡化院長段落
+        // 院長氣泡列
         const blocks = dean.split(/(?:\r?\n){2,}/).map(t => t.trim()).filter(Boolean);
-        blocks.forEach(b => {
-          const bEl = document.createElement("div"); bEl.className="ltc-dean-bubble"; bEl.innerHTML=renderMd(b); msgBox.appendChild(bEl);
+        blocks.forEach((b, bi) => {
+          const row = document.createElement("div"); row.className="ltc-row ltc-row-ai";
+          const av = document.createElement("div"); av.className="ltc-avatar ltc-avatar-dean"; av.textContent = bi===0 ? "🏅" : "";
+          av.style.visibility = bi===0 ? "visible" : "hidden";
+          const bub = document.createElement("div"); bub.className="ltc-bubble ltc-bubble-dean"; bub.innerHTML=renderMd(b);
+          row.appendChild(av); row.appendChild(bub);
+          msgBox.appendChild(row);
         });
+        const t = document.createElement("div"); t.className="ltc-time"; t.style.cssText="padding-left:38px"; t.textContent=now(); msgBox.appendChild(t);
       }
 
       const terms = extractTerms(ans);
