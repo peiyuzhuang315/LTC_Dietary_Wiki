@@ -3,195 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>知識飛輪管理後台 — 長照膳食實戰百科</title>
+<title>知識飛輪管理後台</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0d1117; --card: #161b22; --card2: #1c2128; --border: #30363d;
-  --text: #e6edf3; --muted: #7d8590; --accent: #238636; --accent-h: #2ea043;
-  --teal: #00897b; --teal-d: #00695c; --blue: #2f81f7; --orange: #d29922;
-}
-body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-/* TOPBAR */
-.topbar { background: linear-gradient(90deg,#00695c,#00838f); padding: .9rem 2rem;
-  display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 16px rgba(0,0,0,.5);
-  position: sticky; top:0; z-index:200; }
-.topbar h1 { font-size: 1.1rem; font-weight:800; color:#fff; }
-.topbar small { font-size:.75rem; opacity:.7; color:#fff; }
-.topbar a { margin-left:auto; color:rgba(255,255,255,.8); text-decoration:none; font-size:.8rem; }
-.topbar a:hover { color:#fff; }
-
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--card:#161b22;--card2:#1c2128;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--green:#238636;--green-h:#2ea043;--teal:#00897b;--teal-d:#00695c;--blue:#2f81f7;--orange:#d29922;--red:#da3633}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+/* TOP */
+.topbar{background:linear-gradient(90deg,#00695c,#00838f);padding:.9rem 2rem;display:flex;align-items:center;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.5)}
+.topbar h1{font-size:1.1rem;font-weight:800;color:#fff}
+.topbar small{font-size:.73rem;opacity:.7;color:#fff}
+.topbar a{margin-left:auto;color:rgba(255,255,255,.8);text-decoration:none;font-size:.8rem}
 /* TABS */
-.tabs { display:flex; background:var(--card); border-bottom:1px solid var(--border); padding: 0 2rem; }
-.tab { padding:.85rem 1.4rem; background:none; border:none; border-bottom:2px solid transparent;
-  color:var(--muted); font-size:.85rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s; }
-.tab:hover { color:var(--text); }
-.tab.active { color:var(--teal); border-bottom-color:var(--teal); }
-
+.tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);padding:0 2rem}
+.tab{padding:.8rem 1.3rem;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.tab:hover{color:var(--text)}.tab.active{color:var(--teal);border-bottom-color:var(--teal)}
 /* BODY */
-.body { padding: 1.4rem 2rem; max-width:1100px; margin:0 auto; }
-
+.body{padding:1.3rem 2rem;max-width:1100px;margin:0 auto}
 /* STATS */
-.stats { display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
-.stat { background:var(--card); border:1px solid var(--border); border-radius:10px;
-  padding:.85rem 1.2rem; flex:1; min-width:120px; }
-.stat-v { font-size:1.8rem; font-weight:800; line-height:1; }
-.stat-l { font-size:.72rem; color:var(--muted); margin-top:.3rem; }
-
+.stats{display:flex;gap:1rem;margin-bottom:1.3rem;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.2rem;flex:1;min-width:110px}
+.stat-v{font-size:1.7rem;font-weight:800;line-height:1}
+.stat-l{font-size:.72rem;color:var(--muted);margin-top:.25rem}
 /* SECTION HEADER */
-.sh { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
-.sh h2 { font-size:.9rem; font-weight:700; }
-
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem}
+.sh h2{font-size:.88rem;font-weight:700}
 /* GAP ROW */
-.gap-row { display:flex; align-items:center; gap:1rem;
-  background:var(--card); border:1px solid var(--border); border-radius:8px;
-  padding:.8rem 1.1rem; margin-bottom:.5rem; transition:border-color .2s; }
-.gap-row:hover { border-color:var(--teal); }
-.gap-num { width:36px; height:36px; border-radius:50%; background:var(--teal); color:#fff;
-  font-weight:800; font-size:.9rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.gap-term { font-weight:700; font-size:.88rem; flex:1; }
-.gap-q { font-size:.75rem; color:var(--muted); flex:2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
+.gap-row{display:flex;align-items:center;gap:.8rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin-bottom:.45rem;transition:border-color .2s}
+.gap-row:hover{border-color:var(--teal)}
+.gn{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gt{font-weight:700;font-size:.85rem;flex:1}
+.gq{font-size:.73rem;color:var(--muted);flex:2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* ARCHIVE */
-.archive-toggle { background:none; border:none; color:var(--muted); font-size:.8rem; cursor:pointer; padding:.4rem 0; font-family:inherit; }
-.archive-toggle:hover { color:var(--text); }
-#archive-section { display:none; margin-top:.8rem; border-top:1px solid var(--border); padding-top:.8rem; }
-.gap-row.archived { opacity:.55; }
-.gap-row.archived:hover { opacity:.8; border-color:var(--border); }
-
+#archive-section{display:none;margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--border)}
+.gap-row.archived{opacity:.5}.gap-row.archived:hover{opacity:.75;border-color:var(--border)}
+.arch-btn{background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;padding:.35rem 0;font-family:inherit}
+.arch-btn:hover{color:var(--text)}
 /* DRAFT CARD */
-.dc { background:var(--card); border:1px solid var(--border); border-radius:10px;
-  margin-bottom:.9rem; overflow:hidden; transition:border-color .2s; }
-.dc:hover { border-color:#2f81f744; }
-.dc-head { display:flex; align-items:flex-start; justify-content:space-between;
-  gap:1rem; padding: 1rem 1.2rem; flex-wrap:wrap; }
-.dc-term { font-weight:700; font-size:.92rem; }
-.dc-meta { font-size:.73rem; color:var(--muted); margin-top:.25rem; }
-.dc-actions { display:flex; gap:.5rem; flex-shrink:0; flex-wrap:wrap; align-items:center; }
-
-/* CONTENT EDITOR */
-.dc-editor { display:none; border-top:1px solid var(--border); }
-.dc-textarea {
-  width:100%; min-height:260px; background:#0d1117; border:none; outline:none;
-  color:#94a3b8; font-size:.78rem; line-height:1.8; padding:1rem 1.2rem;
-  font-family:'SFMono-Regular',Consolas,monospace; resize:vertical;
-}
-.dc-toolbar {
-  display:flex; gap:.5rem; padding:.7rem 1.2rem; border-top:1px solid var(--border);
-  background:var(--card2); flex-wrap:wrap;
-}
-
-/* AI REVISE DIALOG */
-.revise-area { display:none; background:var(--card2); border-top:1px solid var(--border);
-  padding:.8rem 1.2rem; }
-.revise-label { font-size:.75rem; color:var(--muted); margin-bottom:.4rem; }
-.revise-input { width:100%; background:var(--bg); border:1px solid var(--border);
-  border-radius:6px; color:var(--text); font-size:.82rem; padding:.5rem .8rem;
-  font-family:inherit; outline:none; }
-.revise-input:focus { border-color:var(--blue); }
-.revise-actions { display:flex; gap:.5rem; margin-top:.5rem; }
-
+.dc{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:.8rem;overflow:hidden}
+.dc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;padding:.9rem 1.1rem;flex-wrap:wrap}
+.dc-term{font-weight:700;font-size:.9rem}
+.dc-meta{font-size:.72rem;color:var(--muted);margin-top:.2rem}
+.dc-act{display:flex;gap:.4rem;flex-shrink:0;flex-wrap:wrap;align-items:center}
+/* EDITOR */
+.dc-editor{display:none;border-top:1px solid var(--border)}
+.dc-ta{width:100%;min-height:240px;background:#0d1117;border:none;outline:none;color:#94a3b8;font-size:.77rem;line-height:1.8;padding:.9rem 1.1rem;font-family:'SFMono-Regular',Consolas,monospace;resize:vertical}
+.dc-toolbar{display:flex;gap:.4rem;padding:.6rem 1.1rem;background:var(--card2);border-top:1px solid var(--border);flex-wrap:wrap;align-items:center}
+/* AI REVISE */
+.ra{display:none;background:var(--card2);border-top:1px solid var(--border);padding:.7rem 1.1rem}
+.ra-label{font-size:.73rem;color:var(--muted);margin-bottom:.35rem}
+.ra-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.8rem;padding:.45rem .75rem;font-family:inherit;outline:none}
+.ra-input:focus{border-color:var(--blue)}
+.ra-btns{display:flex;gap:.4rem;margin-top:.4rem}
+/* STATUS SELECT */
+.status-sel{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:.3rem .6rem;border-radius:6px;font-size:.76rem;font-family:inherit;cursor:pointer}
 /* FILTER */
-.filter-select { background:var(--card); border:1px solid var(--border); color:var(--text);
-  padding:.4rem .8rem; border-radius:6px; font-size:.82rem; font-family:inherit; }
-
+.filter-sel{background:var(--card);border:1px solid var(--border);color:var(--text);padding:.38rem .75rem;border-radius:6px;font-size:.8rem;font-family:inherit}
 /* BUTTONS */
-.btn { padding:.38rem .9rem; border-radius:6px; border:1px solid var(--border);
-  cursor:pointer; font-size:.78rem; font-weight:600; font-family:inherit;
-  transition:all .2s; display:inline-flex; align-items:center; gap:.3rem; }
-.btn-teal { background:var(--teal); color:#fff; border-color:var(--teal-d); }
-.btn-teal:hover { background:var(--teal-d); }
-.btn-green { background:var(--accent); color:#fff; border-color:var(--accent-h); }
-.btn-green:hover { background:var(--accent-h); }
-.btn-blue { background:var(--blue); color:#fff; border-color:#1a6ddf; }
-.btn-blue:hover { background:#1a6ddf; }
-.btn-ghost { background:transparent; color:var(--muted); }
-.btn-ghost:hover { background:var(--card); color:var(--text); }
-.btn-orange { background:#4a2900; color:var(--orange); border-color:#6b3a00; }
-.btn-orange:hover { background:#6b3a00; }
-.btn:disabled { opacity:.35; cursor:not-allowed; }
-
+.btn{padding:.35rem .85rem;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:.76rem;font-weight:600;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:.25rem}
+.btn-teal{background:var(--teal);color:#fff;border-color:var(--teal-d)}.btn-teal:hover{background:var(--teal-d)}
+.btn-green{background:var(--green);color:#fff;border-color:var(--green-h)}.btn-green:hover{background:var(--green-h)}
+.btn-blue{background:var(--blue);color:#fff;border-color:#1a6ddf}.btn-blue:hover{background:#1a6ddf}
+.btn-red{background:#4a0d0d;color:#fca5a5;border-color:#7f1d1d}.btn-red:hover{background:#7f1d1d}
+.btn-orange{background:#3a1800;color:var(--orange);border-color:#6b3a00}.btn-orange:hover{background:#6b3a00}
+.btn-ghost{background:transparent;color:var(--muted)}.btn-ghost:hover{background:var(--card);color:var(--text)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
 /* BADGES */
-.badge { display:inline-block; padding:.12rem .5rem; border-radius:20px; font-size:.7rem; font-weight:700; }
-.bblue { background:#1e3a8a44; color:#93c5fd; border:1px solid #3b82f644; }
-.bgreen { background:#14532d44; color:#4ade80; border:1px solid #22c55e44; }
-.byellow { background:#78350f44; color:#fbbf24; border:1px solid #f59e0b44; }
-.bgray { background:#1e293b; color:#64748b; border:1px solid #334155; }
-
-/* SKELETON / EMPTY */
-.skel { background:linear-gradient(90deg,var(--card) 25%,#1e293b 50%,var(--card) 75%);
-  background-size:200% 100%; animation:shim 1.5s infinite; border-radius:8px; height:56px; margin-bottom:.5rem; }
-@keyframes shim { to { background-position:-200% 0; } }
-.empty { text-align:center; padding:2.5rem; color:var(--muted); font-size:.85rem; }
-
+.badge{display:inline-block;padding:.1rem .48rem;border-radius:20px;font-size:.69rem;font-weight:700}
+.bblue{background:#1e3a8a44;color:#93c5fd;border:1px solid #3b82f644}
+.bgreen{background:#14532d44;color:#4ade80;border:1px solid #22c55e44}
+.byellow{background:#78350f44;color:#fbbf24;border:1px solid #f59e0b44}
+.bgray{background:#1e293b;color:#64748b;border:1px solid #334155}
+.bred{background:#4a0d0d44;color:#f87171;border:1px solid #ef444444}
+/* SKEL/EMPTY */
+.skel{background:linear-gradient(90deg,var(--card) 25%,#1e293b 50%,var(--card) 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:8px;height:52px;margin-bottom:.45rem}
+@keyframes shim{to{background-position:-200% 0}}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:.83rem}
 /* TOAST */
-#toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%);
-  background:var(--card); border:1px solid var(--border); border-radius:50px;
-  padding:.65rem 1.4rem; font-size:.82rem; z-index:9999; display:none;
-  box-shadow:0 8px 32px rgba(0,0,0,.5); max-width:90vw; text-align:center; }
-
+#toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:50px;padding:.6rem 1.3rem;font-size:.8rem;z-index:9999;display:none;box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:90vw;text-align:center}
 /* SPINNER */
-.spin { display:inline-block; width:12px; height:12px; border:2px solid rgba(255,255,255,.3);
-  border-top-color:#fff; border-radius:50%; animation:sp .6s linear infinite; }
-@keyframes sp { to { transform:rotate(360deg); } }
-
-.tp { display:none; }
-.tp.active { display:block; }
-
-/* SAVING indicator */
-.saving { color: var(--orange); font-size:.73rem; display:none; }
+.spin{display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.tp{display:none}.tp.active{display:block}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div>
-    <h1>🌱 知識飛輪管理後台</h1>
-    <small>長照膳食實戰百科 · 全自動內容成長系統</small>
-  </div>
+  <div><h1>🌱 知識飛輪管理後台</h1><small>長照膳食實戰百科 · 全自動內容成長系統</small></div>
   <a href="/LTC_Dietary_Wiki/">← 返回知識庫</a>
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('gaps')">📡 知識缺口 <span id="gap-count-badge"></span></button>
+  <button class="tab active" onclick="switchTab('gaps')">📡 知識缺口</button>
   <button class="tab" onclick="switchTab('drafts')">✍️ 草稿審核</button>
 </div>
 
 <div class="body">
 
-  <!-- ── Tab 1: 知識缺口 ─────────────────────────────── -->
+  <!-- 知識缺口 Tab -->
   <div id="tp-gaps" class="tp active">
     <div id="gap-stats"></div>
-    <div class="sh">
-      <h2>待生成詞條</h2>
-      <button class="btn btn-ghost" onclick="loadGaps()">🔄 重整</button>
-    </div>
-    <div id="gaps-pending"></div>
-
-    <button class="archive-toggle" id="archive-toggle-btn" onclick="toggleArchive()">▶ 顯示已封存（已生成草稿）</button>
+    <div class="sh"><h2>待生成詞條</h2><button class="btn btn-ghost" onclick="loadGaps()">🔄 重整</button></div>
+    <div id="gaps-pending"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    <button class="arch-btn" id="arch-btn" style="display:none" onclick="toggleArchive()">▶ 顯示已封存（草稿已生成）</button>
     <div id="archive-section">
-      <div class="sh" style="margin-top:.6rem;"><h2 style="color:var(--muted)">已封存詞條（草稿已生成）</h2></div>
+      <div class="sh" style="margin-top:.5rem"><h2 style="color:var(--muted)">已封存詞條</h2></div>
       <div id="gaps-archived"></div>
     </div>
   </div>
 
-  <!-- ── Tab 2: 草稿審核 ─────────────────────────────── -->
+  <!-- 草稿審核 Tab -->
   <div id="tp-drafts" class="tp">
     <div class="sh">
       <h2>草稿審核區</h2>
-      <div style="display:flex;gap:.5rem;align-items:center;">
-        <select class="filter-select" id="draft-filter" onchange="loadDrafts()">
+      <div style="display:flex;gap:.4rem;align-items:center">
+        <select class="filter-sel" id="draft-filter" onchange="loadDrafts()">
           <option value="🤖 AI草稿">🤖 AI草稿</option>
           <option value="🔍 審核中">🔍 審核中</option>
           <option value="📦 已發布">📦 已發布</option>
+          <option value="⛔ 已撤下">⛔ 已撤下</option>
           <option value="all">全部</option>
         </select>
         <button class="btn btn-ghost" onclick="loadDrafts()">🔄 重整</button>
       </div>
     </div>
-    <div id="drafts-list"></div>
+    <div id="drafts-list"><div class="skel"></div><div class="skel"></div></div>
   </div>
 
 </div>
@@ -200,277 +137,272 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color
 
 <script>
 const W = "https://ltc-wiki-worker.peiyuzhuang.workers.dev";
+const STATUSES = ["🤖 AI草稿","🔍 審核中","✅ 核准發布","📦 已發布","⛔ 已撤下"];
 
-// ─── Tab 切換 ─────────────────────────────────────────
+// ── Tab ────────────────────────────────────────────────
 function switchTab(t) {
-  document.querySelectorAll('.tab').forEach((b,i) => b.classList.toggle('active', ['gaps','drafts'][i]===t));
-  document.querySelectorAll('.tp').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['gaps','drafts'][i]===t));
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
   document.getElementById('tp-'+t).classList.add('active');
-  if (t==='gaps') loadGaps();
-  if (t==='drafts') loadDrafts();
+  if(t==='gaps') loadGaps();
+  if(t==='drafts') loadDrafts();
 }
 
-// ─── Toast ───────────────────────────────────────────
+// ── Toast ──────────────────────────────────────────────
 let _tt;
-function toast(msg, dur=4000) {
-  const el=document.getElementById('toast');
-  el.innerHTML=msg; el.style.display='block';
-  clearTimeout(_tt); if(dur>0) _tt=setTimeout(()=>el.style.display='none', dur);
-}
+function toast(msg,dur=4000){const el=document.getElementById('toast');el.innerHTML=msg;el.style.display='block';clearTimeout(_tt);if(dur>0)_tt=setTimeout(()=>el.style.display='none',dur);}
 
-// ─── 知識缺口 ─────────────────────────────────────────
-let _draftTerms = new Set(); // 已有草稿的詞條集合
+let _draftTerms=new Set();
 
-async function loadGaps() {
-  document.getElementById('gaps-pending').innerHTML = skeleton(3);
-  document.getElementById('gaps-archived').innerHTML = skeleton(2);
-
-  try {
-    // 並行載入缺口和現有草稿
-    const [gapRes, draftRes] = await Promise.all([
-      fetch(`${W}/admin/gaps`),
-      fetch(`${W}/admin/drafts?status=all`)
-    ]);
-    const { gaps } = await gapRes.json();
-    const { drafts } = await draftRes.json();
-    _draftTerms = new Set((drafts||[]).map(d => d.term));
-
-    const total = (gaps||[]).reduce((s,g)=>s+g.count,0);
-    document.getElementById('gap-stats').innerHTML = `
+// ── 知識缺口 ───────────────────────────────────────────
+async function loadGaps(){
+  document.getElementById('gaps-pending').innerHTML=skel(3);
+  document.getElementById('gaps-archived').innerHTML=skel(2);
+  try{
+    const [gR,dR]=await Promise.all([fetch(`${W}/admin/gaps`),fetch(`${W}/admin/drafts?status=all`)]);
+    const {gaps}=await gR.json(), {drafts}=await dR.json();
+    _draftTerms=new Set((drafts||[]).map(d=>d.term.trim()));
+    const total=(gaps||[]).reduce((s,g)=>s+g.count,0);
+    document.getElementById('gap-stats').innerHTML=`
       <div class="stats">
-        <div class="stat"><div class="stat-v" style="color:var(--teal)">${(gaps||[]).length}</div><div class="stat-l">缺口詞條數量</div></div>
+        <div class="stat"><div class="stat-v" style="color:var(--teal)">${(gaps||[]).length}</div><div class="stat-l">缺口詞條</div></div>
         <div class="stat"><div class="stat-v" style="color:var(--blue)">${total}</div><div class="stat-l">累計觸發次數</div></div>
         <div class="stat"><div class="stat-v" style="color:var(--orange)">${_draftTerms.size}</div><div class="stat-l">已生成草稿</div></div>
       </div>`;
-
-    if (!gaps || gaps.length===0) {
-      document.getElementById('gaps-pending').innerHTML = '<div class="empty">🎉 目前沒有知識缺口！</div>';
-      return;
-    }
-
-    const pending = gaps.filter(g => !_draftTerms.has(g.term));
-    const archived = gaps.filter(g => _draftTerms.has(g.term));
-
-    document.getElementById('gaps-pending').innerHTML =
-      pending.length ? pending.map(gapRow).join('') : '<div class="empty">所有詞條均已生成草稿 🎉</div>';
-    document.getElementById('gaps-archived').innerHTML =
-      archived.length ? archived.map(g => gapRow(g, true)).join('') : '<div class="empty" style="padding:1rem">（無）</div>';
-
-    const btn = document.getElementById('archive-toggle-btn');
-    btn.style.display = archived.length ? 'block' : 'none';
-  } catch(e) {
-    document.getElementById('gaps-pending').innerHTML = `<div class="empty">❌ ${e.message}</div>`;
-  }
+    if(!gaps||!gaps.length){document.getElementById('gaps-pending').innerHTML='<div class="empty">🎉 目前沒有知識缺口！</div>';return;}
+    const pending=gaps.filter(g=>!_draftTerms.has(g.term.trim()));
+    const archived=gaps.filter(g=>_draftTerms.has(g.term.trim()));
+    document.getElementById('gaps-pending').innerHTML=pending.length?pending.map(g=>gapRow(g,false)).join(''):'<div class="empty">所有詞條均已生成草稿 🎉</div>';
+    document.getElementById('gaps-archived').innerHTML=archived.length?archived.map(g=>gapRow(g,true)).join(''):'<div class="empty" style="padding:.8rem">（無）</div>';
+    const ab=document.getElementById('arch-btn');
+    ab.style.display=archived.length?'block':'none';
+  }catch(e){document.getElementById('gaps-pending').innerHTML=`<div class="empty">❌ ${e.message}</div>`;}
 }
 
-function gapRow(g, archived=false) {
-  const id = `gr-${btoa(encodeURIComponent(g.term)).replace(/[^a-zA-Z0-9]/g,'_')}`;
-  return `
-    <div class="gap-row${archived?' archived':''}" id="${id}" data-term="${escAttr(g.term)}" data-question="${escAttr(g.question||'')}">
-      <div class="gap-num">${g.count}</div>
-      <div class="gap-term">${g.term}</div>
-      <div class="gap-q">${g.question||'—'}</div>
-      <div style="flex-shrink:0">
-        ${archived
-          ? `<span class="badge byellow">已生成草稿</span>`
-          : `<button class="btn btn-teal" onclick="generateDraft(this)">🤖 生成草稿</button>`}
-      </div>
-    </div>`;
+function gapRow(g,archived){
+  const key=`gr_${safeId(g.term)}`;
+  const idsJson=JSON.stringify(g.pageIds||[]);
+  return `<div class="gap-row${archived?' archived':''}" id="${key}" data-term="${ea(g.term)}" data-question="${ea(g.question||'')}" data-page-ids='${idsJson}'>
+    <div class="gn">${g.count}</div>
+    <div class="gt">${g.term}</div>
+    <div class="gq">${g.question||'—'}</div>
+    <div style="display:flex;gap:.3rem;flex-shrink:0;align-items:center">
+      ${archived
+        ? `<span class="badge byellow">已生成草稿</span>`
+        : `<button class="btn btn-teal" onclick="generateDraft(this)">🤖 生成草稿</button>`}
+      <button class="btn btn-red" style="padding:.3rem .6rem" title="刪除此詞條" onclick="deleteGap(this)">🗑</button>
+    </div>
+  </div>`;
 }
 
-function toggleArchive() {
-  const sec = document.getElementById('archive-section');
-  const btn = document.getElementById('archive-toggle-btn');
-  const open = sec.style.display==='block';
-  sec.style.display = open ? 'none' : 'block';
-  btn.textContent = (open?'▶ 顯示':'▼ 隱藏') + '已封存（已生成草稿）';
+function toggleArchive(){
+  const s=document.getElementById('archive-section');
+  const open=s.style.display==='block';
+  s.style.display=open?'none':'block';
+  document.getElementById('arch-btn').textContent=(open?'▶ 顯示':'▼ 隱藏')+'已封存（草稿已生成）';
 }
 
-// ─── 生成草稿（透過 data attribute 取得 term/question）──
-async function generateDraft(btn) {
-  const row = btn.closest('.gap-row');
-  const term = row.dataset.term;
-  const question = row.dataset.question;
-  if (!confirm(`確定要為「${term}」生成 AI 草稿？\n（約需 20-40 秒）`)) return;
-  const orig = btn.innerHTML;
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span> AI 撰寫中...';
+// ── 刪除缺口 ───────────────────────────────────────────
+async function deleteGap(btn){
+  const row=btn.closest('.gap-row');
+  const term=row.dataset.term;
+  let pageIds;
+  try{pageIds=JSON.parse(row.dataset.pageIds||'[]');}catch{pageIds=[];}
+  if(!confirm(`確定要刪除缺口詞條「${term}」？\n（此操作會從 Notion 封存所有相關記錄）`))return;
+  btn.disabled=true;btn.innerHTML='⏳';
+  try{
+    const res=await fetch(`${W}/admin/gap`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageIds})});
+    const d=await res.json();
+    if(d.success){toast(`🗑 已刪除「${term}」（共 ${d.deleted} 筆）`);row.remove();}
+    else throw new Error(d.error||'未知錯誤');
+  }catch(e){toast(`❌ 刪除失敗：${e.message}`);btn.disabled=false;btn.innerHTML='🗑';}
+}
+
+// ── 生成草稿 ───────────────────────────────────────────
+async function generateDraft(btn){
+  const row=btn.closest('.gap-row');
+  const term=row.dataset.term, question=row.dataset.question;
+  if(!confirm(`確定要為「${term}」生成 AI 草稿？（約需 20-40 秒）`))return;
+  const orig=btn.innerHTML;
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> AI 撰寫中...';
   toast('⏳ AI 正在撰寫草稿，請稍候...', 0);
-  try {
-    const res = await fetch(`${W}/admin/draft`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({term, question})
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast(`✅ 草稿完成！共 ${data.chars} 字。請切換到「✍️ 草稿審核」查看。`);
-      btn.innerHTML='✅ 已生成'; btn.style.background='#14532d';
-      _draftTerms.add(term);
+  try{
+    const res=await fetch(`${W}/admin/draft`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({term,question})});
+    const d=await res.json();
+    if(d.success){
+      toast(`✅ 草稿完成！共 ${d.chars} 字。請到「✍️ 草稿審核」Tab 查看。`);
       // 移至封存區
+      const archived=document.getElementById('gaps-archived');
       row.classList.add('archived');
-      row.querySelector('.btn-teal').replaceWith(Object.assign(document.createElement('span'),{className:'badge byellow', textContent:'已生成草稿'}));
-      const archived = document.getElementById('gaps-archived');
-      archived.appendChild(row);
-      const pendingEl = document.getElementById('gaps-pending');
-      if (!pendingEl.querySelector('.gap-row:not(.archived)'))
-        pendingEl.innerHTML = '<div class="empty">所有詞條均已生成草稿 🎉</div>';
-      document.getElementById('archive-toggle-btn').style.display='block';
-    } else { throw new Error(data.error||'未知錯誤'); }
-  } catch(e) {
-    toast(`❌ 生成失敗：${e.message}`);
-    btn.innerHTML=orig; btn.disabled=false;
-  }
+      const btns=row.querySelector('div[style*="flex-shrink"]');
+      btns.innerHTML=`<span class="badge byellow">已生成草稿</span><button class="btn btn-red" style="padding:.3rem .6rem" title="刪除此詞條" onclick="deleteGap(this)">🗑</button>`;
+      archived.prepend(row);
+      _draftTerms.add(term.trim());
+      const pending=document.getElementById('gaps-pending');
+      if(!pending.querySelector('.gap-row:not(.archived)'))pending.innerHTML='<div class="empty">所有詞條均已生成草稿 🎉</div>';
+      document.getElementById('arch-btn').style.display='block';
+    }else throw new Error(d.error||'未知錯誤');
+  }catch(e){toast(`❌ 生成失敗：${e.message}`);btn.innerHTML=orig;btn.disabled=false;}
 }
 
-// ─── 草稿列表 ─────────────────────────────────────────
-async function loadDrafts() {
-  const list = document.getElementById('drafts-list');
-  const status = document.getElementById('draft-filter').value;
-  list.innerHTML = skeleton(2);
-  try {
-    const res = await fetch(`${W}/admin/drafts?status=${encodeURIComponent(status)}`);
-    const { drafts } = await res.json();
-    if (!drafts||drafts.length===0) { list.innerHTML='<div class="empty">此狀態目前沒有草稿</div>'; return; }
-    list.innerHTML = drafts.map(draftCard).join('');
-  } catch(e) { list.innerHTML=`<div class="empty">❌ ${e.message}</div>`; }
+// ── 草稿列表 ───────────────────────────────────────────
+async function loadDrafts(){
+  const list=document.getElementById('drafts-list');
+  const status=document.getElementById('draft-filter').value;
+  list.innerHTML=skel(2);
+  try{
+    const res=await fetch(`${W}/admin/drafts?status=${encodeURIComponent(status)}`);
+    const {drafts}=await res.json();
+    if(!drafts||!drafts.length){list.innerHTML='<div class="empty">此狀態目前沒有草稿</div>';return;}
+    list.innerHTML=drafts.map(draftCard).join('');
+  }catch(e){list.innerHTML=`<div class="empty">❌ ${e.message}</div>`;}
 }
 
-function draftCard(d) {
-  const published = d.status==='📦 已發布';
-  return `
-  <div class="dc" id="dc-${d.id}">
+function draftCard(d){
+  const pub=d.status==='📦 已發布';
+  const statusOpts=STATUSES.map(s=>`<option value="${s}"${s===d.status?' selected':''}>${s}</option>`).join('');
+  return `<div class="dc" id="dc-${d.id}">
     <div class="dc-head">
       <div>
         <div class="dc-term">📄 ${d.term}</div>
-        <div class="dc-meta">
-          ${new Date(d.createdTime).toLocaleString('zh-TW')} ·
-          ${d.content.length} 字 ·
-          <span class="badge ${badgeCls(d.status)}">${d.status}</span>
-        </div>
+        <div class="dc-meta">${new Date(d.createdTime).toLocaleString('zh-TW')} · ${d.content.length} 字 · <span class="badge ${bc(d.status)}" id="badge-${d.id}">${d.status}</span></div>
       </div>
-      <div class="dc-actions">
+      <div class="dc-act">
         <button class="btn btn-ghost" onclick="toggleEditor('${d.id}')">✏️ 編輯</button>
-        ${published
-          ? '<span class="badge bgreen">📦 已上線</span>'
-          : `<button class="btn btn-green" data-pid="${d.id}" data-term="${escAttr(d.term)}" onclick="publishDraft(this)">🚀 核准並發布</button>`}
+        <select class="status-sel" data-pid="${d.id}" onchange="changeStatus(this)">${statusOpts}</select>
+        ${pub
+          ?`<button class="btn btn-orange" data-pid="${d.id}" data-term="${ea(d.term)}" onclick="unpublish(this)">⬇️ 撤下</button>`
+          :`<button class="btn btn-green" data-pid="${d.id}" data-term="${ea(d.term)}" onclick="publishDraft(this)">🚀 發布</button>`}
+        <button class="btn btn-red" style="padding:.33rem .55rem" data-pid="${d.id}" onclick="deleteDraft(this)" title="刪除草稿">🗑</button>
       </div>
     </div>
-
-    <!-- 編輯區塊 -->
     <div class="dc-editor" id="editor-${d.id}">
-      <textarea class="dc-textarea" id="ta-${d.id}">${escHtml(d.content)}</textarea>
-
-      <!-- AI 對話調整列 -->
-      <div class="revise-area" id="ra-${d.id}">
-        <div class="revise-label">📝 輸入修改指令（例如：把第二段改得更口語化、幫我加上關於申請資格的段落）</div>
-        <textarea class="revise-input" id="ri-${d.id}" rows="2" placeholder="請描述你想怎麼調整這篇文章..."></textarea>
-        <div class="revise-actions">
+      <textarea class="dc-ta" id="ta-${d.id}">${eh(d.content)}</textarea>
+      <div class="ra" id="ra-${d.id}">
+        <div class="ra-label">📝 輸入修改指令（例如：把導言改得更口語、加入申請步驟段落…）</div>
+        <textarea class="ra-input" id="ri-${d.id}" rows="2" placeholder="描述你想如何調整這篇文章..."></textarea>
+        <div class="ra-btns">
           <button class="btn btn-blue" data-id="${d.id}" onclick="reviseDraft(this)">🤖 AI 調整</button>
           <button class="btn btn-ghost" onclick="closeRevise('${d.id}')">取消</button>
         </div>
       </div>
-
-      <!-- 操作工具列 -->
       <div class="dc-toolbar">
-        <button class="btn btn-orange" data-id="${d.id}" onclick="openRevise('${d.id}')">💬 AI 協助修改</button>
+        <button class="btn btn-orange" onclick="openRevise('${d.id}')">💬 AI 協助修改</button>
         <button class="btn btn-ghost" data-id="${d.id}" data-pid="${d.id}" onclick="saveDraft(this)">💾 儲存草稿</button>
-        <span class="saving" id="saving-${d.id}">⏳ 儲存中...</span>
+        <span style="font-size:.7rem;color:var(--muted);margin-left:.3rem" id="saving-${d.id}"></span>
       </div>
     </div>
   </div>`;
 }
 
-function toggleEditor(id) {
-  const el = document.getElementById('editor-'+id);
-  el.style.display = el.style.display==='block' ? 'none' : 'block';
+function toggleEditor(id){const el=document.getElementById('editor-'+id);el.style.display=el.style.display==='block'?'none':'block';}
+function openRevise(id){document.getElementById('ra-'+id).style.display='block';document.getElementById('ri-'+id).focus();}
+function closeRevise(id){document.getElementById('ra-'+id).style.display='none';}
+
+// ── AI 調整 ────────────────────────────────────────────
+async function reviseDraft(btn){
+  const id=btn.dataset.id;
+  const content=document.getElementById('ta-'+id).value;
+  const instruction=document.getElementById('ri-'+id).value.trim();
+  if(!instruction){toast('⚠️ 請先輸入修改指令');return;}
+  const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spin"></span> 調整中...';
+  toast('⏳ AI 正在修改文章...', 0);
+  try{
+    const res=await fetch(`${W}/admin/revise`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content,instruction})});
+    const d=await res.json();
+    if(d.success){document.getElementById('ta-'+id).value=d.content;closeRevise(id);document.getElementById('ri-'+id).value='';toast('✅ AI 修改完成！請確認後儲存。');}
+    else throw new Error(d.error||'未知錯誤');
+  }catch(e){toast(`❌ 調整失敗：${e.message}`);}
+  finally{btn.innerHTML=orig;btn.disabled=false;}
 }
 
-function openRevise(id) {
-  document.getElementById('ra-'+id).style.display='block';
-  document.getElementById('ri-'+id).focus();
-}
-function closeRevise(id) { document.getElementById('ra-'+id).style.display='none'; }
-
-// ─── AI 調整草稿 ──────────────────────────────────────
-async function reviseDraft(btn) {
-  const id = btn.dataset.id;
-  const content = document.getElementById('ta-'+id).value;
-  const instruction = document.getElementById('ri-'+id).value.trim();
-  if (!instruction) { toast('⚠️ 請輸入修改指令'); return; }
-  const orig = btn.innerHTML;
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span> AI 調整中...';
-  toast('⏳ AI 正在修改文章，請稍候（約 20 秒）...', 0);
-  try {
-    const res = await fetch(`${W}/admin/revise`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({content, instruction})
-    });
-    const data = await res.json();
-    if (data.success) {
-      document.getElementById('ta-'+id).value = data.content;
-      closeRevise(id);
-      document.getElementById('ri-'+id).value='';
-      toast('✅ AI 已完成修改！請確認內容後儲存。');
-    } else { throw new Error(data.error||'未知錯誤'); }
-  } catch(e) { toast(`❌ 調整失敗：${e.message}`); }
-  finally { btn.innerHTML=orig; btn.disabled=false; }
+// ── 儲存草稿 ───────────────────────────────────────────
+async function saveDraft(btn){
+  const id=btn.dataset.id, pid=btn.dataset.pid;
+  const content=document.getElementById('ta-'+id).value;
+  const si=document.getElementById('saving-'+id);
+  si.textContent='⏳ 儲存中...';btn.disabled=true;
+  try{
+    const res=await fetch(`${W}/admin/save`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageId:pid,content})});
+    const d=await res.json();
+    si.textContent='';
+    if(d.success)toast('✅ 草稿已儲存（狀態改為審核中）');
+    else throw new Error(d.error||'未知錯誤');
+  }catch(e){si.textContent='';toast(`❌ 儲存失敗：${e.message}`);}
+  finally{btn.disabled=false;}
 }
 
-// ─── 儲存草稿 ─────────────────────────────────────────
-async function saveDraft(btn) {
-  const id = btn.dataset.id;
-  const pid = btn.dataset.pid;
-  const content = document.getElementById('ta-'+id).value;
-  const saving = document.getElementById('saving-'+id);
-  saving.style.display='inline'; btn.disabled=true;
-  try {
-    const res = await fetch(`${W}/admin/save`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({pageId: pid, content})
-    });
-    const data = await res.json();
-    if (data.success) toast('✅ 草稿已儲存（狀態改為「審核中」）');
-    else throw new Error(data.error||'未知錯誤');
-  } catch(e) { toast(`❌ 儲存失敗：${e.message}`); }
-  finally { saving.style.display='none'; btn.disabled=false; }
+// ── 變更狀態 ───────────────────────────────────────────
+async function changeStatus(sel){
+  const pid=sel.dataset.pid, status=sel.value;
+  try{
+    const res=await fetch(`${W}/admin/draft/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageId:pid,status})});
+    const d=await res.json();
+    if(d.success){
+      toast(`✅ 狀態已改為「${status}」`);
+      const badge=document.getElementById('badge-'+pid);
+      if(badge){badge.textContent=status;badge.className='badge '+bc(status);}
+    }else throw new Error(d.error||'未知錯誤');
+  }catch(e){toast(`❌ 狀態更新失敗：${e.message}`);}
 }
 
-// ─── 發布 ────────────────────────────────────────────
-async function publishDraft(btn) {
-  const pid = btn.dataset.pid;
-  const term = btn.dataset.term;
-  // 嘗試從編輯器取得最新內容
-  const ta = document.getElementById('ta-'+pid);
-  const cardEl = document.getElementById('dc-'+pid);
-  const content = ta ? ta.value : cardEl.querySelector('.dc-textarea')?.value || '';
-  if (!content) { toast('⚠️ 找不到草稿內容，請先展開編輯區'); return; }
-  if (!confirm(`確定要發布「${term}」？\n文章將透過 GitHub API 上傳，約 2 分鐘後上線。`)) return;
-  const orig = btn.innerHTML;
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span> 發布中...';
+// ── 發布 ──────────────────────────────────────────────
+async function publishDraft(btn){
+  const pid=btn.dataset.pid, term=btn.dataset.term;
+  const ta=document.getElementById('ta-'+pid);
+  if(!ta){toast('⚠️ 請先點「✏️ 編輯」展開草稿，確認內容後再發布');return;}
+  const content=ta.value;
+  if(!content.trim()){toast('⚠️ 草稿內容為空，請先展開編輯區');return;}
+  if(!confirm(`確定要發布「${term}」？\n（透過 GitHub API 上傳，約 2 分鐘後上線）`))return;
+  const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spin"></span> 發布中...';
   toast('🚀 透過 GitHub API 發布中...', 0);
-  try {
-    const res = await fetch(`${W}/admin/publish`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({pageId:pid, term, content})
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast(`✅ 發布成功！約 2 分鐘後可在 <a href="${data.url}" target="_blank" style="color:#4ade80">${data.filename}</a> 查看`, 8000);
-      btn.innerHTML='✅ 已發布'; btn.style.background='#14532d';
-    } else { throw new Error(data.error||'未知錯誤'); }
-  } catch(e) {
-    toast(`❌ 發布失敗：${e.message}`);
-    btn.innerHTML=orig; btn.disabled=false;
-  }
+  try{
+    const res=await fetch(`${W}/admin/publish`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageId:pid,term,content})});
+    const d=await res.json();
+    if(d.success){toast(`✅ 發布成功！約 2 分鐘後可在 <a href="${d.url}" target="_blank" style="color:#4ade80">${d.filename}</a> 查看`,8000);btn.innerHTML='✅ 已發布';btn.style.background='#14532d';}
+    else throw new Error(d.error||'未知錯誤');
+  }catch(e){toast(`❌ 發布失敗：${e.message}`);btn.innerHTML=orig;btn.disabled=false;}
 }
 
-function badgeCls(s) {
-  if (s.includes('草稿')||s.includes('審核')) return 'bblue';
-  if (s.includes('已發布')) return 'bgreen';
+// ── 撤下文章 ──────────────────────────────────────────
+async function unpublish(btn){
+  const pid=btn.dataset.pid, term=btn.dataset.term;
+  if(!confirm(`確定要撤下「${term}」？\n（文章將在 GitHub 上被標記，Notion 狀態改為⛔ 已撤下）`))return;
+  const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spin"></span> 撤下中...';
+  toast('⬇️ 撤下中...', 0);
+  try{
+    const res=await fetch(`${W}/admin/unpublish`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageId:pid,term})});
+    const d=await res.json();
+    if(d.success){toast(`✅「${term}」已撤下`);btn.innerHTML='⛔ 已撤下';btn.disabled=true;}
+    else throw new Error(d.error||'未知錯誤');
+  }catch(e){toast(`❌ 撤下失敗：${e.message}`);btn.innerHTML=orig;btn.disabled=false;}
+}
+
+// ── 刪除草稿 ──────────────────────────────────────────
+async function deleteDraft(btn){
+  const pid=btn.dataset.pid;
+  const card=document.getElementById('dc-'+pid);
+  const term=card?.querySelector('.dc-term')?.textContent?.replace('📄 ','').trim()||'?';
+  if(!confirm(`確定要刪除草稿「${term}」？（從 Notion 封存，不可復原）`))return;
+  btn.disabled=true;btn.innerHTML='⏳';
+  try{
+    const res=await fetch(`${W}/admin/draft`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageId:pid})});
+    const d=await res.json();
+    if(d.success){toast(`🗑 草稿「${term}」已刪除`);card?.remove();}
+    else throw new Error(d.error||'未知錯誤');
+  }catch(e){toast(`❌ 刪除失敗：${e.message}`);btn.disabled=false;btn.innerHTML='🗑';}
+}
+
+function bc(s){
+  if(s.includes('草稿')||s.includes('審核'))return 'bblue';
+  if(s.includes('已發布'))return 'bgreen';
+  if(s.includes('已撤'))return 'bred';
   return 'byellow';
 }
-function skeleton(n) { return Array(n).fill('<div class="skel"></div>').join(''); }
-function escAttr(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function skel(n){return Array(n).fill('<div class="skel"></div>').join('');}
+function safeId(s){return btoa(encodeURIComponent(s||'')).replace(/[^a-zA-Z0-9]/g,'_');}
+function ea(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function eh(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 loadGaps();
 </script>
