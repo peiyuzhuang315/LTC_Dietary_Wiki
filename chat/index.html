@@ -6924,6 +6924,21 @@ async function submitQuestion() {
       relEl.style.display = 'block';
       relEl.scrollIntoView({behavior:'smooth', block:'start'});
     });
+
+  } catch (err) {
+    if (ldRow && ldRow.parentNode) ldRow.remove();
+    const errRow = document.createElement('div'); errRow.className='msg-row msg-row-ai';
+    const errAv = document.createElement('div'); errAv.className='msg-avatar msg-avatar-ai'; errAv.textContent='🤖';
+    const errBub = document.createElement('div'); errBub.className='msg-bubble msg-bubble-ai'; errBub.style.color='#c62828';
+    errBub.textContent=`⚠️ 無法取得 AI 回答：${err.message}`;
+    errRow.appendChild(errAv); errRow.appendChild(errBub); thread.appendChild(errRow);
+  } finally {
+    btn.disabled = false;
+    document.getElementById('btn-text').style.display = 'inline';
+    document.getElementById('btn-loading').style.display = 'none';
+  }
+}
+
 function quickAsk(btn) {
   const input = document.getElementById('chat-input');
   input.value = btn.textContent;
