@@ -6187,26 +6187,22 @@
 <h1 id="ai">長照膳食 AI 問答<a class="headerlink" href="#ai" title="Permanent link">&para;</a></h1>
 <div id="ltc-chat-container">
 
-<div class="chat-intro">
-  <p>💡 <strong>輸入您的問題</strong>，AI 將根據本知識庫的 130+ 個詞條為您解答，並推薦相關文章。</p>
-  <p class="chat-examples">試試問：「失智長輩不肯吃飯怎麼辦？」｜「IDDSI 是什麼？」｜「如何申請長照補助？」</p>
-</div>
-
-<div class="chat-input-area">
-  <textarea id="chat-input" rows="3" placeholder="請輸入您的問題，例如：長輩吞嚥困難要怎麼處理食物？（Enter 送出，Shift+Enter 換行）"></textarea>
-  <button id="chat-submit" onclick="submitQuestion()">
-    <span id="btn-text">送出問題</span>
-    <span id="btn-loading" style="display:none">⏳ AI 思考中…</span>
-  </button>
-</div>
-
-<!-- 對話線程容器 -->
-<div id="conversation-thread" style="display:none">
-  <!-- 動態插入對話氣泡 -->
+<!-- 對話線程（含 welcome 提示） -->
+<div id="conversation-thread">
+  <div class="chat-welcome">
+    <div class="chat-welcome-icon">🤖</div>
+    <p class="chat-welcome-title">長照膨食 AI 助理</p>
+    <p class="chat-welcome-sub">根據 130+ 個長照知識詞條為您解答問題，並推薦相關文章。</p>
+    <div class="chat-examples-row">
+      <button class="quick-q" onclick="quickAsk(this)">小長輩不肯吃飯怎麼辦？</button>
+      <button class="quick-q" onclick="quickAsk(this)">IDDSI 是什麼？</button>
+      <button class="quick-q" onclick="quickAsk(this)">如何申請長照補助？</button>
+    </div>
+  </div>
 </div>
 
 <!-- 相關詞條/文章區 -->
-<div id="related-section" style="display:none; margin-top:1rem;">
+<div id="related-section" style="display:none; padding:0 4px;">
   <div id="related-terms-area" style="display:none">
     <div class="related-header">📖 相關詞條</div>
     <div id="related-terms-links" class="chip-row"></div>
@@ -6215,47 +6211,252 @@
     <div class="related-header">📝 推薦閱讀文章</div>
     <div id="related-articles-links" class="chip-row"></div>
   </div>
-  <div id="google-search-area" class="google-search-area" style="display:none">
+  <div id="google-search-area" style="display:none">
     <div class="related-header">🔍 延伸 Google 搜尋</div>
     <div id="google-search-links"></div>
   </div>
 </div>
 
-<div id="chat-error" class="chat-error" style="display:none"></div>
+<!-- 輸入區（貧底部） -->
+<div id="chat-input-area">
+  <div class="input-toolbar">
+    <button class="clear-btn" onclick="clearAnswer()">🗑 清除對話</button>
+  </div>
+  <div class="input-row">
+    <textarea id="chat-input" rows="2" placeholder="請輸入您的饋題，例如：長輩吞嚥困難要怎麼處理食物？（Enter 送出，Shift+Enter 換行）"></textarea>
+    <button id="chat-submit" onclick="submitQuestion()">
+      <span id="btn-text">→</span>
+      <span id="btn-loading" style="display:none">⏳</span>
+    </button>
+  </div>
+  <div id="chat-error" class="chat-error" style="display:none"></div>
+</div>
 
 </div>
 
 <style>
-#ltc-chat-container { max-width: 780px; margin: 1.5rem 0; font-family: inherit; }
-
-.chat-intro {
-  background: var(--md-code-bg-color);
-  border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
-  border-left: 4px solid var(--md-primary-fg-color);
+/* ─── ChatGPT 風格對話容器 ─── */
+#ltc-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 148px);
+  min-height: 420px;
+  max-width: 820px;
+  margin: 0;
+  font-family: inherit;
+  position: relative;
 }
-.chat-intro p { margin: 0.25rem 0; }
-.chat-examples { font-size: 0.85rem; color: var(--md-default-fg-color--light); }
 
-.chat-input-area { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
+/* ── 對話區（可捲動） ── */
+#conversation-thread {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ecead7;
+  border-radius: 16px 16px 0 0;
+  scroll-behavior: smooth;
+}
+#conversation-thread::-webkit-scrollbar { width: 4px; }
+#conversation-thread::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+
+/* ── Welcome 請届 ── */
+.chat-welcome {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; flex: 1; text-align: center; padding: 2rem;
+  gap: 12px; color: rgba(0,0,0,.55);
+}
+.chat-welcome-icon { font-size: 3rem; line-height: 1; }
+.chat-welcome-title { font-size: 1.2rem; font-weight: 700; color: rgba(0,0,0,.7); margin: 0; }
+.chat-welcome-sub { font-size: .88rem; margin: 0; }
+.chat-examples-row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:4px; }
+.quick-q {
+  background: rgba(255,255,255,.8); border: 1px solid rgba(0,0,0,.12);
+  border-radius: 20px; padding: 6px 14px; font-size: .83rem; cursor: pointer;
+  font-family: inherit; transition: background .15s;
+}
+.quick-q:hover { background: #fff; }
+
+/* ── 相關詞條區 ── */
+#related-section { padding: 10px 14px 6px; background:#ecead7; flex-shrink:0; }
+.related-header { font-weight:600; margin:.5rem 0 .35rem; font-size:.84rem; color:rgba(0,0,0,.5); }
+.chip-row { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:.5rem; }
+.term-chip {
+  background: #00897b; color:white !important;
+  padding:.25rem .7rem; border-radius:16px; font-size:.78rem;
+  text-decoration:none !important; transition:opacity .15s;
+}
+.term-chip:hover{opacity:.8}
+.article-chip {
+  background:#e65100; color:white !important;
+  padding:.25rem .7rem; border-radius:16px; font-size:.78rem;
+  text-decoration:none !important; transition:opacity .15s;
+}
+.article-chip:hover{opacity:.8}
+.google-chip {
+  display:inline-block; background:#f1f3f4; color:#1a73e8 !important;
+  padding:.25rem .7rem; border-radius:16px; font-size:.78rem;
+  text-decoration:none !important; border:1px solid #dadce0; transition:background .15s;
+}
+.google-chip:hover{background:#e8eaed}
+
+/* ── 輸入區（貧底，白底） ── */
+#chat-input-area {
+  flex-shrink: 0;
+  background: var(--md-default-bg-color);
+  border-radius: 0 0 16px 16px;
+  padding: 10px 14px 14px;
+  border-top: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 -2px 12px rgba(0,0,0,.06);
+}
+.input-toolbar { display:flex; justify-content:flex-end; margin-bottom:6px; }
+.input-row { display:flex; gap:8px; align-items:flex-end; }
+
 #chat-input {
-  width: 100%; padding: 0.85rem 1rem; font-size: 0.95rem; font-family: inherit;
+  flex: 1; padding: .7rem .9rem; font-size: .95rem; font-family: inherit;
+  border: 1.5px solid rgba(0,0,0,.15); border-radius: 12px;
+  background: var(--md-default-bg-color); color: var(--md-typeset-color);
+  resize: none; transition: border-color .2s; max-height: 120px; overflow-y:auto;
+  line-height: 1.5;
+}
+#chat-input:focus { outline: none; border-color: #00897b; }
+
+#chat-submit {
+  width: 42px; height: 42px; flex-shrink:0;
+  background: #00897b; color: white; border: none;
+  border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: background .2s, transform .15s;
+}
+#chat-submit:hover { background:#00695c; transform:scale(1.05); }
+#chat-submit:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+.clear-btn {
+  background: none; border: none;
+  font-size: .75rem; color: rgba(0,0,0,.35);
+  cursor: pointer; padding: 2px 6px; border-radius:6px;
+}
+.clear-btn:hover { color:rgba(0,0,0,.6); background:rgba(0,0,0,.05); }
+.chat-error {
+  margin-top: 6px; background:#fce4ec; color:#c62828;
+  border-radius:8px; padding:.6rem .9rem; font-size:.88rem;
+}
+
+/* ── 訊息列 ── */
+.msg-row {
+  display: flex; align-items: flex-end; gap: 8px;
+  max-width: 90%;
+  animation: msgPop .18s ease;
+}
+@keyframes msgPop { from{transform:scale(.94) translateY(4px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+.msg-row-user { align-self: flex-end; flex-direction: row-reverse; }
+.msg-row-ai   { align-self: flex-start; flex-direction: row; }
+
+/* ── 頭像 ── */
+.msg-avatar {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,.16);
+}
+.msg-avatar-ai   { background: linear-gradient(135deg,#00897b,#00acc1); }
+.msg-avatar-dean { background: linear-gradient(135deg,#f9a825,#fb8c00); }
+
+/* ── 氣泡 ── */
+.msg-bubble {
+  padding: 9px 13px; border-radius: 20px;
+  line-height: 1.72; box-shadow: 0 1px 3px rgba(0,0,0,.12);
+  position: relative; max-width: 420px; word-break: break-word;
+}
+.msg-bubble p { margin: 0 0 .36em; }
+.msg-bubble p:last-child { margin: 0; }
+.msg-bubble ul,.msg-bubble ol { margin: .25em 0 .36em 1.3em; }
+.msg-bubble li { margin: .1em 0; }
+.msg-bubble strong { font-weight: 700; }
+.msg-bubble code { background:rgba(0,0,0,.07); padding:1px 5px; border-radius:3px; font-size:.85rem; }
+
+/* 使用者：右側綠色 */
+.msg-bubble-user {
+  background: #d9fdd3; color: #111;
+  border-radius: 20px 20px 5px 20px; font-size:.92rem;
+}
+.msg-bubble-user::after {
+  content:''; position:absolute; bottom:0; right:-7px;
+  border: 7px solid transparent; border-left-color:#d9fdd3; border-bottom:0;
+}
+
+/* AI：左側白色 */
+.msg-bubble-ai {
+  background: #fff; color: #111;
+  border-radius: 20px 20px 20px 5px; font-size:.88rem;
+}
+.msg-bubble-ai::after {
+  content:''; position:absolute; bottom:0; left:-7px;
+  border: 7px solid transparent; border-right-color:#fff; border-bottom:0;
+}
+
+/* 院長：左側金色 */
+.msg-bubble-dean {
+  background: linear-gradient(135deg,#fffde7,#fff8e1);
+  border: 1px solid #fbc02d; color: #3e2200;
+  border-radius: 20px 20px 20px 5px; font-size:.88rem;
+}
+.msg-bubble-dean::after {
+  content:''; position:absolute; bottom:0; left:-7px;
+  border: 7px solid transparent; border-right-color:#fbc02d; border-bottom:0;
+}
+.msg-bubble-dean strong { color:#e65100; }
+
+/* 名牌 */
+.msg-label {
+  font-size:.72rem; font-weight:700; color:rgba(0,0,0,.45);
+  padding-left: 42px; margin-bottom:1px;
+}
+/* 時間戳記 */
+.msg-time {
+  font-size:.64rem; color:rgba(0,0,0,.32);
+  padding:0 3px; white-space:nowrap; align-self:flex-end;
+}
+/* 打字等待 */
+.msg-typing { display:inline-flex; align-items:center; gap:4px; padding:12px 15px; }
+.msg-typing span { width:7px; height:7px; background:#aab; border-radius:50%; animation:typeBounce .9s infinite; }
+.msg-typing span:nth-child(2){animation-delay:.15s}
+.msg-typing span:nth-child(3){animation-delay:.3s}
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)}}
+
+/* 打字游標閃裍 */
+@keyframes blinkCursor{0%,100%{opacity:1} 50%{opacity:0}}
+.type-cursor {
+  display:inline-block; width:2px; height:1em; background:#00897b;
+  vertical-align:middle; margin-left:1px; border-radius:1px;
+  animation: blinkCursor .5s infinite;
+}
+
+@media (max-width:600px) {
+  #ltc-chat-container { height: calc(100vh - 110px); }
+  .msg-bubble { max-width: 82vw; font-size:.86rem; }
+}
+</style>
+
+<p>.chat-input-area { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }</p>
+<h1 id="chat-input">chat-input {<a class="headerlink" href="#chat-input" title="Permanent link">&para;</a></h1>
+<p>width: 100%; padding: 0.85rem 1rem; font-size: 0.95rem; font-family: inherit;
   border: 2px solid var(--md-default-fg-color--lightest); border-radius: 10px;
   background: var(--md-default-bg-color); color: var(--md-typeset-color);
   resize: vertical; transition: border-color 0.2s; box-sizing: border-box;
-}
-#chat-input:focus { outline: none; border-color: var(--md-primary-fg-color); }
-#chat-submit {
-  align-self: flex-end; padding: 0.7rem 2rem;
+}</p>
+<h1 border-color:="border-color:" id="chat-inputfocus" none_="none;" outline:="outline:" var_--md-primary-fg-color_="var(--md-primary-fg-color);">chat-input:focus<a class="headerlink" href="#chat-inputfocus" title="Permanent link">&para;</a></h1>
+<h1 id="chat-submit">chat-submit {<a class="headerlink" href="#chat-submit" title="Permanent link">&para;</a></h1>
+<p>align-self: flex-end; padding: 0.7rem 2rem;
   background: var(--md-primary-fg-color); color: white; border: none;
   border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
   transition: opacity 0.2s, transform 0.15s; font-family: inherit;
-}
-#chat-submit:hover { opacity: 0.88; transform: translateY(-1px); }
-#chat-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-/* ── 對話線程容器 ── */
-#conversation-thread {
-  background: #e9ece7;
+}</p>
+<h1 0.88_="0.88;" id="chat-submithover" opacity:="opacity:" transform:="transform:" translateY_-1px_="translateY(-1px);">chat-submit:hover<a class="headerlink" href="#chat-submithover" title="Permanent link">&para;</a></h1>
+<h1 0.5_="0.5;" cursor:="cursor:" id="chat-submitdisabled" none_="none;" not-allowed_="not-allowed;" opacity:="opacity:" transform:="transform:">chat-submit:disabled<a class="headerlink" href="#chat-submitdisabled" title="Permanent link">&para;</a></h1>
+<p>/<em> ── 對話線程容器 ── </em>/</p>
+<h1 id="conversation-thread">conversation-thread {<a class="headerlink" href="#conversation-thread" title="Permanent link">&para;</a></h1>
+<p>background: #e9ece7;
   border-radius: 16px;
   padding: 16px 14px;
   display: flex;
@@ -6264,12 +6465,10 @@
   min-height: 80px;
   margin-bottom: 1rem;
   border: 1px solid rgba(0,0,0,.07);
-}
-
-/* ── 問答組（可多輪對話）── */
-.chat-exchange { display:contents; }
-
-/* ── 訊息列（頭像+氣泡一行）── */
+}</p>
+<p>/<em> ── 問答組（可多輪對話）── </em>/
+.chat-exchange { display:contents; }</p>
+<p>/<em> ── 訊息列（頭像+氣泡一行）── </em>/
 .msg-row {
   display: flex;
   align-items: flex-end;
@@ -6279,18 +6478,16 @@
 }
 @keyframes msgPop { from{transform:scale(.94) translateY(4px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
 .msg-row-user { align-self: flex-end; flex-direction: row-reverse; }
-.msg-row-ai   { align-self: flex-start; flex-direction: row; }
-
-/* ── 頭像 ── */
+.msg-row-ai   { align-self: flex-start; flex-direction: row; }</p>
+<p>/<em> ── 頭像 ── </em>/
 .msg-avatar {
   width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.1rem; box-shadow: 0 2px 6px rgba(0,0,0,.18);
 }
 .msg-avatar-ai   { background: linear-gradient(135deg,#00897b,#00acc1); }
-.msg-avatar-dean { background: linear-gradient(135deg,#f9a825,#fb8c00); }
-
-/* ── 氣泡 ── */
+.msg-avatar-dean { background: linear-gradient(135deg,#f9a825,#fb8c00); }</p>
+<p>/<em> ── 氣泡 ── </em>/
 .msg-bubble {
   padding: 10px 14px;
   border-radius: 20px;
@@ -6306,9 +6503,8 @@
 .msg-bubble li { margin: .12em 0; }
 .msg-bubble strong { font-weight: 700; }
 .msg-bubble h4 { margin:.5em 0 .15em; font-size:.95rem; font-weight:700; }
-.msg-bubble code { background:rgba(0,0,0,.07); padding:1px 5px; border-radius:3px; font-size:.86rem; }
-
-/* 使用者──右側，綠色，右下角尾巴 */
+.msg-bubble code { background:rgba(0,0,0,.07); padding:1px 5px; border-radius:3px; font-size:.86rem; }</p>
+<p>/<em> 使用者──右側，綠色，右下角尾巴 </em>/
 .msg-bubble-user {
   background: #d9fdd3;
   color: #111;
@@ -6319,9 +6515,8 @@
   content: ''; position: absolute; bottom: 0; right: -8px;
   border: 8px solid transparent;
   border-left-color: #d9fdd3; border-bottom: 0;
-}
-
-/* AI──左側，白色，左下角尾巴 */
+}</p>
+<p>/<em> AI──左側，白色，左下角尾巴 </em>/
 .msg-bubble-ai {
   background: #fff;
   color: #111;
@@ -6332,9 +6527,8 @@
   content: ''; position: absolute; bottom: 0; left: -8px;
   border: 8px solid transparent;
   border-right-color: #fff; border-bottom: 0;
-}
-
-/* 院長──左側，金色 */
+}</p>
+<p>/<em> 院長──左側，金色 </em>/
 .msg-bubble-dean {
   background: linear-gradient(135deg,#fffde7,#fff8e1);
   border: 1px solid #fbc02d;
@@ -6347,9 +6541,8 @@
   border: 8px solid transparent;
   border-right-color: #fbc02d; border-bottom: 0;
 }
-.msg-bubble-dean strong { color: #e65100; }
-
-/* 名牌列（頭像+名稱，無氣泡） */
+.msg-bubble-dean strong { color: #e65100; }</p>
+<p>/<em> 名牌列（頭像+名稱，無氣泡） </em>/
 .msg-label {
   display: inline-flex;
   align-items: center;
@@ -6359,9 +6552,8 @@
   color: rgba(0,0,0,.5);
   padding-left: 44px;
   margin-bottom: 1px;
-}
-
-/* 時間戳記 */
+}</p>
+<p>/<em> 時間戳記 </em>/
 .msg-time {
   font-size: .66rem;
   color: rgba(0,0,0,.38);
@@ -6369,9 +6561,8 @@
   white-space: nowrap;
   align-self: flex-end;
 }
-.msg-row-user + .msg-time { align-self:flex-end; text-align:right; padding-right:4px; }
-
-/* 打字等待氣泡 */
+.msg-row-user + .msg-time { align-self:flex-end; text-align:right; padding-right:4px; }</p>
+<p>/<em> 打字等待氣泡 </em>/
 .msg-typing {
   display: inline-flex;
   align-items: center;
@@ -6386,9 +6577,8 @@
 }
 .msg-typing span:nth-child(2){animation-delay:.15s}
 .msg-typing span:nth-child(3){animation-delay:.3s}
-@keyframes typeBounce{0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)}}
-
-/* 相關詞條區 */
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)}}</p>
+<p>/<em> 相關詞條區 </em>/
 .related-header { font-weight:600; margin:.75rem 0 .5rem; font-size:.9rem; }
 .chip-row { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:.75rem; }
 .term-chip {
@@ -6414,8 +6604,7 @@
   padding:.85rem 1rem; margin-top:.75rem; font-size:.9rem;
 }
 @media (max-width:600px) { #chat-submit{align-self:stretch} .msg-bubble{max-width:85vw} }
-</style>
-
+</style></p>
 <script>
 // ====================================================
 // ⚙️ 在下方填入您的 Gemini API Key
@@ -6801,16 +6990,58 @@ async function submitQuestion() {
     // ─ 解析分段 ─
     const { sections, principal } = parseExpertSections(answer, experts);
 
+    function typewriteBubble(bub, plainText, fullHtml, onDone) {
+      const chars = [...plainText]; // handle multibyte
+      const typed = document.createElement('span');
+      const cursor = document.createElement('span');
+      cursor.className = 'type-cursor';
+      bub.innerHTML = '';
+      bub.appendChild(typed);
+      bub.appendChild(cursor);
+      let i = 0;
+      function next() {
+        if (i >= chars.length) {
+          cursor.remove();
+          bub.innerHTML = fullHtml; // swap to fully-rendered HTML
+          if (onDone) onDone();
+          return;
+        }
+        const ch = chars[i++];
+        typed.textContent += ch;
+        thread.scrollTop = thread.scrollHeight;
+        let delay = 14;
+        if ('。！？'.includes(ch)) delay = 160;
+        else if ('，、；：'.includes(ch)) delay = 70;
+        else if (ch === '\n') delay = 90;
+        setTimeout(next, delay);
+      }
+      requestAnimationFrame(next);
+    }
+
+    let typeQueue = Promise.resolve(); // 串行氣泡
     function addBubbles(blocks, avatarEmoji, bubbleClass, avatarClass) {
       blocks.forEach((b, bi) => {
         const row = document.createElement('div'); row.className='msg-row msg-row-ai';
         const av = document.createElement('div'); av.className=`msg-avatar ${avatarClass}`; av.textContent=bi===0?avatarEmoji:'';
         av.style.visibility = bi===0?'visible':'hidden';
-        const bub = document.createElement('div'); bub.className=`msg-bubble ${bubbleClass}`; bub.innerHTML=renderMd(b);
+        const bub = document.createElement('div'); bub.className=`msg-bubble ${bubbleClass}`;
+        bub.innerHTML = '<span class="msg-typing"><span></span><span></span><span></span></span>';
         row.appendChild(av); row.appendChild(bub); thread.appendChild(row);
+        thread.scrollTop = thread.scrollHeight;
+
+        const fullHtml = renderMd(b);
+        const plainText = (function(h){const d=document.createElement('div');d.innerHTML=h;return d.textContent;})(fullHtml);
+
+        typeQueue = typeQueue.then(() => new Promise(resolve => {
+          // 短暫顯示氣泡後始打字
+          setTimeout(() => { typewriteBubble(bub, plainText, fullHtml, resolve); }, bi===0?0:120);
+        }));
       });
-      const ts = document.createElement('div'); ts.className='msg-time'; ts.style.cssText='padding-left:44px'; ts.textContent=now();
-      thread.appendChild(ts);
+      typeQueue = typeQueue.then(() => {
+        const ts = document.createElement('div'); ts.className='msg-time'; ts.style.cssText='padding-left:42px'; ts.textContent=now();
+        thread.appendChild(ts);
+        return Promise.resolve();
+      });
     }
 
     sections.forEach(sec => {
@@ -6909,10 +7140,24 @@ async function submitQuestion() {
   }
 }
 
+function quickAsk(btn) {
+  const input = document.getElementById('chat-input');
+  input.value = btn.textContent;
+  submitQuestion();
+}
+
 function clearAnswer() {
   const thread = document.getElementById('conversation-thread');
-  thread.innerHTML = '';
-  thread.style.display = 'none';
+  thread.innerHTML = `<div class="chat-welcome">
+    <div class="chat-welcome-icon">🤖</div>
+    <p class="chat-welcome-title">長照膳食 AI 助理</p>
+    <p class="chat-welcome-sub">根據 130+ 個長照知識詞條為您解答問題，並推薦相關文章。</p>
+    <div class="chat-examples-row">
+      <button class="quick-q" onclick="quickAsk(this)">長輩不肯吃飯怎麼辦？</button>
+      <button class="quick-q" onclick="quickAsk(this)">IDDSI 是什麼？</button>
+      <button class="quick-q" onclick="quickAsk(this)">如何申請長照補助？</button>
+    </div>
+  </div>`;
   document.getElementById('related-section').style.display = 'none';
   document.getElementById('chat-error').style.display = 'none';
   document.getElementById('chat-input').value = '';
