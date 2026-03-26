@@ -6200,24 +6200,21 @@
   </button>
 </div>
 
-<div id="chat-answer-area" style="display:none">
-  <div class="answer-header">
-    <span class="answer-badge">🤖 AI 回答</span>
-    <button class="clear-btn" onclick="clearAnswer()">清除</button>
-  </div>
-  <div id="expert-cards-area" style="display:none; margin-bottom:1rem;"></div>
-  <div id="chat-answer-content" class="answer-content"></div>
+<!-- 對話線程容器 -->
+<div id="conversation-thread" style="display:none">
+  <!-- 動態插入對話氣泡 -->
+</div>
 
+<!-- 相關詞條/文章區 -->
+<div id="related-section" style="display:none; margin-top:1rem;">
   <div id="related-terms-area" style="display:none">
     <div class="related-header">📖 相關詞條</div>
     <div id="related-terms-links" class="chip-row"></div>
   </div>
-
   <div id="related-articles-area" style="display:none">
     <div class="related-header">📝 推薦閱讀文章</div>
     <div id="related-articles-links" class="chip-row"></div>
   </div>
-
   <div id="google-search-area" class="google-search-area" style="display:none">
     <div class="related-header">🔍 延伸 Google 搜尋</div>
     <div id="google-search-links"></div>
@@ -6233,152 +6230,190 @@
 
 .chat-intro {
   background: var(--md-code-bg-color);
-  border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+  border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
   border-left: 4px solid var(--md-primary-fg-color);
 }
 .chat-intro p { margin: 0.25rem 0; }
 .chat-examples { font-size: 0.85rem; color: var(--md-default-fg-color--light); }
 
-.chat-input-area { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
-
+.chat-input-area { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
 #chat-input {
   width: 100%; padding: 0.85rem 1rem; font-size: 0.95rem; font-family: inherit;
-  border: 2px solid var(--md-default-fg-color--lightest); border-radius: 8px;
+  border: 2px solid var(--md-default-fg-color--lightest); border-radius: 10px;
   background: var(--md-default-bg-color); color: var(--md-typeset-color);
   resize: vertical; transition: border-color 0.2s; box-sizing: border-box;
 }
 #chat-input:focus { outline: none; border-color: var(--md-primary-fg-color); }
-
 #chat-submit {
   align-self: flex-end; padding: 0.7rem 2rem;
   background: var(--md-primary-fg-color); color: white; border: none;
-  border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
   transition: opacity 0.2s, transform 0.15s; font-family: inherit;
 }
 #chat-submit:hover { opacity: 0.88; transform: translateY(-1px); }
 #chat-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-.answer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
-.answer-badge {
-  background: var(--md-primary-fg-color); color: white;
-  padding: 0.2rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+/* ── 對話線程容器 ── */
+#conversation-thread {
+  background: #e9ece7;
+  border-radius: 16px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 80px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0,0,0,.07);
 }
-.clear-btn {
-  background: none; border: 1px solid var(--md-default-fg-color--lighter);
-  border-radius: 6px; padding: 0.25rem 0.75rem; font-size: 0.82rem;
-  cursor: pointer; color: var(--md-default-fg-color--light); font-family: inherit;
+
+/* ── 問答組（可多輪對話）── */
+.chat-exchange { display:contents; }
+
+/* ── 訊息列（頭像+氣泡一行）── */
+.msg-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 88%;
+  animation: msgPop .18s ease;
 }
-.clear-btn:hover { background: var(--md-code-bg-color); }
+@keyframes msgPop { from{transform:scale(.94) translateY(4px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+.msg-row-user { align-self: flex-end; flex-direction: row-reverse; }
+.msg-row-ai   { align-self: flex-start; flex-direction: row; }
 
-.answer-content {
-  background: var(--md-code-bg-color); border-radius: 10px; padding: 1.25rem;
-  line-height: 1.75; border: 1px solid var(--md-default-fg-color--lightest);
-  margin-bottom: 1rem; word-break: break-word; overflow-wrap: break-word;
+/* ── 頭像 ── */
+.msg-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; box-shadow: 0 2px 6px rgba(0,0,0,.18);
 }
-.answer-content p { margin: 0 0 .5em; }
-.answer-content ul, .answer-content ol { margin: .3em 0 .5em 1.4em; padding: 0; }
-.answer-content li { margin: .2em 0; }
-.answer-content h4 { margin: .6em 0 .2em; font-size: 1rem; font-weight: 700; }
-.answer-content h5 { margin: .4em 0 .15em; font-size: .9rem; font-weight: 600; }
-.answer-content strong { font-weight: 700; }
-.answer-content code { background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; font-size: .88rem; }
+.msg-avatar-ai   { background: linear-gradient(135deg,#00897b,#00acc1); }
+.msg-avatar-dean { background: linear-gradient(135deg,#f9a825,#fb8c00); }
 
-.google-search-area { margin-top: 0.5rem; }
-.google-chip {
-  display: inline-block; background: #f1f3f4; color: #1a73e8 !important;
-  padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.82rem;
-  text-decoration: none !important; margin: 0.25rem 0.25rem 0 0;
-  border: 1px solid #dadce0; transition: background 0.15s;
+/* ── 氣泡 ── */
+.msg-bubble {
+  padding: 10px 14px;
+  border-radius: 20px;
+  line-height: 1.72;
+  box-shadow: 0 1px 4px rgba(0,0,0,.13);
+  position: relative;
+  max-width: 460px;
+  word-break: break-word;
 }
-.google-chip:hover { background: #e8eaed; }
+.msg-bubble p { margin: 0 0 .38em; }
+.msg-bubble p:last-child { margin: 0; }
+.msg-bubble ul,.msg-bubble ol { margin: .25em 0 .38em 1.3em; }
+.msg-bubble li { margin: .12em 0; }
+.msg-bubble strong { font-weight: 700; }
+.msg-bubble h4 { margin:.5em 0 .15em; font-size:.95rem; font-weight:700; }
+.msg-bubble code { background:rgba(0,0,0,.07); padding:1px 5px; border-radius:3px; font-size:.86rem; }
 
-.related-header { font-weight: 600; margin: 0.75rem 0 0.5rem; color: var(--md-typeset-color); font-size: 0.9rem; }
+/* 使用者──右側，綠色，右下角尾巴 */
+.msg-bubble-user {
+  background: #d9fdd3;
+  color: #111;
+  border-radius: 20px 20px 5px 20px;
+  font-size: .93rem;
+}
+.msg-bubble-user::after {
+  content: ''; position: absolute; bottom: 0; right: -8px;
+  border: 8px solid transparent;
+  border-left-color: #d9fdd3; border-bottom: 0;
+}
 
-.chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+/* AI──左側，白色，左下角尾巴 */
+.msg-bubble-ai {
+  background: #fff;
+  color: #111;
+  border-radius: 20px 20px 20px 5px;
+  font-size: .9rem;
+}
+.msg-bubble-ai::after {
+  content: ''; position: absolute; bottom: 0; left: -8px;
+  border: 8px solid transparent;
+  border-right-color: #fff; border-bottom: 0;
+}
 
+/* 院長──左側，金色 */
+.msg-bubble-dean {
+  background: linear-gradient(135deg,#fffde7,#fff8e1);
+  border: 1px solid #fbc02d;
+  color: #3e2200;
+  border-radius: 20px 20px 20px 5px;
+  font-size: .9rem;
+}
+.msg-bubble-dean::after {
+  content: ''; position: absolute; bottom: 0; left: -8px;
+  border: 8px solid transparent;
+  border-right-color: #fbc02d; border-bottom: 0;
+}
+.msg-bubble-dean strong { color: #e65100; }
+
+/* 名牌列（頭像+名稱，無氣泡） */
+.msg-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .76rem;
+  font-weight: 700;
+  color: rgba(0,0,0,.5);
+  padding-left: 44px;
+  margin-bottom: 1px;
+}
+
+/* 時間戳記 */
+.msg-time {
+  font-size: .66rem;
+  color: rgba(0,0,0,.38);
+  padding: 0 4px;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+.msg-row-user + .msg-time { align-self:flex-end; text-align:right; padding-right:4px; }
+
+/* 打字等待氣泡 */
+.msg-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 13px 16px;
+}
+.msg-typing span {
+  width: 7px; height: 7px;
+  background: #aab;
+  border-radius: 50%;
+  animation: typeBounce .9s infinite;
+}
+.msg-typing span:nth-child(2){animation-delay:.15s}
+.msg-typing span:nth-child(3){animation-delay:.3s}
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)}}
+
+/* 相關詞條區 */
+.related-header { font-weight:600; margin:.75rem 0 .5rem; font-size:.9rem; }
+.chip-row { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:.75rem; }
 .term-chip {
-  background: var(--md-primary-fg-color); color: white !important;
-  padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.85rem;
-  text-decoration: none !important; font-weight: 500; transition: opacity 0.15s;
+  background: var(--md-primary-fg-color); color:white !important;
+  padding:.3rem .85rem; border-radius:20px; font-size:.84rem;
+  text-decoration:none !important; font-weight:500; transition:opacity .15s;
 }
-.term-chip:hover { opacity: 0.8; }
-
+.term-chip:hover{opacity:.8}
 .article-chip {
-  background: #e65100; color: white !important;
-  padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.85rem;
-  text-decoration: none !important; font-weight: 500; transition: opacity 0.15s;
+  background:#e65100; color:white !important;
+  padding:.3rem .85rem; border-radius:20px; font-size:.84rem;
+  text-decoration:none !important; font-weight:500; transition:opacity .15s;
 }
-.article-chip:hover { opacity: 0.8; }
-
-.chat-error {
-  background: #fce4ec; color: #c62828; border-radius: 8px;
-  padding: 0.85rem 1rem; margin-top: 0.75rem; font-size: 0.9rem;
+.article-chip:hover{opacity:.8}
+.google-chip {
+  display:inline-block; background:#f1f3f4; color:#1a73e8 !important;
+  padding:.3rem .85rem; border-radius:20px; font-size:.82rem;
+  text-decoration:none !important; border:1px solid #dadce0; transition:background .15s;
 }
-
-.expert-card {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 10px 14px; border-radius: 10px;
-  background: var(--md-code-bg-color);
-  border-left: 4px solid; margin-bottom: 8px;
+.google-chip:hover{background:#e8eaed}
+.chat-error{
+  background:#fce4ec; color:#c62828; border-radius:10px;
+  padding:.85rem 1rem; margin-top:.75rem; font-size:.9rem;
 }
-.expert-card-emoji { font-size: 1.6rem; line-height: 1; margin-top: 2px; }
-.expert-card-info { flex: 1; }
-.expert-digital-title { font-weight: 700; font-size: 0.92rem; }
-.expert-real-role { font-size: 0.78rem; color: var(--md-default-fg-color--light); margin-bottom: 4px; }
-.expert-skill-chips { display: flex; flex-wrap: wrap; gap: 4px; }
-.expert-skill-chip {
-  padding: 1px 8px; border-radius: 12px; font-size: 0.72rem;
-  background: rgba(0,0,0,0.07); color: var(--md-typeset-color);
-}
-
-/* 多角色分段對話框 */
-.expert-section { margin-bottom: 1.2rem; }
-.expert-section-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 5px 12px; border-radius: 8px; border-left: 3px solid;
-  background: var(--md-code-bg-color); margin-bottom: 6px;
-  font-size: 0.82rem;
-}
-.expert-section-emoji { font-size: 1.3rem; }
-.expert-section-title { font-weight: 700; }
-.expert-section-role { opacity: .65; font-size: .78rem; }
-.expert-section-bubble {
-  border-left: 3px solid; padding: .75rem 1rem;
-  border-radius: 0 12px 12px 0;
-  background: var(--md-code-bg-color);
-  line-height: 1.75;
-  margin-bottom: 0.6rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,.06);
-}
-.expert-section-bubble:last-child { margin-bottom: 0; }
-.expert-section-bubble p { margin: 0 0 .4em; }
-.expert-section-bubble ul, .expert-section-bubble ol { margin: .3em 0 .3em 1.3em; }
-.expert-section-bubble li { margin: .15em 0; }
-.expert-section-bubble strong { font-weight: 700; }
-
-/* 院長壓軸卡片 */
-.dean-section { margin-top: 1.2rem; margin-bottom: 1rem; }
-.dean-badge {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 7px 14px; border-radius: 10px;
-  background: linear-gradient(135deg, #fff8e1, #fff3cd);
-  border: 2px solid #f9a825; margin-bottom: 8px;
-  font-size: 0.85rem; box-shadow: 0 2px 8px rgba(249,168,37,.2);
-}
-.dean-emoji { font-size: 1.5rem; }
-.dean-title { font-weight: 800; color: #e65100; font-size: .95rem; }
-.dean-role { opacity: .65; font-size: .78rem; color: #5d4037; }
-.dean-bubble {
-  border-left: 4px solid #f9a825; padding: .85rem 1.1rem;
-  border-radius: 0 12px 12px 0;
-  background: linear-gradient(135deg, #fffde7, #fff8e1);
-  line-height: 1.75; font-size: .92rem;
-  box-shadow: 0 2px 8px rgba(249,168,37,.1);
-}
-.dean-bubble p { margin: 0 0 .4em; }
-.dean-bubble strong { font-weight: 700; color: #e65100; }
-
-@media (max-width: 600px) { #chat-submit { align-self: stretch; } }
+@media (max-width:600px) { #chat-submit{align-self:stretch} .msg-bubble{max-width:85vw} }
 </style>
 
 <script>
@@ -6689,6 +6724,10 @@ function matchArticles(keywords) {
 
 let chatHistory = JSON.parse(sessionStorage.getItem('ltc_chat_history') || '[]');
 
+function now() {
+  return new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit', hour12:false });
+}
+
 async function submitQuestion() {
   const input = document.getElementById("chat-input");
   const question = input.value.trim();
@@ -6705,8 +6744,24 @@ async function submitQuestion() {
   btn.disabled = true;
   document.getElementById("btn-text").style.display = "none";
   document.getElementById("btn-loading").style.display = "inline";
-  document.getElementById("chat-error").style.display = "none";
-  document.getElementById("chat-answer-area").style.display = "none";
+  const thread = document.getElementById('conversation-thread');
+  thread.style.display = 'flex';
+
+  // ─ 立即顯示使用者問題氣泡 (右側) ─
+  const t0 = now();
+  const uRow = document.createElement('div'); uRow.className='msg-row msg-row-user';
+  const uBub = document.createElement('div'); uBub.className='msg-bubble msg-bubble-user'; uBub.textContent=question;
+  uRow.appendChild(uBub); thread.appendChild(uRow);
+  const uTime = document.createElement('div'); uTime.className='msg-time'; uTime.style.cssText='align-self:flex-end;padding-right:2px'; uTime.textContent=t0;
+  thread.appendChild(uTime);
+
+  // ─ 打字等待氣泡 ─
+  const ldRow = document.createElement('div'); ldRow.className='msg-row msg-row-ai';
+  const ldAv = document.createElement('div'); ldAv.className='msg-avatar msg-avatar-ai'; ldAv.textContent='🤖';
+  const ldBub = document.createElement('div'); ldBub.className='msg-bubble msg-bubble-ai msg-typing';
+  ldBub.innerHTML='<span></span><span></span><span></span>';
+  ldRow.appendChild(ldAv); ldRow.appendChild(ldBub); thread.appendChild(ldRow);
+  thread.scrollIntoView({behavior:'smooth',block:'end'});
 
   try {
     const res = await fetch(
@@ -6740,55 +6795,45 @@ async function submitQuestion() {
       .replace(/🔗\s*關聯詞條[：:][^\n]+/g, "")
       .trim();
 
-    // 解析多角色分段（含院長）
+    // ─ 移除打字等待氣泡 ─
+    ldRow.remove();
+
+    // ─ 解析分段 ─
     const { sections, principal } = parseExpertSections(answer, experts);
 
-    // 清空並渲染
-    const contentEl = document.getElementById("chat-answer-content");
-    const cardsEl = document.getElementById("expert-cards-area");
-    cardsEl.style.display = "none";
-
-    if (sections.length > 0 || principal) {
-      // 無論角色數量，全面採用動態對話氣泡流 (Conversational Flow)
-      let html = sections.map(sec => {
-        const e = sec.expert || {emoji:"🤖", digitalTitle:"AI 助手", realRole:"智能助理", color:"#00897b"};
-        // 依雙換行切分段落，各自包裝為獨立氣泡
-        const blocks = sec.text.split(/(?:\r?\n){2,}/).map(t => t.trim()).filter(Boolean);
-        const bubblesHtml = blocks.map(b => `<div class="expert-section-bubble" style="border-left-color:${e.color}">${renderMd(b)}</div>`).join('');
-
-        return `
-        <div class="expert-section">
-          <div class="expert-section-badge" style="border-color:${e.color}">
-            <span class="expert-section-emoji">${e.emoji}</span>
-            <div>
-              <span class="expert-section-title" style="color:${e.color}">${e.digitalTitle}</span>
-              <span class="expert-section-role"> · ${e.realRole}</span>
-            </div>
-          </div>
-          ${bubblesHtml}
-        </div>`;
-      }).join('');
-
-      // 院長壓軸出場
-      if (principal) {
-        const blocks = principal.split(/(?:\r?\n){2,}/).map(t => t.trim()).filter(Boolean);
-        const bubblesHtml = blocks.map(b => `<div class="dean-bubble">${renderMd(b)}</div>`).join('');
-        html += `
-        <div class="dean-section">
-          <div class="dean-badge">
-            <span class="dean-emoji">🏅</span>
-            <div>
-              <span class="dean-title">長照督導院長</span>
-              <span class="dean-role"> · 跨域照護統籌</span>
-            </div>
-          </div>
-          ${bubblesHtml}
-        </div>`;
-      }
-      contentEl.innerHTML = html;
+    function addBubbles(blocks, avatarEmoji, bubbleClass, avatarClass) {
+      blocks.forEach((b, bi) => {
+        const row = document.createElement('div'); row.className='msg-row msg-row-ai';
+        const av = document.createElement('div'); av.className=`msg-avatar ${avatarClass}`; av.textContent=bi===0?avatarEmoji:'';
+        av.style.visibility = bi===0?'visible':'hidden';
+        const bub = document.createElement('div'); bub.className=`msg-bubble ${bubbleClass}`; bub.innerHTML=renderMd(b);
+        row.appendChild(av); row.appendChild(bub); thread.appendChild(row);
+      });
+      const ts = document.createElement('div'); ts.className='msg-time'; ts.style.cssText='padding-left:44px'; ts.textContent=now();
+      thread.appendChild(ts);
     }
 
-    document.getElementById("chat-answer-area").style.display = "block";
+    sections.forEach(sec => {
+      const e = sec.expert || {emoji:'🤖', color:'#00897b'};
+      // 名牌列
+      const label = document.createElement('div'); label.className='msg-label';
+      label.textContent=`${e.emoji} ${e.digitalTitle || 'AI 助手'}`; label.style.color=e.color||'#00897b';
+      thread.appendChild(label);
+      const blocks = sec.text.split(/(?:\r?\n){2,}/).map(t=>t.trim()).filter(Boolean);
+      addBubbles(blocks, e.emoji, 'msg-bubble-ai', 'msg-avatar-ai');
+    });
+
+    if (principal) {
+      const dLabel = document.createElement('div'); dLabel.className='msg-label';
+      dLabel.style.color='#e65100'; dLabel.textContent='🏅 長照督導院長';
+      thread.appendChild(dLabel);
+      const blocks = principal.split(/(?:\r?\n){2,}/).map(t=>t.trim()).filter(Boolean);
+      addBubbles(blocks, '🏅', 'msg-bubble-dean', 'msg-avatar-dean');
+    }
+
+    thread.scrollIntoView({behavior:'smooth',block:'end'});
+
+    document.getElementById('related-section').style.display='block';
 
     // 顯示關聯詞條（直接顯示 AI 建議的所有詞條，有 wiki 頁連 wiki）
     const termNames = extractSection(answer, "📖\\s*關聯詞條");
@@ -6851,19 +6896,26 @@ async function submitQuestion() {
     googleArea.style.display = "block";
 
   } catch (err) {
-    document.getElementById("chat-error").textContent = `⚠️ 無法取得 AI 回答：${err.message}`;
-    document.getElementById("chat-error").style.display = "block";
+    ldRow.remove();
+    const errRow = document.createElement('div'); errRow.className='msg-row msg-row-ai';
+    const errAv = document.createElement('div'); errAv.className='msg-avatar msg-avatar-ai'; errAv.textContent='🤖';
+    const errBub = document.createElement('div'); errBub.className='msg-bubble msg-bubble-ai'; errBub.style.color='#c62828';
+    errBub.textContent=`⚠️ 無法取得 AI 回答：${err.message}`;
+    errRow.appendChild(errAv); errRow.appendChild(errBub); thread.appendChild(errRow);
   } finally {
     btn.disabled = false;
-    document.getElementById("btn-text").style.display = "inline";
-    document.getElementById("btn-loading").style.display = "none";
+    document.getElementById('btn-text').style.display = 'inline';
+    document.getElementById('btn-loading').style.display = 'none';
   }
 }
 
 function clearAnswer() {
-  document.getElementById("chat-answer-area").style.display = "none";
-  document.getElementById("chat-error").style.display = "none";
-  document.getElementById("chat-input").value = "";
+  const thread = document.getElementById('conversation-thread');
+  thread.innerHTML = '';
+  thread.style.display = 'none';
+  document.getElementById('related-section').style.display = 'none';
+  document.getElementById('chat-error').style.display = 'none';
+  document.getElementById('chat-input').value = '';
 }
 
 document.addEventListener("DOMContentLoaded", function () {
